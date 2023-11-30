@@ -1,0 +1,25 @@
+.editor-select-image {
+  width: 100px;
+  padding: 8px 5px;
+}
+
+.editor-select-image #imageLabel {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 10px;
+  cursor: pointer;
+  width: 100%;
+  border: 1px solid #333;
+  color: #333;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  text-align: center;
+}
+
+.editor-select-image #imageLabel:hover {
+  background-color: #e6f5ff;
+}
+
+.editor-select-image #imageInput {
+  display: none;
+}
