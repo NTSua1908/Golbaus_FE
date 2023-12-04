@@ -1,0 +1,19 @@
+.post-publish {
+  width: 280px;
+  .show {
+    display: block;
+  }
+  .hidden {
+    display: none;
+  }
+
+  &-heading {
+    &-time {
+      margin-top: 10px;
+    }
+  }
+
+  &-footer {
+    margin-top: 10px;
+  }
+}

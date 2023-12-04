@@ -1,0 +1,24 @@
+.create-post {
+  &-container {
+    padding: 10px;
+  }
+  &-function {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    &-tag {
+      flex: 8.5;
+      padding: 5px;
+      border: solid 1px #ccc;
+      border-radius: 8px;
+    }
+    &-publish {
+      flex: 1.5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 10px;
+    }
+  }
+}
