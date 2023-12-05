@@ -9,19 +9,17 @@ export const Logo = () => (
       fontSize: 'calc(1rem * var(1))',
       lineHeight: 'unset !important',
       fontFamily: 'Circular, Arial, sans-serif',
-      color: 'rgb(9, 11, 23)',
       boxSizing: 'border-box',
-      position: 'absolute',
-      top: '0px',
-      left: '0px',
+      // position: 'absolute',
+      // top: '0px',
+      // left: '0px',
       width: '100%',
       height: '100%',
       transition: 'background-color 0.3s ease 0s',
       borderRadius: '10px',
       overflow: 'hidden',
-      background: 'rgb(45, 0, 108)',
       boxShadow: 'none',
-      padding: '20px',
+      padding: '5px',
     }}>
     <defs id='SvgjsDefs1779'>
       <linearGradient id='SvgjsLinearGradient1784'>

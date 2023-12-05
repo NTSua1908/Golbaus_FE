@@ -1,3 +1,365 @@
+@import '../../variable.scss';
+
 .header {
-  height: 100px;
+  height: 80px;
+  transition: background-color 0.3s ease 0s;
+  background: $background-color;
+  padding: 0 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: $text-menu-color;
+  font-size: 20px;
+
+  .pointer {
+    cursor: pointer;
+  }
+
+  &-logo {
+    width: 80px;
+    height: 100%;
+    flex: 1;
+    padding: 10px;
+  }
+  &-menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 9;
+    &-left ul {
+      font-weight: 700;
+      display: flex;
+      list-style-type: none;
+      // flex: 3;
+      li:first-child {
+        margin-right: 50px;
+      }
+    }
+    &-right {
+      display: flex;
+      // justify-content: space-between;
+      align-items: center;
+      list-style: none;
+      // flex: 5;
+
+      & > li {
+        margin-right: 30px;
+      }
+      &-search {
+        border-radius: 30px;
+        border: 3px solid $text-menu-color;
+        background-color: #fff;
+        height: 50px;
+        width: 400px;
+        display: flex;
+        align-items: center;
+        padding-left: 20px;
+        &-input {
+          width: 300px;
+          height: 100%;
+          border: none;
+          outline: none;
+          font-size: 18px;
+          color: #333;
+          font-weight: 500;
+        }
+        &-spin {
+          width: 30px;
+          height: 100%;
+          display: flex;
+          align-items: center;
+        }
+        &-btn {
+          height: 100%;
+          width: 50px;
+          border: none;
+          border-top-right-radius: 30px;
+          border-bottom-right-radius: 30px;
+          font-size: 20px;
+          background-color: $background-color;
+          color: $text-menu-color;
+          cursor: pointer;
+          font-weight: 800;
+        }
+      }
+
+      &-notification {
+        position: relative;
+        &-count {
+          position: absolute;
+          height: 20px;
+          width: 20px;
+          border-radius: 10px;
+          background-color: red;
+          color: white;
+          top: -10px;
+          left: -10px;
+          font-size: 15px;
+          text-align: center;
+        }
+        &-menu {
+          position: absolute;
+          top: 59px;
+          left: -235px;
+          border-radius: 15px;
+          border: 1px solid $text-menu-color;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.3s ease, visibility 0.3s ease;
+
+          &-header {
+            background-color: $background-color;
+            border-top-right-radius: 15px;
+            border-top-left-radius: 15px;
+            padding: 5px 20px;
+            height: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            &-title {
+              font-size: 14px;
+              font-weight: 700;
+            }
+            &-read {
+              font-size: 13px;
+            }
+          }
+          &-body {
+            width: 300px;
+            height: auto;
+            max-height: 400px;
+            overflow: hidden;
+
+            &-empty {
+              padding: 20px;
+              overflow: hidden;
+              font-weight: 700;
+              text-align: center;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              &-icon {
+                margin-right: 10px;
+                font-size: 25px;
+              }
+              &-content {
+                font-size: 15px;
+              }
+            }
+
+            &-list {
+              height: 100%;
+              overflow-y: scroll;
+              max-width: 400px;
+              // margin: 20px auto;
+              font-size: 15px;
+              // overflow-y: scroll;
+
+              & .notification-item {
+                display: flex;
+                padding: 10px;
+                border-bottom: 1px solid #ccc;
+              }
+
+              & .user-avatar {
+                margin-right: 10px;
+              }
+
+              & .user-avatar img {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                object-fit: cover;
+              }
+
+              & .notification-content {
+                flex-grow: 1;
+              }
+
+              & .user-link {
+                font-weight: bold;
+                color: #333;
+              }
+
+              & .post-link {
+                color: #007bff;
+              }
+
+              & .date {
+                color: #777;
+                font-size: 12px;
+              }
+            }
+          }
+          &-footer {
+            background-color: $background-color;
+            border-bottom-right-radius: 15px;
+            border-bottom-left-radius: 15px;
+            padding: 5px 20px;
+            height: 40px;
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            justify-content: right;
+            align-items: center;
+          }
+        }
+        &-menu.show {
+          opacity: 1;
+          visibility: visible;
+        }
+        &-menu::before {
+          content: '';
+          position: absolute;
+          top: -8px;
+          left: 238px;
+          height: 15px;
+          width: 15px;
+          background-color: $background-color;
+          transform: rotate(45deg);
+          border-left: solid 1px $text-menu-color;
+          border-top: solid 1px $text-menu-color;
+        }
+      }
+
+      &-profile {
+        width: 60px;
+        height: 60px;
+        border: 1px solid #d4ab64;
+        border-radius: 50%;
+        position: relative;
+        &-container {
+          height: 100%;
+          width: 100%;
+          border-radius: 50%;
+          border: 1px solid $text-menu-color;
+        }
+        &-image {
+          height: 100%;
+          width: 100%;
+          border-radius: 50%;
+          border: 1px solid $text-menu-color;
+        }
+
+        &-menu {
+          position: absolute;
+          top: 75px;
+          left: -195px;
+          width: 280px;
+          border-radius: 10px;
+          border: 1px solid $text-menu-color;
+          padding: 11px 20px;
+          background-color: #200941;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.3s ease, visibility 0.3s ease;
+          .padding-icon {
+            margin-right: 20px;
+          }
+          li {
+            padding: 12px 0px 12px 10px;
+            list-style: none;
+            cursor: pointer;
+            border-top: 1px solid $text-menu-color;
+            font-size: 15px;
+            font-weight: 600;
+          }
+          li:hover {
+            color: $background-color;
+            background-color: $text-menu-color;
+            img {
+              border: 1px solid $background-color;
+            }
+          }
+          &-first {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-top: none !important;
+            &-left {
+              width: 50px;
+              height: 50px;
+              flex: 3;
+              display: flex;
+              justify-content: left;
+              img {
+                border: 1px solid $text-menu-color;
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+              }
+            }
+            &-right {
+              flex: 7;
+              .name {
+                font-weight: 800;
+                font-size: 15px;
+                padding-bottom: 10px;
+              }
+              .userName {
+                font-weight: 500;
+                font-size: 12px;
+              }
+            }
+          }
+        }
+
+        &-menu::before {
+          content: '';
+          position: absolute;
+          height: 15px;
+          width: 15px;
+          top: -9px;
+          left: 218px;
+          background-color: #200941;
+          transform: rotate(45deg);
+          border-top: 1px solid $text-menu-color;
+          border-left: 1px solid $text-menu-color;
+        }
+        &-menu.show {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+    }
+  }
+}
+
+.notification-list {
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.notification-item {
+  display: flex;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.user-avatar {
+  margin-right: 10px;
+}
+
+.user-avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.notification-content {
+  flex-grow: 1;
+}
+
+.user-link {
+  font-weight: bold;
+  color: #333;
+}
+
+.post-link {
+  color: #007bff;
+}
+
+.date {
+  color: #777;
+  font-size: 12px;
 }
