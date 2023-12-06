@@ -11,6 +11,7 @@
   align-items: center;
   color: $text-menu-color;
   font-size: 20px;
+  border-bottom: 2px solid $text-menu-color;
 
   @include for-size(phone-sm, min) {
     padding: 0 20px;
@@ -132,6 +133,7 @@
           opacity: 0;
           visibility: hidden;
           transition: opacity 0.3s ease, visibility 0.3s ease;
+          z-index: 1000;
 
           @include for-size(phone-sm, min) {
             left: -217px;
@@ -155,13 +157,12 @@
             }
           }
           &-body {
-            width: 300px;
+            width: 350px;
             height: auto;
             max-height: 400px;
             overflow: hidden;
 
             @include for-size(tablet, min) {
-              width: 350px;
               max-height: 500px;
             }
 
@@ -201,6 +202,7 @@
                 display: flex;
                 padding: 10px;
                 border-bottom: 1px solid #ccc;
+                background-color: #fff;
               }
 
               & .notification-item.unread {
@@ -262,7 +264,7 @@
           content: '';
           position: absolute;
           top: -8px;
-          left: 205px;
+          left: 208px;
           height: 15px;
           width: 15px;
           background-color: $background-color;
@@ -307,6 +309,7 @@
           opacity: 0;
           visibility: hidden;
           transition: opacity 0.3s ease, visibility 0.3s ease;
+          z-index: 10000;
 
           @include for-size(tablet, min) {
             width: 350px;
@@ -373,7 +376,7 @@
           height: 15px;
           width: 15px;
           top: -9px;
-          left: 218px;
+          left: 213px;
           background-color: #200941;
           transform: rotate(45deg);
           border-top: 1px solid $text-menu-color;

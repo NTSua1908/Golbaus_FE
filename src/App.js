@@ -2,6 +2,7 @@ import React from 'react';
 import './App.scss';
 import CreatePost from './pages/CreatePost/CreatePost';
 import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
 
 const App = () => {
   return (
@@ -10,6 +11,7 @@ const App = () => {
       <ShowCode content={mkdStr} /> */}
       {/* <CreatePost /> */}
       <Header />
+      <Footer />
     </div>
   );
 };
