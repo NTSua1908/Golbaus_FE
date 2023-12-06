@@ -13,7 +13,7 @@ export const Logo = () => (
       // position: 'absolute',
       // top: '0px',
       // left: '0px',
-      width: '100%',
+      // width: '100%',
       height: '100%',
       transition: 'background-color 0.3s ease 0s',
       borderRadius: '10px',

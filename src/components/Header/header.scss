@@ -1,4 +1,5 @@
 @import '../../variable.scss';
+@import '../../breakPoint.scss';
 
 .header {
   height: 80px;
@@ -11,6 +12,10 @@
   color: $text-menu-color;
   font-size: 20px;
 
+  @include for-size(phone-sm, min) {
+    padding: 0 20px;
+  }
+
   .pointer {
     cursor: pointer;
   }
@@ -19,7 +24,7 @@
     width: 80px;
     height: 100%;
     flex: 1;
-    padding: 10px;
+    padding: 15px;
   }
   &-menu {
     display: flex;
@@ -30,9 +35,16 @@
       font-weight: 700;
       display: flex;
       list-style-type: none;
+      align-items: center;
       // flex: 3;
-      li:first-child {
+      & li:first-child {
         margin-right: 50px;
+      }
+      & li {
+        text-align: center;
+      }
+      @include for-size(desktop, min) {
+        display: none;
       }
     }
     &-right {
@@ -44,18 +56,32 @@
 
       & > li {
         margin-right: 30px;
+        @include for-size(phone, min) {
+          margin-right: 20px;
+        }
       }
+
+      &-searchbutton {
+        display: none;
+        @include for-size(tablet, min) {
+          display: block;
+        }
+      }
+
       &-search {
         border-radius: 30px;
         border: 3px solid $text-menu-color;
         background-color: #fff;
         height: 50px;
-        width: 400px;
+        width: 350px;
         display: flex;
         align-items: center;
         padding-left: 20px;
+        @include for-size(tablet, min) {
+          display: none;
+        }
         &-input {
-          width: 300px;
+          width: 250px;
           height: 100%;
           border: none;
           outline: none;
@@ -100,12 +126,16 @@
         &-menu {
           position: absolute;
           top: 59px;
-          left: -235px;
+          left: -205px;
           border-radius: 15px;
           border: 1px solid $text-menu-color;
           opacity: 0;
           visibility: hidden;
           transition: opacity 0.3s ease, visibility 0.3s ease;
+
+          @include for-size(phone-sm, min) {
+            left: -217px;
+          }
 
           &-header {
             background-color: $background-color;
@@ -130,6 +160,11 @@
             max-height: 400px;
             overflow: hidden;
 
+            @include for-size(tablet, min) {
+              width: 350px;
+              max-height: 500px;
+            }
+
             &-empty {
               padding: 20px;
               overflow: hidden;
@@ -148,17 +183,32 @@
             }
 
             &-list {
-              height: 100%;
-              overflow-y: scroll;
+              max-height: 400px;
               max-width: 400px;
-              // margin: 20px auto;
               font-size: 15px;
-              // overflow-y: scroll;
+              overflow-y: scroll;
+              @include for-size(tablet, min) {
+                font-size: 20px;
+                max-height: 500px;
+              }
 
+              & .notification-container {
+                display: block;
+                text-decoration: none;
+                color: #333;
+              }
               & .notification-item {
                 display: flex;
                 padding: 10px;
                 border-bottom: 1px solid #ccc;
+              }
+
+              & .notification-item.unread {
+                background-color: #e2f0ff;
+              }
+
+              & .notification-item:hover {
+                background-color: #a8d2ff;
               }
 
               & .user-avatar {
@@ -212,13 +262,17 @@
           content: '';
           position: absolute;
           top: -8px;
-          left: 238px;
+          left: 205px;
           height: 15px;
           width: 15px;
           background-color: $background-color;
           transform: rotate(45deg);
           border-left: solid 1px $text-menu-color;
           border-top: solid 1px $text-menu-color;
+
+          @include for-size(phone-sm, min) {
+            left: 217px;
+          }
         }
       }
 
@@ -253,6 +307,12 @@
           opacity: 0;
           visibility: hidden;
           transition: opacity 0.3s ease, visibility 0.3s ease;
+
+          @include for-size(tablet, min) {
+            width: 350px;
+            left: -255px;
+          }
+
           .padding-icon {
             margin-right: 20px;
           }
@@ -263,6 +323,9 @@
             border-top: 1px solid $text-menu-color;
             font-size: 15px;
             font-weight: 600;
+            @include for-size(tablet, min) {
+              font-size: 20px;
+            }
           }
           li:hover {
             color: $background-color;
@@ -315,6 +378,9 @@
           transform: rotate(45deg);
           border-top: 1px solid $text-menu-color;
           border-left: 1px solid $text-menu-color;
+          @include for-size(tablet, min) {
+            left: 275px;
+          }
         }
         &-menu.show {
           opacity: 1;

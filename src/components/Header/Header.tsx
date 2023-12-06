@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Logo } from '../../Logo';
 import './header.scss';
-import { ConfigProvider, Spin } from 'antd';
+import { ConfigProvider, Drawer, Spin } from 'antd';
 import {
   IoLogOutSharp,
   IoNewspaperOutline,
   IoPerson,
   IoSearchSharp,
 } from 'react-icons/io5';
-import { FaPen, FaBell, FaHistory } from 'react-icons/fa';
+import { FaPen, FaBell, FaHistory, FaSearch } from 'react-icons/fa';
 import { GiEmptyHourglass } from 'react-icons/gi';
 
 interface NotificationProps {
@@ -18,6 +18,7 @@ interface NotificationProps {
   content: string;
   date: string;
   link: string;
+  isRead: boolean;
 }
 
 function Header() {
@@ -33,6 +34,7 @@ function Header() {
       content: 'upvoted your post',
       date: '2023-12-04 10:12 PM',
       link: '#',
+      isRead: false,
     },
     {
       user: '@Halley',
@@ -42,6 +44,7 @@ function Header() {
       content: 'followed you',
       date: '2023-12-04 10:12 PM',
       link: '#',
+      isRead: false,
     },
     {
       user: '@Halley',
@@ -51,6 +54,7 @@ function Header() {
       content: 'has responded to your comment',
       date: '2023-12-04 10:12 PM',
       link: '#',
+      isRead: true,
     },
     {
       user: '@Halley',
@@ -60,6 +64,7 @@ function Header() {
       content: 'commented on your post',
       date: '2023-12-04 10:12 PM',
       link: '#',
+      isRead: false,
     },
     {
       user: '@Halley',
@@ -69,6 +74,7 @@ function Header() {
       content: 'has responded to your comment',
       date: '2023-12-04 10:12 PM',
       link: '#',
+      isRead: true,
     },
     {
       user: '@Halley',
@@ -78,6 +84,17 @@ function Header() {
       content: 'commented on your post',
       date: '2023-12-04 10:12 PM',
       link: '#',
+      isRead: false,
+    },
+    {
+      user: '@Halley',
+      userUrl: '#',
+      avatarUrl:
+        'https://www.pockettactics.com/wp-content/sites/pockettactics/2023/02/Stardew-Valley-Haley-580x334.jpg',
+      content: 'commented on your post',
+      date: '2023-12-04 10:12 PM',
+      link: '#',
+      isRead: false,
     },
   ]);
   const menuProfileRef = useRef<HTMLDivElement>(null);
@@ -163,15 +180,22 @@ function Header() {
               </button>
             </li>
             <li
+              className='header-menu-right-searchbutton pointer'
+              title='Search'>
+              <FaSearch />
+            </li>
+            <li
               className='header-menu-right-write pointer'
-              title='assd'>
+              title='Write post'>
               <FaPen />
             </li>
             <li className='header-menu-right-notification'>
               <div
                 onClick={toggleNotification}
                 ref={buttonNotificationRef}>
-                <div className='header-menu-right-notification-count'>5</div>
+                <div className='header-menu-right-notification-count'>
+                  {notifications.length}
+                </div>
                 <FaBell className='pointer' />
               </div>
               <div
@@ -188,7 +212,7 @@ function Header() {
                   </span>
                 </div>
                 <div className='header-menu-right-notification-menu-body'>
-                  {notifications.length !== 0 && (
+                  {notifications.length === 0 && (
                     <div className='header-menu-right-notification-menu-body-empty '>
                       <span className='header-menu-right-notification-menu-body-empty-icon pointer'>
                         <GiEmptyHourglass />
@@ -204,34 +228,36 @@ function Header() {
                         isNotificationOpen && 'show'
                       }`}>
                       {notifications.map((notification, index) => (
-                        <div
-                          key={index}
-                          className='notification-item'>
-                          <a
-                            href={notification.userUrl}
-                            className='user-avatar'>
-                            <img
-                              src={notification.avatarUrl}
-                              alt={`${notification.user}'s avatar`}
-                            />
-                          </a>
-                          <div className='notification-content'>
-                            <p>
-                              <a
-                                href={notification.userUrl}
-                                className='user-link'>
-                                {notification.user}
-                              </a>{' '}
-                              {notification.content}{' '}
-                              <a
-                                href={notification.link}
-                                className='post-link'>
-                                here
-                              </a>
-                            </p>
-                            <span className='date'>{notification.date}</span>
+                        <a
+                          href={notification.link}
+                          className='notification-container'>
+                          <div
+                            key={index}
+                            className={`notification-item ${
+                              !notification.isRead && 'unread'
+                            }`}>
+                            <a
+                              href={notification.userUrl}
+                              className='user-avatar'>
+                              <img
+                                src={notification.avatarUrl}
+                                alt={`${notification.user}'s avatar`}
+                              />
+                            </a>
+                            <div className='notification-content'>
+                              <p>
+                                <a
+                                  href={notification.userUrl}
+                                  className='user-link'>
+                                  {notification.user}
+                                </a>{' '}
+                                {notification.content}
+                                {'.'}
+                              </p>
+                              <span className='date'>{notification.date}</span>
+                            </div>
                           </div>
-                        </div>
+                        </a>
                       ))}
                     </div>
                   )}

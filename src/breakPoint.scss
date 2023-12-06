@@ -1,0 +1,22 @@
+$breakpoints: (
+  phone-sm: 420px,
+  phone: 767px,
+  tablet: 768px,
+  tablet-lg: 1024px,
+  desktop: 1025px,
+  desktop-lg: 1600px,
+);
+@mixin for-size($breakpoint, $direction: max) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $breakpoint-value: map-get($breakpoints, $breakpoint);
+    @if $direction == max {
+      @media (min-width: $breakpoint-value) {
+        @content;
+      }
+    } @else if $direction == min {
+      @media (max-width: $breakpoint-value) {
+        @content;
+      }
+    }
+  }
+}
