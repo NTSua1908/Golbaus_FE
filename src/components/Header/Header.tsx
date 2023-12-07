@@ -112,13 +112,13 @@ function Header() {
         setMenuProfileOpen(false);
       }
 
-      console.log(
-        event.target,
-        notificationRef.current,
-        !notificationRef.current?.contains(event.target as Node),
-        buttonProfileRef.current !== event.target,
-        !buttonProfileRef.current?.contains(event.target as Node)
-      );
+      // console.log(
+      //   event.target,
+      //   notificationRef.current,
+      //   !notificationRef.current?.contains(event.target as Node),
+      //   buttonProfileRef.current !== event.target,
+      //   !buttonProfileRef.current?.contains(event.target as Node)
+      // );
       if (
         notificationRef.current &&
         !notificationRef.current.contains(event.target as Node) &&
@@ -143,10 +143,6 @@ function Header() {
   const toggleNotification = () => {
     setNotificationOpen((prev) => !prev);
   };
-
-  useEffect(() => {
-    console.log('isOpen', isMenuProfileOpen);
-  }, [isMenuProfileOpen]);
 
   return (
     <ConfigProvider

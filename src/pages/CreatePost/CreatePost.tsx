@@ -16,6 +16,7 @@ import AddTag from '../../components/Tags/AddTag';
 import './createPost.scss';
 import { title } from '@uiw/react-md-editor';
 import Header from '../../components/Header/Header';
+import ShowCode from '../../components/ShowCode/ContentDisplayer';
 
 const CreatePost: React.FC = () => {
   const [publishType, setPublishType] = useState<PublishType>(
@@ -104,6 +105,7 @@ const CreatePost: React.FC = () => {
           value={value}
           setValue={setValue}
         />
+        <ShowCode content={value} />
       </div>
     </div>
   );

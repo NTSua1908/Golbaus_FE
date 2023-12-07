@@ -1,0 +1,96 @@
+/* style.css */
+
+/* Custom styles for paragraphs */
+.custom-paragraph {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+/* Custom styles for images */
+.custom-image {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Custom styles for links */
+.custom-link {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.custom-link:hover {
+  text-decoration: underline;
+}
+
+/* Custom styles for headings */
+.custom-heading1 {
+  font-size: 2em;
+  margin-bottom: 0.5em;
+}
+
+.custom-heading2 {
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.custom-heading3 {
+  font-size: 1.17em;
+  margin-bottom: 0.5em;
+}
+
+.custom-heading4 {
+  font-size: 1em;
+  margin-bottom: 0.5em;
+}
+
+.custom-heading5 {
+  font-size: 0.83em;
+  margin-bottom: 0.5em;
+}
+
+.custom-heading6 {
+  font-size: 0.67em;
+  margin-bottom: 0.5em;
+}
+
+/* Custom styles for lists */
+.custom-list {
+  list-style-type: none;
+  padding-left: 1em;
+}
+
+.custom-list-item {
+  margin-bottom: 0.5em;
+}
+
+/* Custom styles for blockquotes */
+.custom-blockquote {
+  border-left: 4px solid #3498db;
+  padding-left: 1em;
+  margin-left: 0;
+  font-style: italic;
+  color: #555;
+}
+
+/* Custom styles for horizontal rule */
+.custom-hr {
+  border: 1px solid #ddd;
+  margin: 1em 0;
+}
+
+/* Custom styles for pre tag */
+.blog-pre {
+  background-color: #f8f8f8;
+  padding: 1em;
+  border-radius: 4px;
+  overflow: auto;
+}
+
+// /* Custom styles for code tag */
+// .blog-code {
+//   font-family: 'Courier New', Courier, monospace;
+//   font-size: 0.9em;
+//   background-color: #f8f8f8;
+//   padding: 0.2em 0.4em;
+//   border-radius: 4px;
+// }
