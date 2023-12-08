@@ -19,9 +19,13 @@ interface TableOfContentsProps {
 const TableOfContents: React.FC<TableOfContentsProps> = ({ heading }) => {
   const handleItemClick = (id: string) => {
     const element = document.getElementById(id);
-    console.log(id, element);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      const offset = -80;
+      const targetOffsetTop = element.offsetTop + offset;
+      window.scrollTo({
+        top: targetOffsetTop,
+        behavior: 'smooth',
+      });
     }
   };
 

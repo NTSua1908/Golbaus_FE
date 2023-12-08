@@ -1,14 +1,9 @@
-import React from 'react';
-import './App.scss';
-import CreatePost from './pages/CreatePost/CreatePost';
-import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
-import TableOfContents from './components/TableOfContents/TableOfContents';
-import ShowCode from './components/ShowCode/ContentDisplayer';
-import BasicEditor from './components/BasicEditor/BasicEditor';
-import Post from './pages/Post/Post';
+import React, { useState } from 'react';
+import PostContent from '../../components/PostContent/PostContent';
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
 
-const markDown = `
+const value = `
 ## Horizontal Rules
 
 ___
@@ -110,6 +105,23 @@ var foo = function (bar) {
 console.log(foo(5));
 \`\`\`
 
+\`\`\` css
+/* Custom styles for blockquotes */
+.custom-blockquote {
+  border-left: 4px solid #3498db;
+  padding-left: 1em;
+  margin-left: 0;
+  font-style: italic;
+  color: #555;
+}
+
+/* Custom styles for horizontal rule */
+.custom-hr {
+  border: 1px solid #ddd;
+  margin: 1em 0;
+}
+\`\`\`
+
 ## Tables
 
 | Option | Description |
@@ -140,6 +152,7 @@ Autoconverted link https://github.com/nodeca/pica (enable linkify to see)
 
 ![Minion](https://octodex.github.com/images/minion.png)
 ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")
+![Wallpaper](https://c4.wallpaperflare.com/wallpaper/39/346/426/digital-art-men-city-futuristic-night-hd-wallpaper-thumb.jpg)
 
 Like links, Images also have a footnote style syntax
 
@@ -173,7 +186,7 @@ see [how to change output](https://github.com/markdown-it/markdown-it-emoji#chan
 
 ### [\<ins>](https://github.com/markdown-it/markdown-it-ins)
 
-++Inserted text++
+++ Inserted text ++
 
 
 ### [\<mark>](https://github.com/markdown-it/markdown-it-mark)
@@ -239,16 +252,60 @@ It converts "HTML", but keep intact partial entries like "xxxHTMLyyy" and so on.
 
 `;
 
-const App = () => {
+interface PostProps {
+  content: string;
+  thumbnail: string;
+  excerpt: string;
+  avatar: string;
+  fullname: string;
+  username: string;
+  date: string;
+  viewCount: number;
+  postCount: number;
+  followCount: number;
+  upvote: number;
+  downvote: number;
+  comments: string[]; //before
+}
+
+function Post() {
+  const [data, setData] = useState<PostProps>({
+    content: value,
+    thumbnail:
+      'https://1.bp.blogspot.com/-E6gB3SWavGE/X4Wo-00m4qI/AAAAAAAAFMo/VaTo7SBekpgcy9iDDk9j108npXiSWWRPwCLcBGAsYHQ/w0/How%2Bto%2Bfix%2Bthumbnail%2Bissue%2Bin%2Bblogger%2Bhomepage.png',
+    excerpt:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam aliquam quos voluptate laborum asperiores rem. Inventore labore excepturi tempora nam impedit veniam rerum laboriosam, reprehenderit vero voluptas ratione, perspiciatis hic.',
+    avatar:
+      'https://www.pockettactics.com/wp-content/sites/pockettactics/2023/02/Stardew-Valley-Haley-580x334.jpg',
+    fullname: 'Halley',
+    username: 'Halley',
+    date: '08-12-2023 16:58 PM',
+    viewCount: 2134,
+    postCount: 11,
+    followCount: 342,
+    upvote: 34,
+    downvote: 1,
+    comments: ['asdf', 'asdfasd', 'assdf'],
+  });
+
   return (
-    <div className='App'>
-      <Header />
-      <div className='content-wrap'>
-        <Post />
-      </div>
-      <Footer />
+    <div className='post'>
+      <PostContent
+        content={data.content}
+        thumbnail={data.thumbnail}
+        excerpt={data.excerpt}
+        avatar={data.avatar}
+        fullname={data.fullname}
+        username={data.username}
+        date={data.date}
+        viewCount={data.viewCount}
+        postCount={data.postCount}
+        followCount={data.followCount}
+        upvote={data.upvote}
+        downvote={data.downvote}
+      />
     </div>
   );
-};
+}
 
-export default App;
+export default Post;

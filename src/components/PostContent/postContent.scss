@@ -1,0 +1,156 @@
+@import '../../variable.scss';
+@import '../../breakPoint.scss';
+
+.post-content {
+  width: 80%;
+  max-width: 1400px;
+  min-width: 350px;
+  margin: 0 auto;
+
+  @include for-size(desktop, min) {
+    width: 95%;
+  }
+
+  &-container {
+    border: 1px solid $text-menu-color;
+    border-radius: 10px;
+  }
+  &-header {
+    border-top-right-radius: inherit;
+    border-top-left-radius: inherit;
+    background-color: $background-color;
+    height: 50px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding-left: 20px;
+    &-left,
+    &-right,
+    &-middle {
+      height: 18px;
+      width: 18px;
+      border-radius: 50%;
+      margin-left: 15px;
+    }
+
+    &-left {
+      background-color: red;
+    }
+    &-middle {
+      background-color: yellow;
+    }
+    &-right {
+      background-color: green;
+    }
+  }
+  &-body {
+    padding: 20px;
+    @include for-size(tablet, min) {
+      padding: 10px;
+    }
+    display: flex;
+    &-left {
+      flex-grow: 1;
+      padding: 10px;
+      padding-right: 30px;
+      border-right: 1px solid $text-menu-color;
+      @include for-size(tablet, min) {
+        border-right: none;
+        max-width: 100%;
+        padding-right: 10px;
+      }
+
+      &-header {
+        &-thumbnail {
+          max-width: 100%;
+          display: block;
+          margin: 10px auto;
+        }
+      }
+    }
+    &-right {
+      position: sticky;
+      top: calc($header-height + 10px);
+      height: 100%;
+      padding: 10px;
+      padding-left: 20px;
+      min-width: 22%;
+      @include for-size(desktop, min) {
+        min-width: 30%;
+      }
+      @include for-size(tablet, min) {
+        display: none;
+      }
+    }
+  }
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.thumbnail {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 16px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.fullname {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.username {
+  color: #777;
+  margin-bottom: 4px;
+}
+
+.date {
+  color: #777;
+}
+
+.post-stats {
+  display: flex;
+  margin-left: auto;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 16px;
+}
+
+.count {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.label {
+  color: #777;
+}

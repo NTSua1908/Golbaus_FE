@@ -1,4 +1,5 @@
 @import './variable.scss';
+@import './breakPoint.scss';
 
 * {
   box-sizing: border-box;
@@ -13,7 +14,10 @@
 }
 
 .content-wrap {
-  padding-bottom: 250px;
+  padding-bottom: calc($footer-height + 20px);
+  @include for-size(tablet, min) {
+    padding-bottom: calc($footer-height-res + 20px);
+  }
 }
 
 .App-logo {
@@ -44,6 +48,9 @@
 
 ::-webkit-scrollbar {
   width: 8px;
+  @include for-size(tablet, min) {
+    width: 3px;
+  }
 }
 
 ::-webkit-scrollbar-track {

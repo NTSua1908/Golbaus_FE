@@ -105,7 +105,7 @@ const CreatePost: React.FC = () => {
           value={value}
           setValue={setValue}
         />
-        <ShowCode content={value} />
+        {/* <ShowCode content={value} /> */}
       </div>
     </div>
   );

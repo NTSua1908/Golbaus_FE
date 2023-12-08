@@ -1,5 +1,4 @@
-/* style.css */
-
+@import '../../breakPoint.scss';
 /* Custom styles for paragraphs */
 .custom-paragraph {
   margin-bottom: 1rem;
@@ -8,8 +7,10 @@
 
 /* Custom styles for images */
 .custom-image {
-  max-width: 100%;
+  width: 90%;
   height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 /* Custom styles for links */
@@ -53,14 +54,46 @@
   margin-bottom: 0.5em;
 }
 
-/* Custom styles for lists */
-.custom-list {
-  list-style-type: none;
-  padding-left: 1em;
+.custom-list-u {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.custom-list-u .custom-list-item {
+  padding-left: 1.5em;
+  position: relative;
+}
+
+.custom-list-u .custom-list-item::before {
+  content: '\2022'; /* Bullet character */
+  color: #3498db; /* Bullet color */
+  font-size: 1.5em;
+  position: absolute;
+  left: 0;
+}
+
+.custom-list-o {
+  list-style: decimal;
+  padding: 0;
+  margin-left: 1em;
+}
+
+.custom-list-o .custom-list-item {
+  padding-left: 0.5em;
+  position: relative;
 }
 
 .custom-list-item {
   margin-bottom: 0.5em;
+  line-height: 1.5;
+}
+
+.custom-list-u .custom-list-u,
+.custom-list-o .custom-list-u,
+.custom-list-o .custom-list-o,
+.custom-list-u .custom-list-o {
+  margin-left: 20px;
 }
 
 /* Custom styles for blockquotes */
@@ -82,8 +115,54 @@
 .blog-pre {
   background-color: #f8f8f8;
   padding: 1em;
-  border-radius: 4px;
-  overflow: auto;
+  border-radius: 5px;
+  margin-bottom: 3em !important;
+  -webkit-box-shadow: -10px 0px 13px -7px #000000, 10px 0px 13px -7px #000000,
+    35px -23px 2px -16px rgba(0, 0, 0, 0);
+  box-shadow: -10px 0px 13px -7px #000000, 10px 0px 13px -7px #000000,
+    35px -23px 2px -16px rgba(0, 0, 0, 0);
+  position: relative;
+  &-container {
+    overflow: auto;
+  }
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  overflow: hidden;
+  // max-width: 80%;
+
+  // @include for-size(tablet, min) {
+  //   overflow-x: auto;
+  //   display: block;
+  // }
+
+  & th,
+  td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #3498db;
+    @include for-size(tablet, min) {
+      // white-space: nowrap;
+    }
+  }
+
+  & tr:nth-child(even) {
+    background-color: #ecf0f1;
+  }
+
+  & th {
+    background-color: #2980b9;
+    color: #ecf0f1;
+  }
+
+  & tr:hover {
+    background-color: #a6c2d4;
+  }
 }
 
 // /* Custom styles for code tag */

@@ -13,55 +13,48 @@ import './style.css';
 import rehypeSlug from 'rehype-slug';
 import './contentDisplayer.scss';
 
-// const headingsData: TableOfContentsData[] = [
-//   {
-//     level: 1,
-//     title: 'h1 Heading',
-//     id: 'h1',
-//     parent: undefined,
-//     childrens: [],
-//   },
-//   { level: 2, title: 'h2 Heading', id: 'h1', parent: undefined, childrens: [] },
-//   { level: 3, title: 'h3 Heading', id: 'h1', parent: undefined, childrens: [] },
-//   { level: 4, title: 'h4 Heading', id: 'h1', parent: undefined, childrens: [] },
-//   { level: 5, title: 'h5 Heading', id: 'h1', parent: undefined, childrens: [] },
-//   { level: 6, title: 'h6 Heading', id: 'h1', parent: undefined, childrens: [] },
-// ];
-// headingsData.at(0)?.childrens.push({
-//   level: 2,
-//   title: 'Subheading',
-//   id: 'sub',
-//   parent: headingsData.at(0),
-//   childrens: [],
-// });
-
 interface ContentDisplayerProps {
   content: string;
+  setTableOfContents: React.Dispatch<
+    React.SetStateAction<TableOfContentsData[]>
+  >;
 }
 
 let headingIds: string[] = [];
 
 export const ContentDisplayer: React.FC<ContentDisplayerProps> = ({
   content,
+  setTableOfContents,
 }) => {
-  const [tableOfContents, setTableOfContents] = useState<TableOfContentsData[]>(
-    []
-  );
   const postMarkdownRef = useRef<HTMLDivElement>(null);
+
+  function getInnerText(node: ReactNode): string {
+    if (typeof node === 'string') {
+      return node;
+    }
+
+    if (Array.isArray(node)) {
+      return node.map(getInnerText).join('');
+    }
+
+    if (React.isValidElement(node) && node.props.children) {
+      return getInnerText(node.props.children);
+    }
+    return '';
+  }
 
   function getHeadingId(children: ReactNode): string {
     if (!children) {
       return '';
     }
-
-    const headingText = Array.isArray(children) ? children[0] : children;
+    const headingText = getInnerText(children);
     let count = 0;
     for (const heading of headingIds) {
       count = headingText === heading ? count + 1 : count;
     }
-
-    const id = typeof headingText === 'string' ? headingText + count : '';
+    const id = headingText + count;
     headingIds = [...headingIds, headingText];
+    // console.log(headingIds);
     return id;
   }
 
@@ -81,7 +74,7 @@ export const ContentDisplayer: React.FC<ContentDisplayerProps> = ({
           level: parseInt(header.nodeName.substr(1), 10),
         })
       );
-      console.log('heading', headings);
+      // console.log('heading', headings);
 
       if (headings.length > 0) {
         const tableOfContentData: TableOfContentsData[] = [];
@@ -96,7 +89,7 @@ export const ContentDisplayer: React.FC<ContentDisplayerProps> = ({
           }
           lastHeading = headings.at(i)!;
         }
-        console.log('content', tableOfContentData);
+        // console.log('content', tableOfContentData);
         setTableOfContents(tableOfContentData);
       }
     }
@@ -135,7 +128,7 @@ export const ContentDisplayer: React.FC<ContentDisplayerProps> = ({
     const Pre: JSX.Element = (
       <pre className='blog-pre'>
         <CodeCopyBtn>{children}</CodeCopyBtn>
-        {children}
+        <div className='blog-pre-container'>{children}</div>
       </pre>
     );
 
@@ -144,7 +137,6 @@ export const ContentDisplayer: React.FC<ContentDisplayerProps> = ({
 
   return (
     <div className='displayer'>
-      <TableOfContents heading={tableOfContents} />
       <div
         className='displayer-container'
         ref={postMarkdownRef}>
@@ -212,11 +204,14 @@ export const ContentDisplayer: React.FC<ContentDisplayerProps> = ({
                 {children}
               </h6>
             ),
+            table: ({ node, children }) => (
+              <table className='custom-table'>{children}</table>
+            ),
             ul: ({ node, children }) => (
-              <ul className='custom-list'>{children}</ul>
+              <ul className='custom-list-u'>{children}</ul>
             ),
             ol: ({ node, children }) => (
-              <ol className='custom-list'>{children}</ol>
+              <ol className='custom-list-o'>{children}</ol>
             ),
             li: ({ node, children }) => (
               <li className='custom-list-item'>{children}</li>
