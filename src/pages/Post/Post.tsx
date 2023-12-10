@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import PostContent from '../../components/PostContent/PostContent';
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
+import React, { useState } from "react";
+import PostContent from "../../components/PostContent/PostContent";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
+import VotePost from "../../enums/VotePost";
 
 const value = `
 ## Horizontal Rules
@@ -263,33 +264,36 @@ interface PostProps {
   viewCount: number;
   postCount: number;
   followCount: number;
-  upvote: number;
-  downvote: number;
+  countVote: number;
   comments: string[]; //before
+  isMyPost: boolean;
+  vote: VotePost;
+  tags: string[];
 }
 
 function Post() {
   const [data, setData] = useState<PostProps>({
     content: value,
     thumbnail:
-      'https://1.bp.blogspot.com/-E6gB3SWavGE/X4Wo-00m4qI/AAAAAAAAFMo/VaTo7SBekpgcy9iDDk9j108npXiSWWRPwCLcBGAsYHQ/w0/How%2Bto%2Bfix%2Bthumbnail%2Bissue%2Bin%2Bblogger%2Bhomepage.png',
+      "https://1.bp.blogspot.com/-E6gB3SWavGE/X4Wo-00m4qI/AAAAAAAAFMo/VaTo7SBekpgcy9iDDk9j108npXiSWWRPwCLcBGAsYHQ/w0/How%2Bto%2Bfix%2Bthumbnail%2Bissue%2Bin%2Bblogger%2Bhomepage.png",
     excerpt:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam aliquam quos voluptate laborum asperiores rem. Inventore labore excepturi tempora nam impedit veniam rerum laboriosam, reprehenderit vero voluptas ratione, perspiciatis hic.',
-    avatar:
-      'https://www.pockettactics.com/wp-content/sites/pockettactics/2023/02/Stardew-Valley-Haley-580x334.jpg',
-    fullname: 'Halley',
-    username: 'Halley',
-    date: '08-12-2023 16:58 PM',
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam aliquam quos voluptate laborum asperiores rem. Inventore labore excepturi tempora nam impedit veniam rerum laboriosam, reprehenderit vero voluptas ratione, perspiciatis hic.",
+    avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
+    fullname: "Halley",
+    username: "Halley",
+    date: "08-12-2023 16:58 PM",
     viewCount: 2134,
     postCount: 11,
     followCount: 342,
-    upvote: 34,
-    downvote: 1,
-    comments: ['asdf', 'asdfasd', 'assdf'],
+    countVote: 34,
+    comments: ["asdf", "asdfasd", "assdf"],
+    isMyPost: true,
+    vote: VotePost.Up,
+    tags: ["markdown", "blog", "introduce", "demo", "guide"],
   });
 
   return (
-    <div className='post'>
+    <div className="post">
       <PostContent
         content={data.content}
         thumbnail={data.thumbnail}
@@ -300,9 +304,12 @@ function Post() {
         date={data.date}
         viewCount={data.viewCount}
         postCount={data.postCount}
+        commentCount={data.comments.length}
         followCount={data.followCount}
-        upvote={data.upvote}
-        downvote={data.downvote}
+        countVote={data.countVote}
+        isMyPost={data.isMyPost}
+        vote={data.vote}
+        tags={data.tags}
       />
     </div>
   );

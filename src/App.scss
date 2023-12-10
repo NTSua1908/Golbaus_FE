@@ -1,5 +1,5 @@
-@import './variable.scss';
-@import './breakPoint.scss';
+@import "./variable.scss";
+@import "./breakPoint.scss";
 
 * {
   box-sizing: border-box;
@@ -10,7 +10,7 @@
 .App {
   min-height: 100vh;
   position: relative;
-  background-color: #f7f7f7;
+  background-color: $body-background;
 }
 
 .content-wrap {
@@ -49,7 +49,7 @@
 ::-webkit-scrollbar {
   width: 8px;
   @include for-size(tablet, min) {
-    width: 3px;
+    width: 1px;
   }
 }
 
@@ -59,7 +59,7 @@
 
 ::-webkit-scrollbar-thumb {
   background-color: $text-menu-color;
-  // border-radius: 6px;
+  border-radius: 3px;
 }
 
 // ::-webkit-scrollbar-thumb:hover {

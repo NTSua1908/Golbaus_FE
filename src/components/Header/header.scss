@@ -1,5 +1,5 @@
-@import '../../variable.scss';
-@import '../../breakPoint.scss';
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
 
 .header {
   position: sticky;
@@ -13,7 +13,7 @@
   justify-content: space-between;
   align-items: center;
   color: $text-menu-color;
-  font-size: 20px;
+  font-size: 18px;
   border-bottom: 2px solid $text-menu-color;
   z-index: 99999;
   margin-bottom: 20px;
@@ -30,7 +30,7 @@
     width: 80px;
     height: 100%;
     flex: 1;
-    padding: 15px;
+    padding: 5px;
   }
   &-menu {
     display: flex;
@@ -44,7 +44,8 @@
       align-items: center;
       // flex: 3;
       & li:first-child {
-        margin-right: 50px;
+        margin-right: 40px;
+        margin-left: 10px;
       }
       & li {
         text-align: center;
@@ -78,7 +79,7 @@
         border-radius: 30px;
         border: 3px solid $text-menu-color;
         background-color: #fff;
-        height: 50px;
+        height: 40px;
         width: 350px;
         display: flex;
         align-items: center;
@@ -131,8 +132,8 @@
         }
         &-menu {
           position: absolute;
-          top: 59px;
-          left: -205px;
+          top: 47px;
+          left: -239px;
           border-radius: 15px;
           border: 1px solid $text-menu-color;
           opacity: 0;
@@ -140,9 +141,9 @@
           transition: opacity 0.3s ease, visibility 0.3s ease;
           z-index: 1000;
 
-          @include for-size(phone-sm, min) {
-            left: -217px;
-          }
+          // @include for-size(phone-sm, min) {
+          //   left: -205px;
+          // }
 
           &-header {
             background-color: $background-color;
@@ -266,10 +267,10 @@
           visibility: visible;
         }
         &-menu::before {
-          content: '';
+          content: "";
           position: absolute;
           top: -8px;
-          left: 208px;
+          left: 238px;
           height: 15px;
           width: 15px;
           background-color: $background-color;
@@ -277,15 +278,15 @@
           border-left: solid 1px $text-menu-color;
           border-top: solid 1px $text-menu-color;
 
-          @include for-size(phone-sm, min) {
-            left: 217px;
-          }
+          // @include for-size(phone-sm, min) {
+          //   left: 217px;
+          // }
         }
       }
 
       &-profile {
-        width: 60px;
-        height: 60px;
+        width: 40px;
+        height: 40px;
         border: 1px solid #d4ab64;
         border-radius: 50%;
         position: relative;
@@ -304,7 +305,7 @@
 
         &-menu {
           position: absolute;
-          top: 75px;
+          top: 55px;
           left: -195px;
           width: 280px;
           border-radius: 10px;
@@ -318,7 +319,7 @@
 
           @include for-size(tablet, min) {
             width: 350px;
-            left: -255px;
+            left: -275px;
           }
 
           .padding-icon {
@@ -376,18 +377,18 @@
         }
 
         &-menu::before {
-          content: '';
+          content: "";
           position: absolute;
           height: 15px;
           width: 15px;
           top: -9px;
-          left: 213px;
+          left: 206px;
           background-color: #200941;
           transform: rotate(45deg);
           border-top: 1px solid $text-menu-color;
           border-left: 1px solid $text-menu-color;
           @include for-size(tablet, min) {
-            left: 275px;
+            left: 285px;
           }
         }
         &-menu.show {
