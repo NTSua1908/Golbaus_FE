@@ -3,6 +3,8 @@ import PostContent from "../../components/PostContent/PostContent";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import VotePost from "../../enums/VotePost";
+import CommentsTree from "../../components/CommentTree/CommentTree";
+import { Comment } from "../../components/CommentTree/CommentTree";
 
 const value = `
 ## Horizontal Rules
@@ -253,6 +255,68 @@ It converts "HTML", but keep intact partial entries like "xxxHTMLyyy" and so on.
 
 `;
 
+const comments: Comment[] = [
+  {
+    id: "1",
+    avatar: "path/to/avatar1.jpg",
+    username: "user1",
+    fullName: "User One",
+    date: "2023-12-05",
+    text: "This is the first comment.",
+    upvotes: 10,
+    downvotes: 2,
+    replies: [
+      {
+        id: "1.1",
+        avatar: "path/to/avatar1.1.jpg",
+        username: "user1.1",
+        fullName: "User One Point One",
+        date: "2023-12-06",
+        text: "Reply to the first comment.",
+        upvotes: 5,
+        downvotes: 1,
+        replies: [
+          {
+            id: "1.1.1",
+            avatar: "path/to/avatar1.1.jpg",
+            username: "user1.1",
+            fullName: "User One Point One",
+            date: "2023-12-06",
+            text: "Reply to the first comment.",
+            upvotes: 5,
+            downvotes: 1,
+          },
+          // Add more replies as needed
+        ],
+      },
+      {
+        id: "1.2",
+        avatar: "path/to/avatar2.jpg",
+        username: "user2",
+        fullName: "User Two",
+        date: "2023-12-07",
+        text: "This is the second comment.",
+        upvotes: 8,
+        downvotes: 0,
+        // No replies for the second comment
+      },
+      // Add more replies as needed
+    ],
+  },
+  {
+    id: "2",
+    avatar: "path/to/avatar2.jpg",
+    username: "user2",
+    fullName: "User Two",
+    date: "2023-12-07",
+    text: "This is the second comment.",
+    upvotes: 8,
+    downvotes: 0,
+    // No replies for the second comment
+  },
+  // Add more comments as needed
+];
+
 interface PostProps {
   content: string;
   thumbnail: string;
@@ -265,7 +329,7 @@ interface PostProps {
   postCount: number;
   followCount: number;
   countVote: number;
-  comments: string[]; //before
+  comments: Comment[];
   isMyPost: boolean;
   vote: VotePost;
   tags: string[];
@@ -286,7 +350,7 @@ function Post() {
     postCount: 11,
     followCount: 342,
     countVote: 34,
-    comments: ["asdf", "asdfasd", "assdf"],
+    comments: comments,
     isMyPost: true,
     vote: VotePost.Up,
     tags: ["markdown", "blog", "introduce", "demo", "guide"],
@@ -311,6 +375,7 @@ function Post() {
         vote={data.vote}
         tags={data.tags}
       />
+      <CommentsTree comments={data.comments} />
     </div>
   );
 }

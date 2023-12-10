@@ -1,0 +1,114 @@
+.comment {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.comment-info {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.user-details {
+  flex-grow: 1;
+}
+
+.username {
+  font-weight: bold;
+}
+
+.date {
+  color: #888;
+}
+
+.comment-text {
+  margin-top: 10px;
+}
+
+.comment-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.reply-btn,
+.report-btn {
+  padding: 5px 10px;
+  cursor: pointer;
+  border: none;
+  background-color: #3498db;
+  color: #fff;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.reply-btn:hover,
+.report-btn:hover {
+  background-color: #2980b9;
+}
+
+.replies {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.reply-form {
+  margin-top: 10px;
+  height: 100px;
+  width: 100%;
+  background-color: aquamarine;
+}
+
+/* Add more styles as needed */
+
+.comment {
+  margin-bottom: 15px;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-content {
+  margin-top: 10px;
+}
+
+.votes {
+  margin-top: 10px;
+}
+
+.tree-line {
+  position: absolute;
+  border-left: 1px solid #ccc;
+  height: 100%;
+  left: 24px; /* Adjust based on your design */
+  z-index: -1;
+}
+
+.replies-container {
+  margin-left: 20px;
+  position: relative;
+}
