@@ -1,0 +1,20 @@
+@import '../../variable.scss';
+@import '../../breakPoint.scss';
+
+.post {
+  &-comment {
+    width: 90%;
+    max-width: 1400px;
+    min-width: 350px;
+    margin: 0 auto;
+    background-color: transparent;
+    @include for-size(desktop, min) {
+      width: 98%;
+    }
+
+    &-title {
+      color: $background-color;
+      margin: 20px 0px;
+    }
+  }
+}

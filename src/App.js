@@ -7,6 +7,8 @@ import TableOfContents from './components/TableOfContents/TableOfContents';
 import ShowCode from './components/ShowCode/ContentDisplayer';
 import BasicEditor from './components/BasicEditor/BasicEditor';
 import Post from './pages/Post/Post';
+import Profile from './pages/Profile/Profile';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const markDown = `
 ## Horizontal Rules
@@ -244,7 +246,22 @@ const App = () => {
     <div className='App'>
       <Header />
       <div className='content-wrap'>
-        <Post />
+        <Router>
+          <Routes>
+            <Route
+              path='/post'
+              element={<Post />}
+            />
+            <Route
+              path='/create-post'
+              element={<CreatePost />}
+            />
+            <Route
+              path='/user/profile/:userId'
+              element={<Profile />}
+            />
+          </Routes>
+        </Router>
       </div>
       <Footer />
     </div>
