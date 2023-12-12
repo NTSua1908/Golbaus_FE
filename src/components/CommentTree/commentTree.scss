@@ -1,5 +1,5 @@
-@import '../../variable.scss';
-@import '../../breakPoint.scss';
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
 
 .comment {
   margin: 10px 0px;
@@ -30,14 +30,14 @@
     &-container {
       padding: 10px;
       border-radius: 8px;
-      display: flex;
       justify-content: space-between;
       border: 1px solid #999;
     }
     &-left {
-      flex: 1;
+      display: flex;
     }
     &-details {
+      flex: 1;
       &-fullname {
         font-size: 16px;
         color: $background-color;
@@ -62,7 +62,7 @@
       padding-left: 0px;
       & a {
         text-decoration: none;
-        color: $background-color;
+        color: #1f75cb;
         font-weight: bold;
       }
       & a:hover {
@@ -171,6 +171,10 @@
       }
     }
 
+    &-form {
+      margin-top: 10px;
+    }
+
     &-replies {
       border-radius: 8px;
       border-left: 1px solid #d1d1d1;
@@ -227,5 +231,11 @@
       border: 1px solid #ccc;
       cursor: pointer;
     }
+  }
+}
+
+.comments-tree {
+  &-new {
+    margin-bottom: 10px;
   }
 }

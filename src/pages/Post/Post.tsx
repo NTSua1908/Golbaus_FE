@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import PostContent from '../../components/PostContent/PostContent';
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
-import VoteType from '../../enums/VoteType';
-import CommentsTree from '../../components/CommentTree/CommentTree';
-import { Comment } from '../../components/CommentTree/CommentTree';
-import './post.scss';
+import React, { useState } from "react";
+import PostContent from "../../components/PostContent/PostContent";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
+import VoteType from "../../enums/VoteType";
+import CommentsTree from "../../components/CommentTree/CommentTree";
+import { Comment } from "../../components/CommentTree/CommentTree";
+import "./post.scss";
 
 const value = `
 ## Horizontal Rules
@@ -258,28 +258,28 @@ It converts "HTML", but keep intact partial entries like "xxxHTMLyyy" and so on.
 
 const comments: Comment[] = [
   {
-    id: '1',
-    avatar: 'https://stardewvalleywiki.com/mediawiki/images/0/04/Alex.png',
-    username: 'alex',
-    fullName: 'Alex',
-    date: '2023-12-05  13:34 PM',
-    text: 'This is the first comment.',
+    id: "1",
+    avatar: "https://stardewvalleywiki.com/mediawiki/images/0/04/Alex.png",
+    username: "alex",
+    fullName: "Alex",
+    date: "2023-12-05  13:34 PM",
+    text: "This is the first comment.",
     upvotes: 10,
     downvotes: 2,
-    replyFor: 'Haley',
+    replyFor: "Haley",
     totalReplyCount: 3,
     vote: VoteType.Down,
     replies: [
       {
-        id: '1.1',
-        avatar: 'https://stardewvalleywiki.com/mediawiki/images/2/28/Emily.png',
-        username: 'amily',
-        fullName: 'Amily',
-        date: '2023-12-06  13:34 PM',
-        text: 'Reply to the first comment. Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus sunt commodi possimus odio, officia accusantium nemo nobis eaque odit beatae aperiam dolore doloribus ullam quisquam omnis numquam ratione libero in.',
+        id: "1.1",
+        avatar: "https://stardewvalleywiki.com/mediawiki/images/2/28/Emily.png",
+        username: "amily",
+        fullName: "Amily",
+        date: "2023-12-06  13:34 PM",
+        text: "Reply to the first comment. Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus sunt commodi possimus odio, officia accusantium nemo nobis eaque odit beatae aperiam dolore doloribus ullam quisquam omnis numquam ratione libero in.",
         upvotes: 5,
         downvotes: 1,
-        replyFor: 'alex',
+        replyFor: "alex",
         totalReplyCount: 0,
         vote: VoteType.Up,
         replies: [
@@ -287,48 +287,49 @@ const comments: Comment[] = [
         ],
       },
       {
-        id: '1.2',
-        avatar: 'https://stardewvalleywiki.com/mediawiki/images/1/1b/Robin.png',
-        username: 'robin',
-        fullName: 'Robin',
-        date: '2023-12-07  13:34 PM',
-        text: 'This is the second comment.',
+        id: "1.2",
+        avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Robin.png",
+        username: "robin",
+        fullName: "Robin",
+        date: "2023-12-07  13:34 PM",
+        text: "This is the second comment.",
         upvotes: 8,
         downvotes: 0,
-        replyFor: 'alex',
+        replyFor: "alex",
         totalReplyCount: 0,
         vote: VoteType.Unvote,
-        // No replies for the second comment
+        replies: [],
       },
       {
-        id: '1.1.1',
-        avatar: 'https://stardewvalleywiki.com/mediawiki/images/0/04/Alex.png',
-        username: 'alex',
-        fullName: 'Alex',
-        date: '2023-12-06  13:34 PM',
-        text: 'Reply to the first comment.',
-        replyFor: 'robin',
+        id: "1.1.1",
+        avatar: "https://stardewvalleywiki.com/mediawiki/images/0/04/Alex.png",
+        username: "alex",
+        fullName: "Alex",
+        date: "2023-12-06  13:34 PM",
+        text: "Reply to the first comment.",
+        replyFor: "robin",
         upvotes: 5,
         downvotes: 1,
         totalReplyCount: 0,
         vote: VoteType.Unvote,
+        replies: [],
       },
       // Add more replies as needed
     ],
   },
   {
-    id: '2',
-    avatar: 'https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png',
-    username: 'lewis',
-    fullName: 'Lewis',
-    date: '2023-12-07 13:34 PM',
-    text: 'This is the second comment.',
+    id: "2",
+    avatar: "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
+    username: "lewis",
+    fullName: "Lewis",
+    date: "2023-12-07 13:34 PM",
+    text: "This is the second comment.",
     upvotes: 8,
-    replyFor: 'alex',
+    replyFor: "alex",
     downvotes: 0,
     totalReplyCount: 0,
     vote: VoteType.Up,
-    // No replies for the second comment
+    replies: [],
   },
   // Add more comments as needed
 ];
@@ -355,13 +356,13 @@ function Post() {
   const [data, setData] = useState<PostProps>({
     content: value,
     thumbnail:
-      'https://1.bp.blogspot.com/-E6gB3SWavGE/X4Wo-00m4qI/AAAAAAAAFMo/VaTo7SBekpgcy9iDDk9j108npXiSWWRPwCLcBGAsYHQ/w0/How%2Bto%2Bfix%2Bthumbnail%2Bissue%2Bin%2Bblogger%2Bhomepage.png',
+      "https://1.bp.blogspot.com/-E6gB3SWavGE/X4Wo-00m4qI/AAAAAAAAFMo/VaTo7SBekpgcy9iDDk9j108npXiSWWRPwCLcBGAsYHQ/w0/How%2Bto%2Bfix%2Bthumbnail%2Bissue%2Bin%2Bblogger%2Bhomepage.png",
     excerpt:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam aliquam quos voluptate laborum asperiores rem. Inventore labore excepturi tempora nam impedit veniam rerum laboriosam, reprehenderit vero voluptas ratione, perspiciatis hic.',
-    avatar: 'https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png',
-    fullname: 'Halley',
-    username: 'Halley',
-    date: '08-12-2023 16:58 PM',
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam aliquam quos voluptate laborum asperiores rem. Inventore labore excepturi tempora nam impedit veniam rerum laboriosam, reprehenderit vero voluptas ratione, perspiciatis hic.",
+    avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
+    fullname: "Halley",
+    username: "Halley",
+    date: "08-12-2023 16:58 PM",
     viewCount: 2134,
     postCount: 11,
     followCount: 342,
@@ -369,12 +370,12 @@ function Post() {
     comments: comments,
     isMyPost: true,
     vote: VoteType.Up,
-    tags: ['markdown', 'blog', 'introduce', 'demo', 'guide'],
+    tags: ["markdown", "blog", "introduce", "demo", "guide"],
   });
 
   return (
-    <div className='post'>
-      <div className='post-content'>
+    <div className="post">
+      <div className="post-content">
         <PostContent
           content={data.content}
           thumbnail={data.thumbnail}
@@ -393,8 +394,8 @@ function Post() {
           tags={data.tags}
         />
       </div>
-      <div className='post-comment'>
-        <h2 className='post-comment-title'>Comments</h2>
+      <div className="post-comment">
+        <h2 className="post-comment-title">Comments</h2>
         <CommentsTree comments={data.comments} />
       </div>
     </div>
