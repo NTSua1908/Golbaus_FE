@@ -23,6 +23,7 @@
     "react-syntax-highlighter": "^15.5.0",
     "rehype-slug": "^6.0.0",
     "sass": "^1.69.5",
+    "swiper": "^11.0.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

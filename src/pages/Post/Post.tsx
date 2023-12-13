@@ -9,6 +9,10 @@ import {
   CommentTreeProps,
 } from '../../components/CommentTree/CommentTree';
 import './post.scss';
+import SwipperContent, {
+  SwiperCardContent,
+  SwiperContentProps,
+} from '../../components/SwiperContent/SwiperContent';
 
 const value = `
 ## Horizontal Rules
@@ -259,6 +263,83 @@ It converts "HTML", but keep intact partial entries like "xxxHTMLyyy" and so on.
 
 `;
 
+const contents: SwiperCardContent[] = [
+  {
+    thumbnail:
+      'https://tintuc-divineshop.cdn.vccloud.vn/wp-content/uploads/2020/08/782784.jpg',
+    title: 'Stardev Valley',
+    upvote: 10,
+    downvote: 1,
+    viewCount: 432,
+    authorName: 'Lewis',
+    authorAvatar:
+      'https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png',
+    commentCount: 3,
+    date: new Date(2023, 12, 23, 15, 22),
+    excerpt:
+      'How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games',
+  },
+  {
+    thumbnail: 'https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large',
+    title: 'New mod for Stardev Valley',
+    upvote: 10,
+    downvote: 1,
+    viewCount: 432,
+    authorName: 'Lewis',
+    authorAvatar:
+      'https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png',
+    commentCount: 3,
+    date: new Date(2023, 12, 23, 15, 22),
+    excerpt:
+      'How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games',
+  },
+  {
+    thumbnail: 'https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large',
+    title: 'New mod for Stardev Valley',
+    upvote: 10,
+    downvote: 1,
+    viewCount: 432,
+    authorName: 'Lewis',
+    authorAvatar:
+      'https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png',
+    commentCount: 3,
+    date: new Date(2023, 12, 23, 15, 22),
+    excerpt:
+      'How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games',
+  },
+  {
+    thumbnail: 'https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large',
+    title: 'New mod for Stardev Valley',
+    upvote: 10,
+    downvote: 1,
+    viewCount: 432,
+    authorName: 'Lewis',
+    authorAvatar:
+      'https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png',
+    commentCount: 3,
+    date: new Date(2023, 12, 23, 15, 22),
+    excerpt:
+      'How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games',
+  },
+  {
+    thumbnail: 'https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large',
+    title: 'New mod for Stardev Valley',
+    upvote: 10,
+    downvote: 1,
+    viewCount: 432,
+    authorName: 'Lewis',
+    authorAvatar:
+      'https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png',
+    commentCount: 3,
+    date: new Date(2023, 12, 23, 15, 22),
+    excerpt:
+      'How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games',
+  },
+];
+const relatedPost: SwiperContentProps = {
+  contents: contents,
+};
+
 const comments: Comment[] = [
   {
     id: '1',
@@ -412,6 +493,9 @@ function Post() {
           page={commentProps.page}
           totalCount={commentProps.totalCount}
         />
+      </div>
+      <div className='post-comment-more'>
+        <SwipperContent contents={contents} />
       </div>
     </div>
   );
