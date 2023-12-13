@@ -1,5 +1,5 @@
-@import "../../variable.scss";
-@import "../../breakPoint.scss";
+@import '../../variable.scss';
+@import '../../breakPoint.scss';
 
 .comment {
   margin: 10px 0px;
@@ -149,7 +149,7 @@
         background-color: $body-background;
         border-radius: 5px;
         overflow: hidden;
-        z-index: 1;
+        z-index: 999;
         &-item {
           list-style-type: none;
           padding: 8px 10px;
@@ -186,11 +186,16 @@
       -o-transition: all 0.2s ease-in-out;
       transition: all 0.2s ease-in-out;
       max-height: 0;
-      overflow: hidden;
       &.show {
         margin: 10px 0px 10px 0px;
         max-height: 1000px;
         transform: scaleY(1);
+      }
+
+      &-more {
+        margin-left: 53px;
+        cursor: pointer;
+        font-weight: 500;
       }
     }
   }
@@ -237,5 +242,19 @@
 .comments-tree {
   &-new {
     margin-bottom: 10px;
+  }
+  &-list {
+    &-pagination {
+      display: flex;
+      justify-content: center;
+    }
+  }
+  &-empty {
+    padding: 10px 20px;
+    text-align: center;
+    color: #333;
+    border: 1px solid #333;
+    border-radius: 5px;
+    font-weight: 500;
   }
 }
