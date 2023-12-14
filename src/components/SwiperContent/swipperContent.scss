@@ -8,7 +8,18 @@
   overflow: hidden;
   background-color: #fff;
   color: #000;
-  box-shadow: 4px 4px 10px #ccc;
+  animation: 4s ease-in-out infinite shadown;
+  @keyframes shadown {
+    0% {
+      box-shadow: 4px 4px 10px #000000;
+    }
+    50% {
+      box-shadow: 4px 4px 10px #dbdbdb;
+    }
+    100% {
+      box-shadow: 4px 4px 10px #000000;
+    }
+  }
 
   @include for-size(tablet, min) {
     width: 180px;
@@ -34,7 +45,7 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      max-height: 45px;
+      max-height: 40px;
       @include for-size(tablet, min) {
         font-size: 13px;
         max-height: 36px;

@@ -1,5 +1,5 @@
-@import "../../variable.scss";
-@import "../../breakPoint.scss";
+@import '../../variable.scss';
+@import '../../breakPoint.scss';
 
 .header {
   position: sticky;
@@ -16,7 +16,6 @@
   font-size: 18px;
   border-bottom: 2px solid $text-menu-color;
   z-index: 99999;
-  margin-bottom: 20px;
 
   @include for-size(phone-sm, min) {
     padding: 0 20px;
@@ -267,7 +266,7 @@
           visibility: visible;
         }
         &-menu::before {
-          content: "";
+          content: '';
           position: absolute;
           top: -8px;
           left: 238px;
@@ -377,7 +376,7 @@
         }
 
         &-menu::before {
-          content: "";
+          content: '';
           position: absolute;
           height: 15px;
           width: 15px;

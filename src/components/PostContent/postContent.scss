@@ -6,6 +6,7 @@
   max-width: 1400px;
   min-width: 350px;
   margin: 0 auto;
+  margin-top: 20px;
 
   @include for-size(desktop, min) {
     width: 98%;

@@ -1,0 +1,76 @@
+@import '../../variable.scss';
+@import '../../breakPoint.scss';
+
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  &-container {
+    width: 450px;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid #ebeef5;
+  }
+  &-logo {
+    height: 80px;
+    display: flex;
+    justify-content: center;
+  }
+  &-title {
+    text-align: center;
+    color: $background-color;
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 1.2;
+    display: block;
+    padding: 20px 0px;
+  }
+  &-form {
+    &-input {
+      height: 45px;
+      & .ant-input-prefix {
+        padding: 0 5px;
+      }
+      & .ant-input {
+        text-indent: 10px;
+      }
+    }
+    &-function {
+      padding: 10px 0px;
+      display: flex;
+      justify-content: space-between;
+      & a {
+        color: $background-color;
+        font-weight: 500;
+      }
+      & a:hover {
+        color: #773ec7;
+        text-decoration: underline;
+      }
+    }
+    &-submit {
+      outline: none;
+      color: #ffc562;
+      background-color: $background-color;
+      border: 1px solid $text-menu-color;
+      border-radius: 5px;
+      width: 100%;
+      padding: 8px;
+    }
+  }
+  &-other {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    & hr,
+    & span {
+      flex: 1;
+      text-align: center;
+      color: $background-color;
+      font-size: 18px;
+      font-weight: 700;
+    }
+  }
+}

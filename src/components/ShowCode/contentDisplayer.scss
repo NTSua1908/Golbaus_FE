@@ -7,7 +7,7 @@
 
 /* Custom styles for images */
 .custom-image {
-  width: 90%;
+  max-width: 90%;
   height: auto;
   display: block;
   margin: 0 auto;
@@ -27,31 +27,37 @@
 .custom-heading1 {
   font-size: 2em;
   margin-bottom: 0.5em;
+  line-height: 35px;
 }
 
 .custom-heading2 {
   font-size: 1.5em;
   margin-bottom: 0.5em;
+  line-height: 35px;
 }
 
 .custom-heading3 {
   font-size: 1.17em;
   margin-bottom: 0.5em;
+  line-height: 35px;
 }
 
 .custom-heading4 {
   font-size: 1em;
   margin-bottom: 0.5em;
+  line-height: 35px;
 }
 
 .custom-heading5 {
   font-size: 0.83em;
   margin-bottom: 0.5em;
+  line-height: 35px;
 }
 
 .custom-heading6 {
   font-size: 0.67em;
   margin-bottom: 0.5em;
+  line-height: 35px;
 }
 
 .custom-list-u {
