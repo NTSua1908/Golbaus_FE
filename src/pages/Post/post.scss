@@ -1,5 +1,5 @@
-@import "../../variable.scss";
-@import "../../breakPoint.scss";
+@import '../../variable.scss';
+@import '../../breakPoint.scss';
 
 .post {
   &-comment {
@@ -22,5 +22,10 @@
     max-width: 1400px;
     min-width: 350px;
     margin: 0 auto;
+    padding-top: 20px;
+    &-related,
+    &-other {
+      color: $background-color;
+    }
   }
 }

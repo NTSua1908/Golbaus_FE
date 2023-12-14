@@ -173,6 +173,11 @@
 
     &-form {
       margin-top: 10px;
+      display: flex;
+      &-icon {
+        transform: scaleX(-1);
+        padding: 0px 5px;
+      }
     }
 
     &-replies {

@@ -10,6 +10,9 @@ import VoteType from '../../enums/VoteType';
 import { Link } from 'react-router-dom';
 import { command } from 'yargs';
 import { Pagination } from 'antd';
+import { ImReply } from 'react-icons/im';
+import { CiEdit, CiFlag1 } from 'react-icons/ci';
+import { MdDeleteOutline } from 'react-icons/md';
 
 export interface Comment {
   id: string;
@@ -213,7 +216,8 @@ const Comment = React.memo(
                     }`}>
                     <ul>
                       <li className='comment-content-option-menu-item'>
-                        Report
+                        <CiFlag1 />
+                        <span>Report</span>
                       </li>
                       {/* Validate later */}
                       <li
@@ -221,14 +225,15 @@ const Comment = React.memo(
                         onClick={() => {
                           setEdit(true);
                         }}>
-                        Edit
+                        <CiEdit /> <span>Edit</span>
                       </li>
                       <li
                         className='comment-content-option-menu-item'
                         onClick={() => {
                           onDelete(comment.id);
                         }}>
-                        Delete
+                        <MdDeleteOutline />
+                        <span>Delete</span>
                       </li>
                     </ul>
                   </div>
@@ -268,6 +273,21 @@ const Comment = React.memo(
               </div>
             </div>
           )}
+
+          {isReply && (
+            <div className='comment-content-form'>
+              <div className='comment-content-form-icon'>
+                <ImReply />
+              </div>
+              <ReplyForm
+                content={addReply}
+                setContent={setAddReply}
+                onSave={handleReply}
+                onCancel={handleCancelReply}
+              />
+            </div>
+          )}
+
           {totalCommentCount > 0 && (
             <div
               className='comment-content-showComment'
@@ -284,16 +304,6 @@ const Comment = React.memo(
             </div>
           )}
 
-          {isReply && (
-            <div className='comment-content-form'>
-              <ReplyForm
-                content={addReply}
-                setContent={setAddReply}
-                onSave={handleReply}
-                onCancel={handleCancelReply}
-              />
-            </div>
-          )}
           <div
             className={`comment-content-replies ${
               showComment && replies && 'show'
