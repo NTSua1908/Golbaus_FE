@@ -1,4 +1,3 @@
-// LoginPage.tsx
 import React from 'react';
 import { message } from 'antd';
 import { Form, Input, Button } from 'antd';
@@ -6,6 +5,8 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import './login.scss';
 import { Logo } from '../../Logo';
 import { Link } from 'react-router-dom';
+import { FaFacebook, FaGoogle } from 'react-icons/fa';
+import FormItem from 'antd/es/form/FormItem';
 
 interface LoginFormProps {
   onLogin: (values: any) => void;
@@ -23,7 +24,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       onFinish={onFinish}>
       <Form.Item
         name='email'
-        rules={[{ required: true, message: 'Please input your email!' }]}>
+        rules={[
+          { required: true, message: 'Please input your email!' },
+          {
+            type: 'email',
+            message: 'The input is not valid E-mail!',
+          },
+        ]}
+        hasFeedback>
         <Input
           className='login-form-input'
           prefix={<UserOutlined />}
@@ -38,6 +46,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
           prefix={<LockOutlined />}
           placeholder='Password'
         />
+      </Form.Item>
+      <Form.Item>
         <div className='login-form-function'>
           <Link
             to={'/forgot-password'}
@@ -45,13 +55,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             Forgot password?
           </Link>
           <Link
-            to={'register'}
+            to={'/register'}
             className='login-form-function-item'>
             Create account
           </Link>
         </div>
-      </Form.Item>
-      <Form.Item>
         <button
           className='login-form-submit'
           type='submit'>
@@ -74,6 +82,12 @@ const Login: React.FC = () => {
     message.info('Google login clicked');
   };
 
+  const handleFacebookLogin = () => {
+    // Implement your Google login logic here
+    // You may use a library like Firebase for Google authentication
+    message.info('Google login clicked');
+  };
+
   return (
     <div className='login'>
       <div className='login-container'>
@@ -84,14 +98,24 @@ const Login: React.FC = () => {
         <LoginForm onLogin={handleLogin} />
         <div className='login-other'>
           <hr />
-          <span className='mx-3'>Login by</span>
+          <span className='mx-3'>Sign in with</span>
           <hr />
         </div>
-        <button
-          className='login-other-google'
-          onClick={handleGoogleLogin}>
-          Login with Google
-        </button>
+        <div className='login-other-function'>
+          <button
+            className='login-other-function-google'
+            onClick={handleGoogleLogin}>
+            <FaGoogle style={{ color: '#e94820' }} />
+            <span>Google</span>
+          </button>
+          <div className='login-other-function-devider'></div>
+          <button
+            className='login-other-function-facebook'
+            onClick={handleFacebookLogin}>
+            <FaFacebook style={{ color: '#3b5998' }} />
+            <span>Facebook</span>
+          </button>
+        </div>
       </div>
     </div>
   );

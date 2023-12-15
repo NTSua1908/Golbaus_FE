@@ -9,11 +9,24 @@ import BasicEditor from './components/BasicEditor/BasicEditor';
 import Post from './pages/Post/Post';
 import Profile from './pages/Profile/Profile';
 import Login from './pages/Login/Login';
+import ResetPassword from './pages/ResetPassword/ResetPassword';
+import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 import NotFound from './pages/NotFound/NotFound';
+import Register from './pages/Register/Register';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 
 const App = () => {
+  const hideHeaderFooterRoutes = [
+    '/login',
+    '/reset-password',
+    '/forgot-password',
+    '/register',
+  ];
+  const shouldHideHeaderFooter = hideHeaderFooterRoutes.includes(
+    window.location.pathname
+  );
+
   return (
     <ConfigProvider
       theme={{
@@ -22,8 +35,9 @@ const App = () => {
         },
       }}>
       <div className='App'>
-        <Header />
-        <div className='content-wrap'>
+        {!shouldHideHeaderFooter && <Header />}
+        <div
+          className={`content-wrap ${shouldHideHeaderFooter && 'no-padding'}`}>
           <Router>
             <Routes>
               <Route
@@ -39,17 +53,29 @@ const App = () => {
                 element={<Profile />}
               />
               <Route
+                path='*'
+                element={<NotFound />}
+              />
+              <Route
                 path='/login'
                 element={<Login />}
               />
               <Route
-                path='*'
-                element={<NotFound />}
+                path='/reset-password'
+                element={<ResetPassword />}
+              />
+              <Route
+                path='/forgot-password'
+                element={<ForgotPassword />}
+              />
+              <Route
+                path='/register'
+                element={<Register />}
               />
             </Routes>
           </Router>
         </div>
-        <Footer />
+        {!shouldHideHeaderFooter && <Footer />}
       </div>
     </ConfigProvider>
   );

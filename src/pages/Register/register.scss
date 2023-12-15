@@ -1,7 +1,7 @@
 @import '../../variable.scss';
 @import '../../breakPoint.scss';
 
-.login {
+.register {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,7 +30,7 @@
   }
   &-form {
     & .ant-form-item {
-      margin: 13px 0px;
+      margin: 10px 0px 13px 0px;
     }
     &-input {
       height: 45px;
@@ -43,8 +43,6 @@
     }
     &-function {
       padding: 10px 0px;
-      display: flex;
-      justify-content: space-between;
       & a {
         color: $background-color;
         font-weight: 500;

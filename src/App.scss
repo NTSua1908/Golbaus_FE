@@ -20,6 +20,10 @@
   @include for-size(tablet, min) {
     padding-bottom: calc($footer-height-res + 20px);
   }
+  &.no-padding {
+    height: 100vh;
+    padding: 0;
+  }
 }
 
 ::-webkit-scrollbar {
