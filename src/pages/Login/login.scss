@@ -64,6 +64,16 @@
       padding: 8px;
       cursor: pointer;
       font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      &-spin {
+        margin-left: 10px;
+        & i {
+          background-color: $text-menu-color !important;
+        }
+      }
     }
   }
   &-other {

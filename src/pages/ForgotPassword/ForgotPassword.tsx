@@ -37,7 +37,7 @@ const ForgotPassword: React.FC = () => {
         <h5 className='forgot-password-title'>Forgot password</h5>
         <p className='forgot-password-description'>
           Don't worry! Please provide us with the email you used to register
-          your Viblo account. We will send you a link to reset your password
+          your Golbaus account. We will send you a link to reset your password
           through that email.
         </p>
         <Form

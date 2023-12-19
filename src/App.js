@@ -15,6 +15,8 @@ import NotFound from './pages/NotFound/NotFound';
 import Register from './pages/Register/Register';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
+import { Provider } from 'react-redux';
+import store from './store/configureStore';
 
 const App = () => {
   const hideHeaderFooterRoutes = [
@@ -34,49 +36,53 @@ const App = () => {
           colorPrimary: '#20004d',
         },
       }}>
-      <div className='App'>
-        {!shouldHideHeaderFooter && <Header />}
-        <div
-          className={`content-wrap ${shouldHideHeaderFooter && 'no-padding'}`}>
-          <Router>
-            <Routes>
-              <Route
-                path='/post'
-                element={<Post />}
-              />
-              <Route
-                path='/create-post'
-                element={<CreatePost />}
-              />
-              <Route
-                path='/user/profile/:userId'
-                element={<Profile />}
-              />
-              <Route
-                path='*'
-                element={<NotFound />}
-              />
-              <Route
-                path='/login'
-                element={<Login />}
-              />
-              <Route
-                path='/reset-password'
-                element={<ResetPassword />}
-              />
-              <Route
-                path='/forgot-password'
-                element={<ForgotPassword />}
-              />
-              <Route
-                path='/register'
-                element={<Register />}
-              />
-            </Routes>
-          </Router>
+      <Provider store={store}>
+        <div className='App'>
+          {!shouldHideHeaderFooter && <Header />}
+          <div
+            className={`content-wrap ${
+              shouldHideHeaderFooter && 'no-padding'
+            }`}>
+            <Router>
+              <Routes>
+                <Route
+                  path='/post'
+                  element={<Post />}
+                />
+                <Route
+                  path='/create-post'
+                  element={<CreatePost />}
+                />
+                <Route
+                  path='/user/profile/:userId'
+                  element={<Profile />}
+                />
+                <Route
+                  path='*'
+                  element={<NotFound />}
+                />
+                <Route
+                  path='/login'
+                  element={<Login />}
+                />
+                <Route
+                  path='/reset-password'
+                  element={<ResetPassword />}
+                />
+                <Route
+                  path='/forgot-password'
+                  element={<ForgotPassword />}
+                />
+                <Route
+                  path='/register'
+                  element={<Register />}
+                />
+              </Routes>
+            </Router>
+          </div>
+          {!shouldHideHeaderFooter && <Footer />}
         </div>
-        {!shouldHideHeaderFooter && <Footer />}
-      </div>
+      </Provider>
     </ConfigProvider>
   );
 };

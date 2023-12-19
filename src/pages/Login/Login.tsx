@@ -1,5 +1,5 @@
 import React from 'react';
-import { message } from 'antd';
+import { Spin, message } from 'antd';
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import './login.scss';
@@ -7,12 +7,26 @@ import { Logo } from '../../Logo';
 import { Link } from 'react-router-dom';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import FormItem from 'antd/es/form/FormItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { AuthState } from '../../reducers/authReducer';
+import { RootState } from '../../store/configureStore';
+import { Login as HandleLogin } from '../../services/authService';
+import {
+  loginFailure,
+  loginStart,
+  loginSuccess,
+} from '../../actions/loginAction';
+import { NotificationPlacement } from 'antd/es/notification/interface';
+import { notification } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginFormProps {
   onLogin: (values: any) => void;
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
+  const isLoading = useSelector((state: RootState) => state.auth.isLoading);
+
   const onFinish = (values: any) => {
     onLogin(values);
   };
@@ -63,7 +77,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
         <button
           className='login-form-submit'
           type='submit'>
-          Login
+          Login{isLoading && <Spin className='login-form-submit-spin' />}
         </button>
       </Form.Item>
     </Form>
@@ -71,25 +85,59 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 };
 
 const Login: React.FC = () => {
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state: RootState) => state.auth.isLoading);
+  const navigate = useNavigate();
+
   const handleLogin = (values: any) => {
-    // Implement your email/password login logic here
-    console.log('Email/Password Login:', values);
+    if (!isLoading) {
+      dispatch(loginStart());
+      HandleLogin({ email: values.email, password: values.password })
+        .then((data: any) => {
+          // console.log('Data:', data.token.access_token);
+          localStorage.setItem('token', data.token.access_token);
+          openNotificationSuccess();
+          dispatch(loginSuccess());
+          navigate('/');
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          dispatch(loginFailure());
+          openNotificationFailure();
+        });
+    }
   };
 
   const handleGoogleLogin = () => {
-    // Implement your Google login logic here
-    // You may use a library like Firebase for Google authentication
     message.info('Google login clicked');
   };
 
   const handleFacebookLogin = () => {
-    // Implement your Google login logic here
-    // You may use a library like Firebase for Google authentication
     message.info('Google login clicked');
+  };
+
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotificationSuccess = () => {
+    api.info({
+      message: `Notification`,
+      description: 'Login successful',
+      placement: 'topRight',
+    });
+  };
+
+  const openNotificationFailure = () => {
+    api.info({
+      message: `Notification`,
+      description: 'Login failure (Username or password is incorrect)',
+      placement: 'topRight',
+      type: 'error',
+    });
   };
 
   return (
     <div className='login'>
+      {contextHolder}
       <div className='login-container'>
         <div className='login-logo'>
           <Logo />

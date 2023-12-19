@@ -1,0 +1,8 @@
+import { LoginModel } from './../model/authModel';
+import api from './api';
+
+const BASE_URL_AUTH = 'https://localhost:7032/api/auth/';
+
+export function Login(params: LoginModel) {
+  return api.post(BASE_URL_AUTH + 'login', params);
+}
