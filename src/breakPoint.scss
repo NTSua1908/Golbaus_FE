@@ -18,5 +18,16 @@ $breakpoints: (
         @content;
       }
     }
+  } @else {
+    $breakpoint-value: $breakpoint;
+    @if $direction == max {
+      @media (min-width: $breakpoint-value) {
+        @content;
+      }
+    } @else if $direction == min {
+      @media (max-width: $breakpoint-value) {
+        @content;
+      }
+    }
   }
 }

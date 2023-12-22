@@ -1,11 +1,12 @@
 import {
+  LOGIN_EXPIRE,
   LOGIN_FAILURE,
   LOGIN_START,
   LOGIN_SUCCESS,
   LOGOUT,
 } from '../actions/loginAction';
 
-export interface AuthState {
+interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
 }
@@ -29,6 +30,12 @@ const authReducer = (state = initialState, action: any) => {
         isLoading: false,
       };
     case LOGIN_FAILURE:
+      return {
+        ...state,
+        isAuthenticated: false,
+        isLoading: false,
+      };
+    case LOGIN_EXPIRE:
       return {
         ...state,
         isAuthenticated: false,

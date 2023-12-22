@@ -395,6 +395,11 @@
           visibility: visible;
         }
       }
+      &-auth a {
+        text-decoration: none;
+        font-size: 15px;
+        color: $text-menu-color;
+      }
     }
   }
 }

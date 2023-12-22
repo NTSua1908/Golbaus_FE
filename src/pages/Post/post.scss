@@ -2,6 +2,11 @@
 @import '../../breakPoint.scss';
 
 .post {
+  padding-bottom: calc($footer-height + 20px);
+  @include for-size(tablet, min) {
+    padding-bottom: calc($footer-height-res + 20px);
+  }
+
   &-comment {
     width: 90%;
     max-width: 1400px;

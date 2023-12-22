@@ -1,0 +1,55 @@
+@import '../../../variable.scss';
+@import '../../../breakPoint.scss';
+
+.featured-post {
+  display: flex;
+  padding: 10px 0px;
+  // border-bottom: 1px solid #ccc;
+  @include for-size(desktop, min) {
+    padding: 0px;
+    display: block;
+    border-bottom: none;
+  }
+  &-left {
+    flex: 3;
+    margin-right: 40px;
+    &-small {
+      display: none;
+    }
+    @include for-size(desktop, min) {
+      margin-right: 0px;
+    }
+
+    @include for-size(tablet, min) {
+      margin-right: 0px;
+      &-medium {
+        display: none;
+      }
+      &-small {
+        display: block;
+      }
+    }
+  }
+  &-right {
+    flex: 4;
+    &-medium {
+      display: none;
+    }
+    @include for-size(desktop, min) {
+      &-medium {
+        display: block;
+      }
+      &-small {
+        display: none;
+      }
+    }
+    @include for-size(tablet, min) {
+      &-medium {
+        display: none;
+      }
+      &-small {
+        display: block;
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+@import '../../variable.scss';
+@import '../../breakPoint.scss';
+
+.question-block {
+  display: block;
+  padding: 20px;
+  text-decoration: none;
+  color: #333;
+  border-bottom: 1px solid #999;
+  &:hover {
+    background-color: #f1f1f1;
+  }
+  &-title {
+    font-size: 20px;
+  }
+  &-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    &-left {
+      display: flex;
+      align-items: center;
+      &-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+      }
+      &-avatar {
+        display: block;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+      }
+      &-fullname {
+        display: block;
+        padding: 0px 10px;
+        font-weight: 800;
+        color: $background-color;
+      }
+      &-reputation {
+        display: block;
+        font-size: 15px;
+      }
+    }
+  }
+}

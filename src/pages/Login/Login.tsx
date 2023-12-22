@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Spin, message } from 'antd';
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
@@ -8,9 +8,8 @@ import { Link } from 'react-router-dom';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import FormItem from 'antd/es/form/FormItem';
 import { useDispatch, useSelector } from 'react-redux';
-import { AuthState } from '../../reducers/authReducer';
 import { RootState } from '../../store/configureStore';
-import { Login as HandleLogin } from '../../services/authService';
+import { Login as HandleLogin } from '../../services/AuthService';
 import {
   loginFailure,
   loginStart,
@@ -87,18 +86,28 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 const Login: React.FC = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state: RootState) => state.auth.isLoading);
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, []);
 
   const handleLogin = (values: any) => {
     if (!isLoading) {
       dispatch(loginStart());
       HandleLogin({ email: values.email, password: values.password })
-        .then((data: any) => {
-          // console.log('Data:', data.token.access_token);
-          localStorage.setItem('token', data.token.access_token);
+        .then((res: any) => {
+          localStorage.setItem('token', res.data.token.access_token);
           openNotificationSuccess();
           dispatch(loginSuccess());
-          navigate('/');
+          setTimeout(() => {
+            navigate('/');
+          }, 2000);
         })
         .catch((error) => {
           console.error('Error:', error);

@@ -5,8 +5,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  padding: 0px 5px;
+  min-height: 100vh;
+  padding: 30px 5px;
   &-container {
     width: 450px;
     border-radius: 10px;

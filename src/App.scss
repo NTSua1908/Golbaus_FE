@@ -16,14 +16,14 @@
 
 .content-wrap {
   min-height: calc(100vh - $header-height);
-  padding-bottom: calc($footer-height + 20px);
-  @include for-size(tablet, min) {
-    padding-bottom: calc($footer-height-res + 20px);
-  }
-  &.no-padding {
-    height: 100vh;
-    padding: 0;
-  }
+  // padding-bottom: calc($footer-height + 20px);
+  // @include for-size(tablet, min) {
+  //   padding-bottom: calc($footer-height-res + 20px);
+  // }
+  // &.no-padding {
+  //   min-height: 100vh;
+  //   padding: 0;
+  // }
 }
 
 ::-webkit-scrollbar {

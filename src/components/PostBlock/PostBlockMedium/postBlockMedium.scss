@@ -1,0 +1,71 @@
+@import '../../../variable.scss';
+@import '../../../breakPoint.scss';
+
+.post-block-medium {
+  display: block;
+  padding: 10px 0px;
+  color: #333;
+  margin: 0 auto;
+  height: 435px;
+  text-decoration: none;
+  margin-top: 15px;
+
+  &:hover {
+    border-bottom: 3px solid $background-color;
+    // padding-right: 0px;
+  }
+
+  @include for-size(desktop, min) {
+    margin-top: 0px;
+    height: 515px;
+    padding: 40px 0px;
+    border-bottom: 1px solid #999;
+  }
+
+  @include for-size(tablet, min) {
+    display: block;
+    height: auto;
+  }
+
+  &-thumbnail {
+    height: 260px;
+    &-img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+  }
+  &-content {
+    height: 200px;
+    padding: 10px 5px;
+    display: flex;
+    flex-direction: column;
+
+    &-title {
+      font-size: 25px;
+    }
+    &-excerpt {
+      display: block;
+      flex: 1;
+      padding: 10px 0px;
+      color: #666;
+      line-height: 25px;
+      font-size: 14px;
+      overflow: hidden;
+    }
+    &-info {
+      margin-top: 20px;
+      font-size: 15px;
+      color: #666;
+      &-auth {
+        font-weight: 500;
+        color: #333;
+      }
+      &-date {
+        font-size: 13px;
+        line-height: 23px;
+      }
+    }
+  }
+}

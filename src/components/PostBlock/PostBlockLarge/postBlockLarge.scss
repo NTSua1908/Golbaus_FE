@@ -1,0 +1,75 @@
+@import '../../../variable.scss';
+@import '../../../breakPoint.scss';
+
+.post-block-large {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px 10px 30px;
+  height: 280px;
+  color: #333;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-decoration: none;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  &:hover {
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
+  }
+
+  @include for-size(tablet, min) {
+    display: block;
+    height: auto;
+  }
+
+  &-left {
+    flex: 4;
+    height: 260px;
+    &-img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+  }
+  &-right {
+    flex: 6;
+    padding: 10px;
+    padding-left: 40px;
+    display: flex;
+    flex-direction: column;
+    height: 220px;
+
+    @include for-size(tablet, min) {
+      margin-top: 10px;
+      padding-left: 10px;
+    }
+
+    &-title {
+      font-size: 25px;
+    }
+    &-excerpt {
+      display: block;
+      flex: 1;
+      padding: 10px 0px;
+      color: #666;
+      line-height: 25px;
+      font-size: 14px;
+      overflow: hidden;
+    }
+    &-info {
+      margin-top: 18px;
+      font-size: 15px;
+      color: #666;
+      &-auth {
+        font-weight: 500;
+        color: #333;
+      }
+      &-date {
+        font-size: 13px;
+        line-height: 23px;
+      }
+    }
+  }
+}

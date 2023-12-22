@@ -1,0 +1,90 @@
+@import '../../../variable.scss';
+@import '../../../breakPoint.scss';
+
+.post-block-trending {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin-top: 5px;
+  color: #333;
+  text-decoration: none;
+  padding-right: 3px;
+  border-bottom: 1px solid #ccc;
+
+  &:nth-child(3n + 1) {
+    grid-row: 1;
+  }
+
+  &:nth-child(3n + 2) {
+    grid-row: 2;
+  }
+
+  &:nth-child(3n + 3) {
+    grid-row: 3;
+  }
+
+  @include for-size(desktop, min) {
+    border-bottom: none;
+  }
+
+  @include for-size(tablet, min) {
+    &:nth-child(5n + 1) {
+      grid-row: 1;
+    }
+
+    &:nth-child(5n + 2) {
+      grid-row: 2;
+    }
+    &:nth-child(5n + 3) {
+      grid-row: 3;
+    }
+
+    &:nth-child(5n + 4) {
+      grid-row: 4;
+    }
+    &:nth-child(5n + 5) {
+      grid-row: 5;
+    }
+  }
+
+  @include for-size(500px, min) {
+    &:nth-child(n) {
+      grid-row: auto;
+      grid-column: 1;
+    }
+  }
+
+  &:hover {
+    border-right: 3px solid $background-color;
+    padding-right: 0px;
+  }
+
+  &-left {
+    height: 100%;
+    padding: 0px 5px;
+    display: flex;
+    align-items: center;
+  }
+  &-right {
+    padding: 10px;
+    padding-left: 20px;
+
+    &-title {
+      font-size: 16px;
+    }
+
+    &-info {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #666;
+      &-auth {
+        font-weight: 500;
+        color: #333;
+      }
+      &-date {
+        font-size: 13px;
+        line-height: 23px;
+      }
+    }
+  }
+}

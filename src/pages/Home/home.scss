@@ -1,0 +1,80 @@
+@import '../../variable.scss';
+@import '../../breakPoint.scss';
+
+.home {
+  margin-top: 10px;
+  padding: 20px 0px;
+  padding-bottom: calc($footer-height + 20px);
+  @include for-size(tablet, min) {
+    padding-bottom: calc($footer-height-res + 20px);
+  }
+  &-container {
+    width: 80%;
+    margin: 0 auto;
+    @include for-size(desktop, min) {
+      width: 95%;
+    }
+  }
+  &-title {
+    padding: 30px;
+    text-align: center;
+    color: $background-color;
+    background-color: antiquewhite;
+    margin-bottom: 20px;
+  }
+  &-content {
+    display: flex;
+    margin-top: 30px;
+
+    @include for-size(desktop, min) {
+      flex-direction: column-reverse;
+    }
+
+    &-title {
+      padding: 20px 0px;
+    }
+    &-line {
+      display: flex;
+      align-items: center;
+      &-left {
+        height: 2px;
+        background-color: $background-color;
+        width: 150px;
+      }
+      &-right {
+        height: 2px;
+        background-color: #ccc;
+        flex: 1;
+      }
+    }
+    &-featured {
+      flex: 7;
+      padding: 10px 40px 10px 0px;
+      @include for-size(desktop, min) {
+        padding: 10px 10px 10px 0px;
+      }
+    }
+    &-trending {
+      flex: 3;
+      padding: 10px;
+      &-container {
+        @include for-size(desktop, min) {
+          display: grid;
+          padding: 10px;
+          grid-template-columns: repeat(3, 1fr);
+        }
+        @include for-size(tablet, min) {
+          display: grid;
+          padding: 10px;
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        @include for-size(500px, min) {
+          display: grid;
+          padding: 10px;
+          grid-template-columns: repeat(1, 1fr);
+        }
+      }
+    }
+  }
+}

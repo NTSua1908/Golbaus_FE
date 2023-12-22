@@ -13,6 +13,7 @@ import SwipperContent, {
   SwiperCardContent,
   SwiperContentProps,
 } from '../../components/SwiperContent/SwiperContent';
+import { useLocation } from 'react-router-dom';
 
 const value = `# Ahoy there, mates! Willy's Fish Shop Welcomes You!
 
@@ -336,42 +337,49 @@ function Post() {
     tags: ['markdown', 'blog', 'introduce', 'demo', 'guide'],
   });
 
+  let { state } = useLocation();
+  console.log(state);
+
   return (
-    <div className='post'>
-      <div className='post-content'>
-        <PostContent
-          content={data.content}
-          thumbnail={data.thumbnail}
-          excerpt={data.excerpt}
-          avatar={data.avatar}
-          fullname={data.fullname}
-          username={data.username}
-          date={data.date}
-          viewCount={data.viewCount}
-          postCount={data.postCount}
-          commentCount={data.comments.length}
-          followCount={data.followCount}
-          countVote={data.countVote}
-          isMyPost={data.isMyPost}
-          vote={data.vote}
-          tags={data.tags}
-        />
+    <div>
+      <Header />
+      <div className='post'>
+        <div className='post-content'>
+          <PostContent
+            content={data.content}
+            thumbnail={data.thumbnail}
+            excerpt={data.excerpt}
+            avatar={data.avatar}
+            fullname={data.fullname}
+            username={data.username}
+            date={data.date}
+            viewCount={data.viewCount}
+            postCount={data.postCount}
+            commentCount={data.comments.length}
+            followCount={data.followCount}
+            countVote={data.countVote}
+            isMyPost={data.isMyPost}
+            vote={data.vote}
+            tags={data.tags}
+          />
+        </div>
+        <div className='post-more'>
+          <h3 className='post-more-related'>Related Posts</h3>
+          <SwipperContent contents={contents} />
+          <h3 className='post-more-other'>Other posts by {data.fullname}</h3>
+          <SwipperContent contents={contents} />
+        </div>
+        <div className='post-comment'>
+          <h2 className='post-comment-title'>Comments</h2>
+          <CommentsTree
+            data={commentProps.data}
+            amount={commentProps.amount}
+            page={commentProps.page}
+            totalCount={commentProps.totalCount}
+          />
+        </div>
       </div>
-      <div className='post-more'>
-        <h3 className='post-more-related'>Related Posts</h3>
-        <SwipperContent contents={contents} />
-        <h3 className='post-more-other'>Other posts by {data.fullname}</h3>
-        <SwipperContent contents={contents} />
-      </div>
-      <div className='post-comment'>
-        <h2 className='post-comment-title'>Comments</h2>
-        <CommentsTree
-          data={commentProps.data}
-          amount={commentProps.amount}
-          page={commentProps.page}
-          totalCount={commentProps.totalCount}
-        />
-      </div>
+      <Footer />
     </div>
   );
 }

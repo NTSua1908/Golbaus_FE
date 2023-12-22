@@ -1,8 +1,8 @@
 import Role from '../enums/Role';
 
 export interface UserGetByToken {
-  FullName: string;
-  Avatar: string;
-  UserName: string;
-  Role: Role;
+  fullName: string | null;
+  avatar: string | null;
+  userName: string | null;
+  role: Role | null;
 }
