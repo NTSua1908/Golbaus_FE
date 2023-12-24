@@ -1,5 +1,5 @@
-@import '../../variable.scss';
-@import '../../breakPoint.scss';
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
 
 .home {
   margin-top: 10px;
@@ -8,9 +8,36 @@
   @include for-size(tablet, min) {
     padding-bottom: calc($footer-height-res + 20px);
   }
+
+  &-name {
+    font-size: 70px;
+    text-align: center;
+    // filter: blur(0.01em);
+    color: $background-color;
+    text-shadow: 2px 2px $text-menu-color;
+
+    @include for-size(phone, min) {
+      font-size: 40px;
+    }
+  }
+
+  &-introduce {
+    display: block;
+    text-align: center;
+    line-height: 30px;
+    font-size: 18px;
+    padding: 40px 20px;
+
+    @include for-size(phone, min) {
+      line-height: 28px;
+      font-size: 15px;
+    }
+  }
+
   &-container {
     width: 80%;
     margin: 0 auto;
+    max-width: 1500px;
     @include for-size(desktop, min) {
       width: 95%;
     }
@@ -20,7 +47,7 @@
     text-align: center;
     color: $background-color;
     background-color: antiquewhite;
-    margin-bottom: 20px;
+    margin-bottom: 35px;
   }
   &-content {
     display: flex;
@@ -75,6 +102,36 @@
           grid-template-columns: repeat(1, 1fr);
         }
       }
+    }
+    &-more {
+      position: relative;
+      display: block;
+      padding: 6px 10px;
+      border: 1px inset $background-color;
+      color: $background-color;
+      border-radius: 5px;
+      text-decoration: none;
+      text-align: center;
+      width: 150px;
+      font-size: 13px;
+      margin: 10px auto;
+      transition: width ease-in-out 0.2s;
+      &::after {
+        content: "";
+        position: absolute;
+        top: -4px;
+        left: -4px;
+        right: -4px;
+        bottom: -4px;
+        border: 1px outset $background-color;
+        border-radius: 5px;
+      }
+      &:hover {
+        width: 170px;
+      }
+    }
+    &-special-post {
+      padding: 60px 0px;
     }
   }
 }

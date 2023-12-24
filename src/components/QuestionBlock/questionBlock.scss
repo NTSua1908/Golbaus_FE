@@ -1,5 +1,5 @@
-@import '../../variable.scss';
-@import '../../breakPoint.scss';
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
 
 .question-block {
   display: block;
@@ -18,6 +18,14 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px;
+
+    @include for-size(550px, min) {
+      display: block;
+      &-stats,
+      &-right {
+        margin-top: 10px;
+      }
+    }
     &-left {
       display: flex;
       align-items: center;
@@ -41,6 +49,18 @@
       &-reputation {
         display: block;
         font-size: 15px;
+      }
+    }
+    &-stats {
+      display: flex;
+      &-detail {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        &-icon {
+          margin-right: 5px;
+        }
       }
     }
   }

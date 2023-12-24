@@ -4,5 +4,7 @@ export interface QuestionListModel {
   fullName: string;
   reputation: number;
   date: Date;
+  viewCount: number;
+  commentCount: number;
   tags: string[];
 }

@@ -1,7 +1,9 @@
-@import '../../variable.scss';
-@import '../../breakPoint.scss';
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
 
 .swiper-card {
+  display: block;
+  text-decoration: none;
   width: 270px;
   border-radius: 10px;
   height: 365px;
@@ -45,7 +47,7 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      max-height: 40px;
+      max-height: 39px;
       @include for-size(tablet, min) {
         font-size: 13px;
         max-height: 36px;

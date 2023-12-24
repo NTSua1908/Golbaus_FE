@@ -1,17 +1,11 @@
-@import '../../variable.scss';
-@import '../../breakPoint.scss';
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
 
 .header {
   position: sticky;
   top: 0;
   width: 100%;
-  height: $header-height;
-  transition: background-color 0.3s ease 0s;
   background: $background-color;
-  padding: 0 50px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   color: $text-menu-color;
   font-size: 18px;
   border-bottom: 2px solid $text-menu-color;
@@ -19,6 +13,20 @@
 
   @include for-size(phone-sm, min) {
     padding: 0 20px;
+  }
+  &-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    height: $header-height;
+    transition: background-color 0.3s ease 0s;
+    padding: 0 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include for-size(phone-sm, min) {
+      padding: 0 25px;
+    }
   }
 
   .pointer {
@@ -266,7 +274,7 @@
           visibility: visible;
         }
         &-menu::before {
-          content: '';
+          content: "";
           position: absolute;
           top: -8px;
           left: 238px;
@@ -376,7 +384,7 @@
         }
 
         &-menu::before {
-          content: '';
+          content: "";
           position: absolute;
           height: 15px;
           width: 15px;

@@ -10,10 +10,10 @@
   text-decoration: none;
   margin-top: 15px;
 
-  &:hover {
-    border-bottom: 3px solid $background-color;
-    // padding-right: 0px;
-  }
+  // &:hover {
+  //   border-bottom: 3px solid $background-color;
+  //   // padding-right: 0px;
+  // }
 
   @include for-size(desktop, min) {
     margin-top: 0px;
@@ -37,13 +37,13 @@
     }
   }
   &-content {
-    height: 200px;
+    height: 175px;
     padding: 10px 5px;
     display: flex;
     flex-direction: column;
 
     &-title {
-      font-size: 25px;
+      font-size: 20px;
     }
     &-excerpt {
       display: block;
@@ -55,7 +55,7 @@
       overflow: hidden;
     }
     &-info {
-      margin-top: 20px;
+      margin-top: 10px;
       font-size: 15px;
       color: #666;
       &-auth {
