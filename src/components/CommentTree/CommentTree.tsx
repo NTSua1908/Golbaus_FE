@@ -280,6 +280,7 @@ const Comment = React.memo(
                 <ImReply />
               </div>
               <ReplyForm
+                autoFocus
                 content={addReply}
                 setContent={setAddReply}
                 onSave={handleReply}
@@ -335,12 +336,14 @@ interface ReplyFormProps {
   onSave: () => void;
   onCancel: () => void;
   content: string;
+  autoFocus?: boolean;
   setContent: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const ReplyForm: React.FC<ReplyFormProps> = ({
   onSave,
   onCancel,
+  autoFocus,
   content,
   setContent,
 }) => {
@@ -352,7 +355,7 @@ export const ReplyForm: React.FC<ReplyFormProps> = ({
   return (
     <div className='comment-reply-form'>
       <textarea
-        autoFocus
+        autoFocus={autoFocus}
         className='comment-reply-form-input'
         value={content}
         onChange={handleChange}

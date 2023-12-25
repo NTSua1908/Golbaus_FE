@@ -1,5 +1,5 @@
-@import "../../variable.scss";
-@import "../../breakPoint.scss";
+@import '../../variable.scss';
+@import '../../breakPoint.scss';
 
 .swiper-card {
   display: block;
@@ -10,7 +10,96 @@
   overflow: hidden;
   background-color: #fff;
   color: #000;
-  animation: 4s ease-in-out infinite shadown;
+  box-shadow: 4px 4px 10px #dbdbdb;
+
+  &.animation {
+    @include for-size(tablet, min) {
+      animation: 4s ease-in-out infinite shadown;
+      width: 180px;
+      height: 240px;
+    }
+    .swiper-card-content {
+      &-title {
+        @include for-size(tablet, min) {
+          font-size: 13px;
+          max-height: 36px;
+        }
+      }
+      &-stats {
+        @include for-size(tablet, min) {
+          display: none;
+        }
+      }
+      &-author {
+        &-name {
+          @include for-size(tablet, min) {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-top: 5px;
+            font-size: 12px;
+            font-weight: 600;
+          }
+        }
+        &-img {
+          @include for-size(tablet, min) {
+            display: none;
+          }
+        }
+        &-info {
+          @include for-size(tablet, min) {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  &.base {
+    @include for-size(900px, min) {
+      animation: 4s ease-in-out infinite shadown;
+      width: 180px;
+      height: 240px;
+    }
+    .swiper-card-content {
+      &-title {
+        @include for-size(900px, min) {
+          font-size: 13px;
+          max-height: 36px;
+        }
+      }
+      &-stats {
+        @include for-size(900px, min) {
+          display: none;
+        }
+      }
+      &-author {
+        &-name {
+          @include for-size(900px, min) {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-top: 5px;
+            font-size: 12px;
+            font-weight: 600;
+          }
+        }
+        &-img {
+          @include for-size(900px, min) {
+            display: none;
+          }
+        }
+        &-info {
+          @include for-size(900px, min) {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
   @keyframes shadown {
     0% {
       box-shadow: 4px 4px 10px #000000;
@@ -23,10 +112,6 @@
     }
   }
 
-  @include for-size(tablet, min) {
-    width: 180px;
-    height: 240px;
-  }
   &-thumbnail {
     max-height: 45%;
     overflow: hidden;
@@ -48,10 +133,6 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       max-height: 39px;
-      @include for-size(tablet, min) {
-        font-size: 13px;
-        max-height: 36px;
-      }
     }
     &-excerpt {
       display: -webkit-box;
@@ -70,9 +151,6 @@
       gap: 10px;
       text-align: center;
       font-size: 14px;
-      @include for-size(tablet, min) {
-        display: none;
-      }
       &-detail {
         display: flex;
         align-items: center;
@@ -88,10 +166,10 @@
         &.down &-icon {
           font-size: 20px;
         }
-        &.view &-icon {
-        }
-        &.comments &-icon {
-        }
+        // &.view &-icon {
+        // }
+        // &.comments &-icon {
+        // }
       }
     }
     &-author {
@@ -99,15 +177,6 @@
 
       &-name {
         display: none;
-        @include for-size(tablet, min) {
-          display: -webkit-box;
-          -webkit-line-clamp: 1;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-          margin-top: 5px;
-          font-size: 12px;
-          font-weight: 600;
-        }
       }
       &-img {
         width: 40px;
@@ -115,14 +184,8 @@
         border-radius: 50%;
         border: 1px solid #999;
         margin-right: 10px;
-        @include for-size(tablet, min) {
-          display: none;
-        }
       }
       &-info {
-        @include for-size(tablet, min) {
-          display: none;
-        }
         &-fullname {
           font-size: 16px;
           color: #20004d;

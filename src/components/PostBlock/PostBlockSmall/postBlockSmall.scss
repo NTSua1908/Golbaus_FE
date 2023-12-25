@@ -5,11 +5,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 25px;
   height: 120px;
   color: #333;
   text-decoration: none;
   padding-right: 3px;
+  max-width: 500px;
+  margin: 25px auto 0px auto;
   &:hover {
     border-right: 3px solid $background-color;
     padding-right: 0px;

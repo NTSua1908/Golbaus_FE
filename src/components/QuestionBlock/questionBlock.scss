@@ -1,5 +1,5 @@
-@import "../../variable.scss";
-@import "../../breakPoint.scss";
+@import '../../variable.scss';
+@import '../../breakPoint.scss';
 
 .question-block {
   display: block;
@@ -21,14 +21,19 @@
 
     @include for-size(550px, min) {
       display: block;
-      &-stats,
+      &-stats {
+        margin-top: 10px;
+      }
       &-right {
         margin-top: 10px;
+        text-align: left;
       }
     }
     &-left {
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      flex: 3;
       &-link {
         display: flex;
         align-items: center;
@@ -50,17 +55,27 @@
         display: block;
         font-size: 15px;
       }
-    }
-    &-stats {
-      display: flex;
-      &-detail {
+
+      &-stats {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 10px;
-        &-icon {
-          margin-right: 5px;
+        &-detail {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 10px;
+          &-icon {
+            margin-right: 5px;
+          }
         }
+      }
+    }
+    &-right {
+      flex: 2;
+      text-align: right;
+
+      @include for-size(550px, min) {
+        margin-top: 10px;
+        text-align: left;
       }
     }
   }

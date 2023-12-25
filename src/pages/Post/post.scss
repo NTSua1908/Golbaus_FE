@@ -28,9 +28,19 @@
     min-width: 350px;
     margin: 0 auto;
     padding-top: 20px;
-    &-related,
     &-other {
       color: $background-color;
+      text-align: center;
+      padding: 10px 0px;
+    }
+
+    &-related {
+      color: $background-color;
+      text-align: center;
+      padding: 10px 0px;
+      &-container {
+        margin-top: 20px;
+      }
     }
   }
 }

@@ -14,6 +14,7 @@ import SwipperContent, {
   SwiperContentProps,
 } from '../../components/SwiperContent/SwiperContent';
 import { useLocation } from 'react-router-dom';
+import PostGrid from '../../components/PostGrid/PostGrid';
 
 const value = `# Ahoy there, mates! Willy's Fish Shop Welcomes You!
 
@@ -364,10 +365,12 @@ function Post() {
           />
         </div>
         <div className='post-more'>
-          <h3 className='post-more-related'>Related Posts</h3>
+          <h2 className='post-more-other'>Other posts by {data.fullname}</h2>
           <SwipperContent contents={contents} />
-          <h3 className='post-more-other'>Other posts by {data.fullname}</h3>
-          <SwipperContent contents={contents} />
+          <h2 className='post-more-related'>Related Posts</h2>
+          <div className='post-more-related-container'>
+            <PostGrid posts={contents} />
+          </div>
         </div>
         <div className='post-comment'>
           <h2 className='post-comment-title'>Comments</h2>

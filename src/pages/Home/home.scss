@@ -1,12 +1,22 @@
-@import "../../variable.scss";
-@import "../../breakPoint.scss";
+@import '../../variable.scss';
+@import '../../breakPoint.scss';
 
 .home {
-  margin-top: 10px;
-  padding: 20px 0px;
+  // margin-top: 10px;
+  padding: 0px 0px 20px 0px;
   padding-bottom: calc($footer-height + 20px);
   @include for-size(tablet, min) {
     padding-bottom: calc($footer-height-res + 20px);
+  }
+
+  &-banner {
+    height: 320px;
+    object-fit: cover;
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 auto;
+    display: block;
+    padding-bottom: 20px;
   }
 
   &-name {
@@ -103,35 +113,9 @@
         }
       }
     }
-    &-more {
-      position: relative;
-      display: block;
-      padding: 6px 10px;
-      border: 1px inset $background-color;
-      color: $background-color;
-      border-radius: 5px;
-      text-decoration: none;
-      text-align: center;
-      width: 150px;
-      font-size: 13px;
-      margin: 10px auto;
-      transition: width ease-in-out 0.2s;
-      &::after {
-        content: "";
-        position: absolute;
-        top: -4px;
-        left: -4px;
-        right: -4px;
-        bottom: -4px;
-        border: 1px outset $background-color;
-        border-radius: 5px;
-      }
-      &:hover {
-        width: 170px;
-      }
-    }
+
     &-special-post {
-      padding: 60px 0px;
+      padding: 20px 0px;
     }
   }
 }

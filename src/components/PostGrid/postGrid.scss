@@ -1,0 +1,27 @@
+@import '../../variable.scss';
+@import '../../breakPoint.scss';
+
+.postGrid {
+  width: min-content;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin: 0 auto;
+
+  @include for-size(1280px, min) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include for-size(900px, min) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include for-size(650px, min) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include for-size(phone-sm, min) {
+    gap: 5px;
+    max-width: 100%;
+    // overflow-x: hidden;
+    // overflow-y: unset;
+  }
+}
