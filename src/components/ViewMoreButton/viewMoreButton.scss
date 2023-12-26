@@ -4,11 +4,11 @@
   margin: 0 auto;
   padding: 10px 0px;
   cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
   &-text {
     padding: 3px 0px;
-    &:hover {
-      text-decoration: underline;
-    }
   }
   &-icon {
     color: #79c846;

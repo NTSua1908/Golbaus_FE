@@ -49,6 +49,10 @@
       display: flex;
       list-style-type: none;
       align-items: center;
+      & a {
+        text-decoration: none;
+        color: $text-menu-color;
+      }
       // flex: 3;
       & li:first-child {
         margin-right: 40px;

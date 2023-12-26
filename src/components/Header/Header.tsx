@@ -184,8 +184,12 @@ function Header() {
         <div className="header-menu">
           <div className="header-menu-left">
             <ul>
-              <li className="pointer">Posts</li>
-              <li className="pointer">Questions and Answers</li>
+              <li className="pointer">
+                <Link to={"/Post"}>Posts</Link>
+              </li>
+              <li className="pointer">
+                <Link to={"/QuestionAndAnswer"}>Questions and Answers</Link>
+              </li>
             </ul>
           </div>
           <div className="header-menu-right">

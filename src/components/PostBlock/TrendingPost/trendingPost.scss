@@ -1,11 +1,11 @@
-@import '../../../variable.scss';
-@import '../../../breakPoint.scss';
+@import "../../../variable.scss";
+@import "../../../breakPoint.scss";
 
 .post-block-trending {
   display: flex;
   justify-content: left;
   align-items: center;
-  margin-top: 5px;
+  padding-top: 5px;
   color: #333;
   text-decoration: none;
   padding-right: 3px;

@@ -1,12 +1,12 @@
-import React from 'react';
-import './swipperContent.scss';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import { formatDateToString } from '../../Helper/DateHelper';
-import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti';
-import { FaRegEye, FaRocketchat } from 'react-icons/fa';
-import { Autoplay, Pagination } from 'swiper/modules';
-import { Link } from 'react-router-dom';
+import React from "react";
+import "./swipperContent.scss";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import { formatDateToString } from "../../Helper/DateHelper";
+import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
+import { FaRegEye, FaRocketchat } from "react-icons/fa";
+import { Autoplay, Pagination } from "swiper/modules";
+import { Link } from "react-router-dom";
 
 export interface SwiperCardContent {
   thumbnail: string;
@@ -33,61 +33,59 @@ export interface SwiperContentProps {
 export function SwipperCard({ content, animation }: SwiperCardProps) {
   return (
     <Link
-      to={'/post'}
-      className={`swiper-card ${animation ? 'animation' : 'base'}`}>
-      <div className='swiper-card-thumbnail'>
-        <img
-          src={content.thumbnail}
-          alt='Thumbnail'
-        />
+      to={"/post/" + content.title}
+      className={`swiper-card ${animation ? "animation" : "base"}`}
+    >
+      <div className="swiper-card-thumbnail">
+        <img src={content.thumbnail} alt="Thumbnail" />
       </div>
 
-      <div className='swiper-card-content'>
-        <div className='swiper-card-content-header'>
-          <h3 className='swiper-card-content-title'>{content.title}</h3>
+      <div className="swiper-card-content">
+        <div className="swiper-card-content-header">
+          <h3 className="swiper-card-content-title">{content.title}</h3>
 
-          <p className='swiper-card-content-excerpt'>{content.excerpt}</p>
+          <p className="swiper-card-content-excerpt">{content.excerpt}</p>
         </div>
-        <div className='swiper-card-content-stats'>
-          <div className='swiper-card-content-stats-detail up'>
-            <span className='swiper-card-content-stats-detail-icon'>
+        <div className="swiper-card-content-stats">
+          <div className="swiper-card-content-stats-detail up">
+            <span className="swiper-card-content-stats-detail-icon">
               <TiArrowSortedUp />
             </span>
             {content.upvote}
           </div>
-          <div className='swiper-card-content-stats-detail down'>
-            <span className='swiper-card-content-stats-detail-icon'>
+          <div className="swiper-card-content-stats-detail down">
+            <span className="swiper-card-content-stats-detail-icon">
               <TiArrowSortedDown />
             </span>
             {content.downvote}
           </div>
-          <div className='swiper-card-content-stats-detail view'>
-            <span className='swiper-card-content-stats-detail-icon'>
+          <div className="swiper-card-content-stats-detail view">
+            <span className="swiper-card-content-stats-detail-icon">
               <FaRegEye />
             </span>
             {content.viewCount}
           </div>
-          <div className='swiper-card-content-stats-detail comments'>
-            <span className='swiper-card-content-stats-detail-icon'>
+          <div className="swiper-card-content-stats-detail comments">
+            <span className="swiper-card-content-stats-detail-icon">
               <FaRocketchat />
             </span>
             {content.commentCount}
           </div>
         </div>
-        <div className='swiper-card-content-author'>
-          <span className='swiper-card-content-author-name'>
+        <div className="swiper-card-content-author">
+          <span className="swiper-card-content-author-name">
             <i> By {content.authorName}</i>
           </span>
           <img
             src={content.authorAvatar}
-            alt=''
-            className='swiper-card-content-author-img'
+            alt=""
+            className="swiper-card-content-author-img"
           />
-          <div className='swiper-card-content-author-info'>
-            <div className='swiper-card-content-author-info-fullname'>
+          <div className="swiper-card-content-author-info">
+            <div className="swiper-card-content-author-info-fullname">
               {content.authorName}
             </div>
-            <div className='swiper-card-content-author-info-date'>
+            <div className="swiper-card-content-author-info-date">
               {formatDateToString(content.date)}
             </div>
           </div>
@@ -99,7 +97,7 @@ export function SwipperCard({ content, animation }: SwiperCardProps) {
 
 function SwiperContent({ contents }: SwiperContentProps) {
   return (
-    <div className='swiper-content'>
+    <div className="swiper-content">
       <Swiper
         spaceBetween={20}
         slidesPerView={4}
@@ -153,13 +151,11 @@ function SwiperContent({ contents }: SwiperContentProps) {
             slidesPerView: 1.8,
             spaceBetween: 10,
           },
-        }}>
+        }}
+      >
         {contents.map((content, index) => (
           <SwiperSlide key={index}>
-            <SwipperCard
-              content={content}
-              animation
-            />
+            <SwipperCard content={content} animation />
           </SwiperSlide>
         ))}
       </Swiper>

@@ -1,45 +1,93 @@
-@import '../../variable.scss';
-@import '../../breakPoint.scss';
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
 
 .post {
-  padding-bottom: calc($footer-height + 20px);
+  padding: 0px 0px calc($footer-height + 20px) 0px;
+  background-color: $body-background;
+
   @include for-size(tablet, min) {
     padding-bottom: calc($footer-height-res + 20px);
   }
 
-  &-comment {
-    width: 90%;
-    max-width: 1400px;
-    min-width: 350px;
+  &-banner {
+    height: 250px;
+    object-fit: cover;
+    width: 100%;
+    max-width: 2000px;
     margin: 0 auto;
-    @include for-size(desktop, min) {
-      width: 98%;
-    }
+    display: block;
+    padding-bottom: 20px;
+  }
 
-    &-title {
-      color: $background-color;
-      margin: 20px 0px;
+  &-container {
+    width: 80%;
+    margin: 0 auto;
+    max-width: 1500px;
+
+    @include for-size(desktop, min) {
+      width: 95%;
     }
   }
 
-  &-more {
-    width: 90%;
-    max-width: 1400px;
-    min-width: 350px;
-    margin: 0 auto;
-    padding-top: 20px;
-    &-other {
-      color: $background-color;
-      text-align: center;
-      padding: 10px 0px;
+  &-title {
+    padding: 30px;
+    text-align: center;
+    color: $background-color;
+    background-color: antiquewhite;
+    margin-bottom: 35px;
+  }
+  &-content {
+    display: flex;
+    margin-top: 30px;
+
+    @include for-size(desktop, min) {
+      flex-direction: column-reverse;
     }
 
-    &-related {
-      color: $background-color;
-      text-align: center;
-      padding: 10px 0px;
+    &-title {
+      padding: 20px 0px;
+    }
+    &-line {
+      display: flex;
+      align-items: center;
+      &-left {
+        height: 2px;
+        background-color: $background-color;
+        width: 150px;
+      }
+      &-right {
+        height: 2px;
+        background-color: #ccc;
+        flex: 1;
+      }
+    }
+    &-featured {
+      flex: 7;
+      padding: 10px 40px 10px 0px;
+      @include for-size(desktop, min) {
+        padding: 10px 10px 10px 0px;
+      }
+    }
+    &-trending {
+      flex: 3;
+      padding: 10px;
       &-container {
-        margin-top: 20px;
+        @include for-size(desktop, min) {
+          display: grid;
+          padding: 10px;
+          grid-template-columns: repeat(3, 1fr);
+        }
+        @include for-size(tablet, min) {
+          display: grid;
+          padding: 10px;
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        @include for-size(500px, min) {
+          display: grid;
+          padding: 10px;
+          grid-template-columns: repeat(1, 1fr);
+        }
       }
     }
   }

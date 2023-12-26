@@ -1,0 +1,46 @@
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
+
+.postDetail {
+  padding-bottom: calc($footer-height + 20px);
+  @include for-size(tablet, min) {
+    padding-bottom: calc($footer-height-res + 20px);
+  }
+
+  &-comment {
+    width: 90%;
+    max-width: 1400px;
+    min-width: 350px;
+    margin: 0 auto;
+    @include for-size(desktop, min) {
+      width: 98%;
+    }
+
+    &-title {
+      color: $background-color;
+      margin: 20px 0px;
+    }
+  }
+
+  &-more {
+    width: 90%;
+    max-width: 1400px;
+    min-width: 350px;
+    margin: 0 auto;
+    padding-top: 20px;
+    &-other {
+      color: $background-color;
+      text-align: center;
+      padding: 10px 0px;
+    }
+
+    &-related {
+      color: $background-color;
+      text-align: center;
+      padding: 10px 0px;
+      &-container {
+        margin-top: 20px;
+      }
+    }
+  }
+}
