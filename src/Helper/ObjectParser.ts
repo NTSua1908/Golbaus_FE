@@ -1,8 +1,8 @@
 import { SwiperCardContent } from "../components/SwiperContent/SwiperContent";
-import { PostBlock, PostTrending } from "../model/postModel";
+import { PostBlock, PostList } from "../model/postModel";
 
 export function ParsePostTrendingToSwiperCardContent(
-  PostTrending: PostTrending
+  PostTrending: PostList
 ): SwiperCardContent {
   return {
     date: PostTrending.date,
@@ -19,7 +19,7 @@ export function ParsePostTrendingToSwiperCardContent(
 }
 
 export function ParsePostTrendingToPostBlock(
-  PostTrending: PostTrending
+  PostTrending: PostList
 ): PostBlock {
   return {
     id: PostTrending.id,

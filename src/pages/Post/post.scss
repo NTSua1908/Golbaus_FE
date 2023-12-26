@@ -90,5 +90,14 @@
         }
       }
     }
+
+    &-followed {
+      @include for-size(desktop, min) {
+        margin-left: 20px;
+      }
+      @include for-size(600px, min) {
+        margin-left: 0px;
+      }
+    }
   }
 }

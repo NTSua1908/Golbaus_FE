@@ -7,7 +7,7 @@ export interface PostBlock {
   id: string;
 }
 
-export interface PostTrending {
+export interface PostList {
   thumbnail: string;
   title: string;
   excerpt: string;

@@ -4,7 +4,7 @@ import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import "./post.scss";
-import { PostBlock, PostTrending } from "../../model/postModel";
+import { PostBlock, PostList } from "../../model/postModel";
 import TrendingPost from "../../components/PostBlock/TrendingPost/TrendingPost";
 import PostBlockLarge from "../../components/PostBlock/PostBlockLarge/PostBlockLarge";
 import ViewMoreButton from "../../components/ViewMoreButton/ViewMoreButton";
@@ -13,7 +13,7 @@ import FeaturedPost from "../../components/PostBlock/FeaturedPost/FeaturedPost";
 import SwipperContent from "../../components/SwiperContent/SwiperContent";
 import PostBlockList from "../../components/PostBlock/PostBlockList/PostBlockList";
 
-const contents: PostTrending[] = [
+const contents: PostList[] = [
   {
     id: "1231231",
     thumbnail:
@@ -28,7 +28,7 @@ const contents: PostTrending[] = [
     commentCount: 3,
     date: new Date(2023, 12, 23, 15, 22),
     excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
+      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolor ad fugit accusantium, temporibus saepe, beatae laboriosam, quam id tempore doloribus nemo! Architecto vero earum repudiandae dignissimos labore, dolorum possimus quaerat.",
   },
   {
     id: "1231231",
@@ -225,10 +225,13 @@ function Post() {
         <ViewMoreButton onClick={() => {}} />
 
         <h2 className="post-content-title">Followed Users' Activity</h2>
-        <div className="post-content-followed"></div>
-        {posts.map((post, index) => (
-          <PostBlockList key={index} post={post} />
-        ))}
+        <div className="post-content-followed">
+          {contents.map((post, index) => (
+            <PostBlockList key={index} post={post} />
+          ))}
+        </div>
+
+        <ViewMoreButton onClick={() => {}} />
 
         <ScrollToTop />
       </div>

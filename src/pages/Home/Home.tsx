@@ -4,7 +4,7 @@ import Footer from "../../components/Footer/Footer";
 import PostBlockLarge from "../../components/PostBlock/PostBlockLarge/PostBlockLarge";
 import "./home.scss";
 import FeaturedPost from "../../components/PostBlock/FeaturedPost/FeaturedPost";
-import { PostBlock, PostTrending } from "../../model/postModel";
+import { PostBlock, PostList } from "../../model/postModel";
 import TrendingPost from "../../components/PostBlock/TrendingPost/TrendingPost";
 import { QuestionListModel } from "../../model/questionModel";
 import { title } from "@uiw/react-md-editor";
@@ -18,8 +18,9 @@ import { ParsePostTrendingToPostBlock } from "../../Helper/ObjectParser";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 import ViewMoreButton from "../../components/ViewMoreButton/ViewMoreButton";
 import Banner from "../../images/home_banner.png";
+import { useNavigate } from "react-router-dom";
 
-const contents: PostTrending[] = [
+const contents: PostList[] = [
   {
     id: "1231231",
     thumbnail:
@@ -239,7 +240,16 @@ const questions: QuestionListModel[] = [
 ];
 
 function Home() {
-  console.log("Home");
+  const navigate = useNavigate();
+
+  const gotoPosts = () => {
+    navigate("/post");
+  };
+
+  const gotoQA = () => {
+    navigate("/QuestionAndAnswer");
+  };
+
   return (
     <div>
       <Header />
@@ -302,7 +312,7 @@ function Home() {
             <PostBlockLarge post={post} />
           </div>
 
-          <ViewMoreButton onClick={() => {}} />
+          <ViewMoreButton onClick={gotoPosts} />
 
           <h1 className="home-title">NEW QUESTIONS</h1>
           <div className="home-content-question">
@@ -310,7 +320,7 @@ function Home() {
               <QuestionBlock key={index} question={question} />
             ))}
           </div>
-          <ViewMoreButton onClick={() => {}} />
+          <ViewMoreButton onClick={gotoQA} />
         </div>
         <ScrollToTop />
       </div>
