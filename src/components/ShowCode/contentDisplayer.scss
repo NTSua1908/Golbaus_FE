@@ -1,4 +1,4 @@
-@import '../../breakPoint.scss';
+@import "../../breakPoint.scss";
 /* Custom styles for paragraphs */
 .custom-paragraph {
   margin-bottom: 1rem;
@@ -72,7 +72,7 @@
 }
 
 .custom-list-u .custom-list-item::before {
-  content: '\2022'; /* Bullet character */
+  content: "\2022"; /* Bullet character */
   color: #3498db; /* Bullet color */
   font-size: 1.5em;
   position: absolute;

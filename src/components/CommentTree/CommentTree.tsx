@@ -1,18 +1,18 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import './commentTree.scss';
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import "./commentTree.scss";
 import {
   TiArrowRight,
   TiArrowSortedDown,
   TiArrowSortedUp,
-} from 'react-icons/ti';
-import { SlOptionsVertical } from 'react-icons/sl';
-import VoteType from '../../enums/VoteType';
-import { Link } from 'react-router-dom';
-import { command } from 'yargs';
-import { Pagination } from 'antd';
-import { ImReply } from 'react-icons/im';
-import { CiEdit, CiFlag1 } from 'react-icons/ci';
-import { MdDeleteOutline } from 'react-icons/md';
+} from "react-icons/ti";
+import { SlOptionsVertical } from "react-icons/sl";
+import VoteType from "../../enums/VoteType";
+import { Link } from "react-router-dom";
+import { command } from "yargs";
+import { Pagination } from "antd";
+import { ImReply } from "react-icons/im";
+import { CiEdit, CiFlag1 } from "react-icons/ci";
+import { MdDeleteOutline } from "react-icons/md";
 
 export interface Comment {
   id: string;
@@ -58,19 +58,19 @@ const Comment = React.memo(
     const [currentPage, setCurrentPage] = useState(1);
     const handleLoadMoreReplies = () => {};
     //add reply
-    const [addReply, setAddReply] = useState('');
+    const [addReply, setAddReply] = useState("");
     const handleReply = () => {
       // debugger;
       const commentReply: Comment = {
         avatar:
-          'https://i.pinimg.com/564x/94/9b/8d/949b8d8d9229693ba9d53b054b738e2a.jpg', //My avatar
-        fullName: 'Nguyen Thien Sua', //My full name,
-        username: 'ntsua', //My username,
+          "https://i.pinimg.com/564x/94/9b/8d/949b8d8d9229693ba9d53b054b738e2a.jpg", //My avatar
+        fullName: "Nguyen Thien Sua", //My full name,
+        username: "ntsua", //My username,
         replyFor: comment.username, //Post author user name
-        date: '2023-12-12 12:34 PM',
+        date: "2023-12-12 12:34 PM",
         downvotes: 0,
         upvotes: 0,
-        id: '1.4' + addReply,
+        id: "1.4" + addReply,
         text: addReply,
         totalReplyCount: 0,
         replies: [],
@@ -85,12 +85,12 @@ const Comment = React.memo(
           setShowComment(true);
         }
       }
-      setAddReply('');
+      setAddReply("");
       setReply(false);
     };
 
     const handleCancelReply = () => {
-      setAddReply('');
+      setAddReply("");
       setReply(false);
     };
 
@@ -106,8 +106,6 @@ const Comment = React.memo(
       setShowOption(!isShowOption);
     };
 
-    console.log(comment.id);
-
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
         if (
@@ -118,10 +116,10 @@ const Comment = React.memo(
         }
       };
 
-      document.addEventListener('click', handleClickOutside);
+      document.addEventListener("click", handleClickOutside);
 
       return () => {
-        document.removeEventListener('click', handleClickOutside);
+        document.removeEventListener("click", handleClickOutside);
       };
     }, []);
 
@@ -175,15 +173,15 @@ const Comment = React.memo(
     };
 
     return (
-      <div className='comment'>
-        <div className='comment-header'>
+      <div className="comment">
+        <div className="comment-header">
           <img
             src={comment.avatar}
-            alt='User Avatar'
-            className='comment-header-avatar'
+            alt="User Avatar"
+            className="comment-header-avatar"
           />
         </div>
-        <div className='comment-content'>
+        <div className="comment-content">
           {isEdit ? (
             <ReplyForm
               content={editContent}
@@ -192,46 +190,50 @@ const Comment = React.memo(
               onCancel={handleCancelEditComment}
             />
           ) : (
-            <div className='comment-content-container'>
-              <div className='comment-content-left'>
-                <div className='comment-content-details'>
-                  <span className='comment-content-details-fullname'>
+            <div className="comment-content-container">
+              <div className="comment-content-left">
+                <div className="comment-content-details">
+                  <span className="comment-content-details-fullname">
                     {comment.fullName}
                   </span>
-                  <span className='comment-content-details-username'>
+                  <span className="comment-content-details-username">
                     @{comment.username}
                   </span>
-                  <span className='comment-content-details-date'>
+                  <span className="comment-content-details-date">
                     {comment.date}
                   </span>
                 </div>
                 <div
-                  className='comment-content-option'
+                  className="comment-content-option"
                   ref={optionRef}
-                  onClick={handleShowOption}>
+                  onClick={handleShowOption}
+                >
                   <SlOptionsVertical />
                   <div
                     className={`comment-content-option-menu ${
-                      isShowOption && 'show'
-                    }`}>
+                      isShowOption && "show"
+                    }`}
+                  >
                     <ul>
-                      <li className='comment-content-option-menu-item'>
+                      <li className="comment-content-option-menu-item">
                         <CiFlag1 />
                         <span>Report</span>
                       </li>
                       {/* Validate later */}
                       <li
-                        className='comment-content-option-menu-item'
+                        className="comment-content-option-menu-item"
                         onClick={() => {
                           setEdit(true);
-                        }}>
+                        }}
+                      >
                         <CiEdit /> <span>Edit</span>
                       </li>
                       <li
-                        className='comment-content-option-menu-item'
+                        className="comment-content-option-menu-item"
                         onClick={() => {
                           onDelete(comment.id);
-                        }}>
+                        }}
+                      >
                         <MdDeleteOutline />
                         <span>Delete</span>
                       </li>
@@ -240,34 +242,37 @@ const Comment = React.memo(
                 </div>
               </div>
 
-              <div className='comment-content-message'>
-                <Link to={`/user/profile/${'fill-later'}`}>
+              <div className="comment-content-message">
+                <Link to={`/user/profile/${"fill-later"}`}>
                   @{comment.replyFor}
-                </Link>{' '}
+                </Link>{" "}
                 {content}
               </div>
-              <div className='comment-content-function'>
-                <div className='comment-content-function-votes'>
+              <div className="comment-content-function">
+                <div className="comment-content-function-votes">
                   <div
                     className={`comment-content-function-votes-up ${
-                      vote == VoteType.Up && 'selected'
+                      vote == VoteType.Up && "selected"
                     }`}
-                    onClick={handleUpvote}>
+                    onClick={handleUpvote}
+                  >
                     <TiArrowSortedUp />
                     <span>{upvote}</span>
                   </div>
                   <div
                     className={`comment-content-function-votes-down ${
-                      vote == VoteType.Down && 'selected'
+                      vote == VoteType.Down && "selected"
                     }`}
-                    onClick={handleDownvote}>
+                    onClick={handleDownvote}
+                  >
                     <TiArrowSortedDown />
                     <span>{downvote}</span>
                   </div>
                 </div>
                 <div
-                  className='comment-content-function-reply'
-                  onClick={handleReplyClick}>
+                  className="comment-content-function-reply"
+                  onClick={handleReplyClick}
+                >
                   Reply
                 </div>
               </div>
@@ -275,8 +280,8 @@ const Comment = React.memo(
           )}
 
           {isReply && (
-            <div className='comment-content-form'>
-              <div className='comment-content-form-icon'>
+            <div className="comment-content-form">
+              <div className="comment-content-form-icon">
                 <ImReply />
               </div>
               <ReplyForm
@@ -291,15 +296,17 @@ const Comment = React.memo(
 
           {totalCommentCount > 0 && (
             <div
-              className='comment-content-showComment'
-              onClick={handleShowReplyClick}>
+              className="comment-content-showComment"
+              onClick={handleShowReplyClick}
+            >
               <div
                 className={`comment-content-showComment-button ${
-                  showComment && 'show'
-                }`}>
+                  showComment && "show"
+                }`}
+              >
                 <TiArrowRight />
               </div>
-              <div className='comment-content-showComment-label'>
+              <div className="comment-content-showComment-label">
                 Show replies
               </div>
             </div>
@@ -307,8 +314,9 @@ const Comment = React.memo(
 
           <div
             className={`comment-content-replies ${
-              showComment && replies && 'show'
-            }`}>
+              showComment && replies && "show"
+            }`}
+          >
             {replies &&
               replies.map((reply) => (
                 <Comment
@@ -320,8 +328,9 @@ const Comment = React.memo(
               ))}
             {currentPage < Math.ceil(totalCommentCount / 10) && (
               <div
-                className='comment-content-replies-more'
-                onClick={handleLoadMoreReplies}>
+                className="comment-content-replies-more"
+                onClick={handleLoadMoreReplies}
+              >
                 Show more comments...
               </div>
             )}
@@ -353,24 +362,26 @@ export const ReplyForm: React.FC<ReplyFormProps> = ({
   };
 
   return (
-    <div className='comment-reply-form'>
+    <div className="comment-reply-form">
       <textarea
         autoFocus={autoFocus}
-        className='comment-reply-form-input'
+        className="comment-reply-form-input"
         value={content}
         onChange={handleChange}
-        placeholder='Write your comment...'
+        placeholder="Write your comment..."
       />
-      <div className='comment-reply-form-function'>
+      <div className="comment-reply-form-function">
         <button
-          className='comment-reply-form-function-save'
+          className="comment-reply-form-function-save"
           onClick={onSave}
-          disabled={content.length === 0}>
+          disabled={content.length === 0}
+        >
           Save changes
         </button>
         <button
-          className='comment-reply-form-function-cancel'
-          onClick={onCancel}>
+          className="comment-reply-form-function-cancel"
+          onClick={onCancel}
+        >
           Cancel
         </button>
       </div>
@@ -387,23 +398,23 @@ export interface CommentTreeProps {
 
 const CommentsTree = ({ data, page, amount, totalCount }: CommentTreeProps) => {
   const [comments, setComment] = useState(data);
-  const [reply, setReply] = useState('');
+  const [reply, setReply] = useState("");
   const [currentPage, setCurrentPage] = useState(page);
 
   const handleOnAddComment = () => {
     // console.log(reply);
-    setReply('');
+    setReply("");
     setComment([
       {
         avatar:
-          'https://i.pinimg.com/564x/94/9b/8d/949b8d8d9229693ba9d53b054b738e2a.jpg', //My avatar
-        fullName: 'Nguyen Thien Sua', //My full name,
-        username: 'ntsua', //My username,
-        replyFor: 'Haley', //Post author user name
-        date: '2023-12-12 12:34 PM',
+          "https://i.pinimg.com/564x/94/9b/8d/949b8d8d9229693ba9d53b054b738e2a.jpg", //My avatar
+        fullName: "Nguyen Thien Sua", //My full name,
+        username: "ntsua", //My username,
+        replyFor: "Haley", //Post author user name
+        date: "2023-12-12 12:34 PM",
         downvotes: 0,
         upvotes: 0,
-        id: '1.4' + reply,
+        id: "1.4" + reply,
         text: reply,
         totalReplyCount: 0,
         replies: [],
@@ -418,14 +429,14 @@ const CommentsTree = ({ data, page, amount, totalCount }: CommentTreeProps) => {
   };
 
   const handleOnCancelComment = () => {
-    setReply('');
+    setReply("");
   };
 
   const onChangePage = (page: number, pageSize: Number) => {};
 
   return (
-    <div className='comments-tree'>
-      <div className='comments-tree-new'>
+    <div className="comments-tree">
+      <div className="comments-tree-new">
         <ReplyForm
           content={reply}
           setContent={setReply}
@@ -434,7 +445,7 @@ const CommentsTree = ({ data, page, amount, totalCount }: CommentTreeProps) => {
         />
       </div>
       {comments.length > 0 ? (
-        <div className='comments-tree-list'>
+        <div className="comments-tree-list">
           {comments.map((comment) => (
             <Comment
               key={comment.id}
@@ -442,7 +453,7 @@ const CommentsTree = ({ data, page, amount, totalCount }: CommentTreeProps) => {
               onDelete={handleDeleteComment}
             />
           ))}
-          <div className='comments-tree-list-pagination'>
+          <div className="comments-tree-list-pagination">
             <Pagination
               simple
               defaultCurrent={currentPage}
@@ -453,7 +464,7 @@ const CommentsTree = ({ data, page, amount, totalCount }: CommentTreeProps) => {
           </div>
         </div>
       ) : (
-        <div className='comments-tree-empty'>
+        <div className="comments-tree-empty">
           <p>This post has no comments</p>
         </div>
       )}

@@ -5,8 +5,8 @@ import React, {
   ChangeEvent,
   forwardRef,
   useImperativeHandle,
-} from 'react';
-import MDEditor, { ContextStore, commands } from '@uiw/react-md-editor';
+} from "react";
+import MDEditor, { ContextStore, commands } from "@uiw/react-md-editor";
 import {
   createUploadImageCommand,
   textUnderlineCommand,
@@ -15,10 +15,11 @@ import {
   textAlignRightCommand,
   createUndoCommand,
   createRedoCommand,
-} from './EditorCommands';
-import './style.css';
-import { deleteObject, ref as firebaseRef } from 'firebase/storage';
-import storage from '../../FirebaseInit';
+} from "./EditorCommands";
+import "./style.css";
+import { deleteObject, ref as firebaseRef } from "firebase/storage";
+import storage from "../../FirebaseInit";
+import { deleteImage } from "../../services/FireBaseService";
 
 export interface ImageUploaded {
   link: string;
@@ -40,27 +41,13 @@ const BasicEditor = forwardRef<EditorRef, EditorProps>(
     const [historyIndex, setHistoryIndex] = useState(0);
     const typingTimeoutRef = useRef<number>();
 
-    //Manage image added in this post, we will delete unused image when user save the post
+    //Manage image added in this post, we will delete unused image when user save the post :v
     const [images, setImages] = useState<ImageUploaded[]>([]);
 
-    useEffect(() => {
-      console.log(images);
-    }, [images]);
-
-    //Delete unused image
-    const onSavePost = (): Promise<void> => {
-      return new Promise(async (resolve, reject) => {
-        await images.forEach(async (x) => {
-          if (!value.includes(x.link)) {
-            const desertRef = firebaseRef(storage, x.path);
-            await deleteObject(desertRef)
-              .then()
-              .catch(() => {
-                reject();
-              });
-            resolve();
-          }
-        });
+    //Delete unused image :3
+    const onSavePost = () => {
+      return deleteImage(images, (link) => {
+        return !value.includes(link);
       });
     };
 
@@ -112,7 +99,7 @@ const BasicEditor = forwardRef<EditorRef, EditorProps>(
     };
 
     return (
-      <div className='container'>
+      <div className="BasicEditor">
         <MDEditor
           height={800}
           value={value}
@@ -133,9 +120,9 @@ const BasicEditor = forwardRef<EditorRef, EditorProps>(
                 commands.title6,
               ],
               {
-                name: 'title',
-                groupName: 'title',
-                buttonProps: { 'aria-label': 'Insert title' },
+                name: "title",
+                groupName: "title",
+                buttonProps: { "aria-label": "Insert title" },
               }
             ),
             commands.divider,
@@ -165,4 +152,4 @@ const BasicEditor = forwardRef<EditorRef, EditorProps>(
   }
 );
 
-export default BasicEditor;
+export default React.memo(BasicEditor);

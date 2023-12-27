@@ -1,6 +1,6 @@
-import React from 'react';
-import { SwiperCardContent, SwipperCard } from '../SwiperContent/SwiperContent';
-import './postGrid.scss';
+import React from "react";
+import { SwiperCardContent, SwipperCard } from "../SwiperContent/SwiperContent";
+import "./postGrid.scss";
 
 interface PostGridProps {
   posts: SwiperCardContent[];
@@ -8,9 +8,9 @@ interface PostGridProps {
 
 function PostGrid({ posts }: PostGridProps) {
   return (
-    <div className='postGrid'>
+    <div className="postGrid">
       {posts.map((post, index) => (
-        <SwipperCard content={post} />
+        <SwipperCard key={index} content={post} />
       ))}
     </div>
   );

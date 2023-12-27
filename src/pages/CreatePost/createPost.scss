@@ -1,7 +1,83 @@
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
+
 .create-post {
+  padding: 0px 0px calc($footer-height + 20px) 0px;
+  @include for-size(tablet, min) {
+    padding-bottom: calc($footer-height-res + 20px);
+  }
+
   &-container {
     padding: 10px;
   }
+
+  &-label {
+    padding: 3px 0px 6px 5px;
+    font-size: 16px;
+    display: inline-block;
+  }
+
+  &-describe {
+    font-size: 14px;
+    color: #333;
+  }
+
+  &-thumbnail {
+    display: flex;
+    margin: 10px auto;
+    padding: 0px 30px;
+    width: fit-content;
+    max-width: 99vw;
+    overflow: hidden;
+
+    @include for-size(desktop, min) {
+      display: block;
+    }
+
+    &-input {
+      display: none;
+    }
+    &-label {
+      cursor: pointer;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      padding: 5px 10px;
+      height: fit-content;
+      margin-right: 20px;
+      font-size: 15px;
+      @include for-size(desktop, min) {
+        margin: 0 auto;
+        display: block;
+        width: fit-content;
+      }
+    }
+    &-image {
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      flex: 1;
+
+      @include for-size(desktop, min) {
+        margin-top: 10px;
+      }
+
+      & img {
+        height: 100%;
+        object-fit: cover;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        @include for-size(desktop, min) {
+          height: auto;
+          max-width: 90%;
+        }
+      }
+    }
+  }
+
+  &-excerpt {
+    padding-top: 10px;
+  }
+
   &-function {
     display: flex;
     justify-content: center;
