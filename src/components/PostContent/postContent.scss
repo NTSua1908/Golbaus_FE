@@ -1,5 +1,5 @@
-@import '../../variable.scss';
-@import '../../breakPoint.scss';
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
 
 .postContent {
   width: 90%;
@@ -144,7 +144,7 @@
           justify-content: space-between;
           margin: 20px 0;
 
-          @include for-size(tablet, min) {
+          @include for-size(820px, min) {
             display: block;
           }
 
@@ -211,7 +211,7 @@
             display: flex;
             align-items: center;
             margin-left: 10px;
-            @include for-size(tablet, min) {
+            @include for-size(820px, min) {
               justify-content: right;
               margin-top: 20px;
             }
@@ -264,6 +264,10 @@
                   padding: 8px 10px;
                   cursor: pointer;
                   border-top: 1px solid #ccc;
+                  & a {
+                    text-decoration: none;
+                    color: #333;
+                  }
                   & span {
                     margin-left: 7px;
                   }
@@ -283,6 +287,11 @@
         }
       }
       &-body {
+        &-title {
+          text-align: center;
+          font-size: 30px;
+          padding: 10px 20px 40px 20px;
+        }
         &-tags {
           margin-top: 30px;
         }

@@ -1,0 +1,111 @@
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
+
+.edit-post {
+  &-logo {
+    height: 110px;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+  }
+  &-title {
+    text-align: center;
+    color: $background-color;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.2;
+    display: block;
+    padding-top: 20px;
+  }
+
+  &-container {
+    padding: 10px;
+  }
+
+  &-label {
+    padding: 3px 0px 6px 5px;
+    font-size: 16px;
+    display: inline-block;
+  }
+
+  &-describe {
+    font-size: 14px;
+    color: #333;
+  }
+
+  &-thumbnail {
+    display: flex;
+    margin: 10px auto;
+    padding: 0px 30px;
+    width: fit-content;
+    max-width: 99vw;
+    overflow: hidden;
+
+    @include for-size(desktop, min) {
+      display: block;
+    }
+
+    &-input {
+      display: none;
+    }
+    &-label {
+      cursor: pointer;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      padding: 5px 10px;
+      height: fit-content;
+      margin-right: 20px;
+      font-size: 15px;
+      @include for-size(desktop, min) {
+        margin: 0 auto;
+        display: block;
+        width: fit-content;
+      }
+    }
+    &-image {
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      flex: 1;
+
+      @include for-size(desktop, min) {
+        margin-top: 10px;
+      }
+
+      & img {
+        height: 100%;
+        object-fit: cover;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        @include for-size(desktop, min) {
+          height: auto;
+          max-width: 90%;
+        }
+      }
+    }
+  }
+
+  &-excerpt {
+    padding-top: 10px;
+  }
+
+  &-function {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    &-tag {
+      flex: 8.5;
+      padding: 5px;
+      border: solid 1px #ccc;
+      border-radius: 8px;
+    }
+    &-publish {
+      flex: 1.5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 10px;
+    }
+  }
+}

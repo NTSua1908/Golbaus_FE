@@ -17,6 +17,7 @@ import Profile from "./pages/Profile/Profile";
 import Register from "./pages/Register/Register";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import store, { RootState } from "./store/configureStore";
+import EditPost from "./pages/EditPost/EditPost";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ const App = () => {
               <Route path="/post/:postName" element={<PostDetail />} />
               <Route path="/" element={<Home />} />
               <Route path="/create-post" element={<CreatePost />} />
+              <Route path="/edit-post/:postName" element={<EditPost />} />
               <Route path="/user/profile/:userId" element={<Profile />} />
               <Route path="*" element={<NotFound />} />
               <Route path="/login" element={<Login />} />
