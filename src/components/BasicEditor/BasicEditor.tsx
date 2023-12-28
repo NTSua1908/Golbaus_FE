@@ -46,6 +46,7 @@ const BasicEditor = forwardRef<EditorRef, EditorProps>(
 
     //Delete unused image :3
     const onSavePost = () => {
+      console.log("deleteing...");
       return deleteImage(images, (link) => {
         return !value.includes(link);
       });

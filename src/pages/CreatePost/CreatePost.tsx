@@ -23,6 +23,7 @@ import {
   resizeAndUploadImage,
 } from "../../services/FireBaseService";
 import "./createPost.scss";
+import { Create as CreateNewPost } from "../../services/PostService";
 
 const CreatePost: React.FC = () => {
   const [publishType, setPublishType] = useState<PublishType>(
@@ -43,13 +44,22 @@ const CreatePost: React.FC = () => {
     if (editorRef.current) {
       await editorRef.current
         .onSavePost()
-        .then(() => {
-          api.open({
-            message: "Success",
-            description:
-              "I will never close automatically. This is a purposely very very long description that has many many characters and words.",
-            duration: 0,
-          });
+        .then(async (res) => {
+          const post = {
+            title: title,
+            content: value,
+            excerpt: excerpt,
+            publishType: publishType,
+            tags: tags,
+            thumbnail: thumbnail[0].link,
+          };
+          await CreateNewPost(post)
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         })
         .catch(() => {
           api.open({
@@ -59,6 +69,8 @@ const CreatePost: React.FC = () => {
             duration: 0,
           });
         });
+
+      console.log("Created");
     }
   };
 

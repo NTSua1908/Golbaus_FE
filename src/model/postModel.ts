@@ -1,3 +1,5 @@
+import PublishType from "../enums/PublishType";
+
 export interface PostBlock {
   thumbnail: string;
   title: string;
@@ -19,4 +21,13 @@ export interface PostList {
   commentCount: number;
   date: Date;
   id: string;
+}
+
+export interface PostCreateModel {
+  title: string;
+  excerpt: string;
+  thumbnail: string;
+  tags: string[];
+  content: string;
+  publishType: PublishType;
 }
