@@ -1,0 +1,148 @@
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
+
+.menu-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 300px;
+  background-color: $menu-left-background;
+  color: #f1f1f1;
+  transition: width ease-in-out 0.2s, left ease-in-out 0.5s;
+
+  @include for-size(phone, min) {
+    width: 100vw;
+    left: -100vw;
+  }
+
+  &.hidden {
+    @include for-size(phone, max) {
+      width: 110px;
+    }
+
+    @include for-size(phone, min) {
+      left: 0;
+    }
+  }
+
+  &-container {
+    overflow: hidden;
+  }
+
+  &-header {
+    padding: 30px 10px 30px 10px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #f1f1f1;
+
+    &-avatar {
+      height: 90px;
+      min-width: 90px;
+      width: 90px;
+      border: 1px solid #333;
+      border-radius: 50%;
+      overflow: hidden;
+      & img {
+        object-fit: cover;
+        height: 100%;
+        width: 100%;
+      }
+    }
+    &-info {
+      margin-left: 10px;
+      min-width: 180px;
+      &-fullname {
+        padding-bottom: 10px;
+        font-size: 20px;
+      }
+      &-username {
+        font-size: 14px;
+      }
+    }
+  }
+
+  &-body {
+    padding: 40px 0px 0px 25px;
+    height: calc(100vh - 151px);
+    &-item {
+      height: 60px;
+      display: flex;
+      align-items: center;
+      padding-left: 20px;
+      cursor: pointer;
+      position: relative;
+      min-width: 100%;
+
+      &.active {
+        background-color: $body-background;
+        color: $menu-left-background;
+        border-radius: 60px 0px 0px 60px;
+
+        &::after {
+          content: "";
+          position: absolute;
+          width: 50px;
+          height: 50px;
+          top: -50px;
+          border-bottom-right-radius: 50%;
+          box-shadow: 1px 20px 0px 0px $body-background;
+          right: 0px;
+        }
+
+        &::before {
+          content: "";
+          position: absolute;
+          width: 50px;
+          height: 50px;
+          bottom: -50px;
+          border-top-right-radius: 50%;
+          box-shadow: 1px -20px 0px 0px $body-background;
+          right: 0px;
+        }
+      }
+      &-icon {
+        font-size: 20px;
+      }
+      &-title {
+        margin-left: 55px;
+        font-size: 18px;
+      }
+    }
+  }
+
+  &-toggle {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    background-color: $menu-left-background;
+    position: absolute;
+    top: 135px;
+    left: calc(100% - 15px);
+    cursor: pointer;
+    transition: transform ease-in-out 0.2s;
+
+    @include for-size(phone, min) {
+      right: -50px;
+      left: auto;
+      top: 50px;
+      transform: rotate(180deg);
+    }
+
+    &.hidden {
+      @include for-size(phone, max) {
+        transform: rotate(180deg);
+      }
+
+      @include for-size(phone, min) {
+        right: 20px;
+        top: 50px;
+        transform: rotate(0deg);
+      }
+    }
+  }
+}

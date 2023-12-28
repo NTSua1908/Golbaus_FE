@@ -51,7 +51,7 @@ const App = () => {
               <Route path="/" element={<Home />} />
               <Route path="/create-post" element={<CreatePost />} />
               <Route path="/edit-post/:postName" element={<EditPost />} />
-              <Route path="/user/profile/:userId" element={<Profile />} />
+              <Route path="/profile/:userId" element={<Profile />} />
               <Route path="*" element={<NotFound />} />
               <Route path="/login" element={<Login />} />
               <Route path="/reset-password" element={<ResetPassword />} />
