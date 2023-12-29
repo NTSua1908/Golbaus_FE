@@ -163,7 +163,7 @@ function Header() {
           console.log("Get by token");
         })
         .catch((error) => {
-          console.log(error);
+          localStorage.removeItem("token");
         });
     }
   }, []);

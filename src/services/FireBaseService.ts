@@ -63,18 +63,21 @@ export function deleteImage(
   condition: (x: string) => boolean
 ): Promise<void> {
   return new Promise(async (resolve, reject) => {
-    await images.forEach(async (x) => {
-      if (condition(x.link)) {
-        const desertRef = ref(storage, x.path);
-        await deleteObject(desertRef)
-          .then(() => {
-            resolve();
-          })
-          .catch(() => {
-            reject();
-          });
-      }
-    });
+    if (images.length > 0) {
+      await images.forEach(async (x) => {
+        if (condition(x.link)) {
+          const desertRef = ref(storage, x.path);
+          await deleteObject(desertRef)
+            .then()
+            .catch(() => {
+              reject();
+            });
+        }
+      });
+      resolve();
+    } else {
+      resolve();
+    }
   });
 }
 
