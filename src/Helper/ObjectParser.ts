@@ -5,6 +5,7 @@ export function ParsePostTrendingToSwiperCardContent(
   PostTrending: PostList
 ): SwiperCardContent {
   return {
+    id: PostTrending.id,
     date: PostTrending.date,
     title: PostTrending.title,
     thumbnail: PostTrending.thumbnail,

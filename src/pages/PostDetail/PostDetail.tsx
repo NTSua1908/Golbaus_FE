@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PostContent from "../../components/PostContent/PostContent";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
@@ -15,6 +15,20 @@ import SwipperContent, {
 } from "../../components/SwiperContent/SwiperContent";
 import { useLocation } from "react-router-dom";
 import PostGrid from "../../components/PostGrid/PostGrid";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/configureStore";
+import { GetDetail } from "../../services/PostService";
+import { formatDateToString } from "../../Helper/DateHelper";
+import { Spin } from "antd";
+import { AxiosError } from "axios";
+import {
+  postLoading,
+  postNotFound,
+  removePost,
+  setPostContent,
+} from "../../actions/postAction";
+import NotFound from "../../images/not_found.png";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
 
 const value = `## Horizontal Rules
 ___
@@ -265,6 +279,7 @@ It converts "HTML", but keep intact partial entries like "xxxHTMLyyy" and so on.
 
 const contents: SwiperCardContent[] = [
   {
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail:
       "https://tintuc-divineshop.cdn.vccloud.vn/wp-content/uploads/2020/08/782784.jpg",
     title: "Stardev Valley",
@@ -280,6 +295,7 @@ const contents: SwiperCardContent[] = [
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
   {
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
     upvote: 10,
@@ -294,6 +310,7 @@ const contents: SwiperCardContent[] = [
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
   {
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
     upvote: 10,
@@ -308,6 +325,7 @@ const contents: SwiperCardContent[] = [
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
   {
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
     upvote: 10,
@@ -322,6 +340,7 @@ const contents: SwiperCardContent[] = [
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
   {
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
     upvote: 10,
@@ -336,6 +355,7 @@ const contents: SwiperCardContent[] = [
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
   {
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
     upvote: 10,
@@ -350,6 +370,7 @@ const contents: SwiperCardContent[] = [
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
   {
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
     upvote: 10,
@@ -364,6 +385,7 @@ const contents: SwiperCardContent[] = [
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
   {
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
     upvote: 10,
@@ -378,6 +400,7 @@ const contents: SwiperCardContent[] = [
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
   {
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title:
       "New mod for Stardev Valley, New mod for Stardev Valley, New mod for Stardev Valley",
@@ -482,94 +505,95 @@ const commentProps: CommentTreeProps = {
   totalCount: 24,
 };
 
-interface PostProps {
-  title: string;
-  content: string;
-  thumbnail: string;
-  excerpt: string;
-  avatar: string;
-  fullname: string;
-  username: string;
-  date: string;
-  viewCount: number;
-  postCount: number;
-  followCount: number;
-  countVote: number;
-  comments: Comment[];
-  isMyPost: boolean;
-  vote: VoteType;
-  tags: string[];
-}
-
 function PostDetail() {
-  const [data, setData] = useState<PostProps>({
-    title: "New mod for Stardev Valley - Download now",
-    content: value,
-    thumbnail:
-      "https://1.bp.blogspot.com/-E6gB3SWavGE/X4Wo-00m4qI/AAAAAAAAFMo/VaTo7SBekpgcy9iDDk9j108npXiSWWRPwCLcBGAsYHQ/w0/How%2Bto%2Bfix%2Bthumbnail%2Bissue%2Bin%2Bblogger%2Bhomepage.png",
-    excerpt:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam aliquam quos voluptate laborum asperiores rem. Inventore labore excepturi tempora nam impedit veniam rerum laboriosam, reprehenderit vero voluptas ratione, perspiciatis hic.",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
-    fullname: "Halley",
-    username: "Halley",
-    date: "08-12-2023 16:58 PM",
-    viewCount: 2134,
-    postCount: 11,
-    followCount: 342,
-    countVote: 34,
-    comments: comments,
-    isMyPost: true,
-    vote: VoteType.Up,
-    tags: ["markdown", "blog", "introduce", "demo", "guide"],
-  });
+  const isAuthenticated = localStorage.getItem("token") !== null;
+  const post = useSelector((state: RootState) => state.post.post);
+  const comments = useSelector((state: RootState) => state.post.comments);
+  const isNotFound = useSelector((state: RootState) => state.post.isNotFound);
+  const isLoading = useSelector((state: RootState) => state.post.isLoading);
+  const dispatch = useDispatch();
 
   let { state } = useLocation();
-  console.log(state);
+
+  useEffect(() => {
+    if (!isLoading && (!post || post.id != state.id)) {
+      if (post) {
+        dispatch(removePost());
+      }
+      dispatch(postLoading());
+      GetDetail(state.id)
+        .then((res) => {
+          dispatch(setPostContent(res.data));
+        })
+        .catch((error: AxiosError) => {
+          if (error.request.status === 400) {
+            dispatch(postNotFound());
+          }
+        });
+    }
+  }, [post]);
 
   return (
     <div>
       <Header />
-      <div className="postDetail">
-        <div className="postDetail-content">
-          <PostContent
-            title={data.title}
-            content={data.content}
-            thumbnail={data.thumbnail}
-            excerpt={data.excerpt}
-            avatar={data.avatar}
-            fullname={data.fullname}
-            username={data.username}
-            date={data.date}
-            viewCount={data.viewCount}
-            postCount={data.postCount}
-            commentCount={data.comments.length}
-            followCount={data.followCount}
-            countVote={data.countVote}
-            isMyPost={data.isMyPost}
-            vote={data.vote}
-            tags={data.tags}
-          />
+      {isNotFound && (
+        <div className="postDetail-notFound">
+          <img src={NotFound} alt="Not Found" />
         </div>
-        <div className="postDetail-more">
-          <h2 className="postDetail-more-other">
-            Other posts by {data.fullname}
-          </h2>
-          <SwipperContent contents={contents} />
-          <h2 className="postDetail-more-related">Related Posts</h2>
-          <div className="postDetail-more-related-container">
-            <PostGrid posts={contents} />
+      )}
+      {isLoading && (
+        <div>
+          <Spin fullscreen size="large" />
+        </div>
+      )}
+      {post && post.id === state.id && (
+        <div className="postDetail">
+          <div className="postDetail-content">
+            <PostContent
+              title={post.title}
+              content={post.content}
+              thumbnail={post.thumbnail}
+              excerpt={post.excerpt}
+              avatar={post.avatar}
+              fullname={post.fullName}
+              username={post.userName}
+              date={
+                post.publishDate
+                  ? formatDateToString(post.publishDate)
+                  : "Unpublished"
+              }
+              viewCount={post.viewCount}
+              postCount={post.postCount}
+              commentCount={post.commentCount}
+              followCount={post.followCount}
+              countVote={post.countVote}
+              isMyPost={post.isMyPost}
+              vote={post.vote}
+              tags={post.tags}
+            />
+          </div>
+          <div className="postDetail-more">
+            <h2 className="postDetail-more-other">
+              Other posts by {post.fullName}
+            </h2>
+            <SwipperContent contents={contents} />
+            <h2 className="postDetail-more-related">Related Posts</h2>
+            <div className="postDetail-more-related-container">
+              <PostGrid posts={contents} />
+            </div>
+          </div>
+          <div className="postDetail-comment">
+            <h2 className="postDetail-comment-title">Comments</h2>
+            <CommentsTree
+              data={commentProps.data}
+              amount={commentProps.amount}
+              page={commentProps.page}
+              totalCount={commentProps.totalCount}
+            />
           </div>
         </div>
-        <div className="postDetail-comment">
-          <h2 className="postDetail-comment-title">Comments</h2>
-          <CommentsTree
-            data={commentProps.data}
-            amount={commentProps.amount}
-            page={commentProps.page}
-            totalCount={commentProps.totalCount}
-          />
-        </div>
-      </div>
+      )}
+      <ScrollToTop />
       <Footer />
     </div>
   );

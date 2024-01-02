@@ -1,4 +1,5 @@
 import PublishType from "../enums/PublishType";
+import VoteType from "../enums/VoteType";
 
 export interface PostBlock {
   thumbnail: string;
@@ -30,4 +31,26 @@ export interface PostCreateModel {
   tags: string[];
   content: string;
   publishType: PublishType;
+}
+
+export interface PostDetailModel {
+  id: string;
+  title: string;
+  excerpt: string;
+  thumbnail: string;
+  content: string;
+  countVote: number;
+  publishDate?: Date;
+  updatedDate?: Date;
+  fullName: string;
+  userName: string;
+  avatar: string;
+  isFollowed: string;
+  isMyPost: boolean;
+  postCount: number;
+  followCount: number;
+  commentCount: number;
+  viewCount: number;
+  vote: VoteType;
+  tags: string[];
 }

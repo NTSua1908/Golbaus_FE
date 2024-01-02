@@ -1,7 +1,7 @@
 enum VoteType {
-  Unvote,
   Up,
   Down,
+  Unvote,
 }
 
 export default VoteType;

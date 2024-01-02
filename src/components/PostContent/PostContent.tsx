@@ -130,7 +130,7 @@ function PostContent({
               <TiArrowSortedUp />
             </div>
             <div className="postContent-body-left-count">
-              {voteCount && "+"}
+              {voteCount > 0 && "+"}
               {voteCount}
             </div>
             <div

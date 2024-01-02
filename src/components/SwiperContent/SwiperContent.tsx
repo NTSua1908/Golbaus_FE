@@ -9,6 +9,7 @@ import { Autoplay, Pagination } from "swiper/modules";
 import { Link } from "react-router-dom";
 
 export interface SwiperCardContent {
+  id: string;
   thumbnail: string;
   title: string;
   excerpt: string;
@@ -34,6 +35,7 @@ export function SwipperCard({ content, animation }: SwiperCardProps) {
   return (
     <Link
       to={"/post/" + content.title}
+      state={{ id: content.id }}
       className={`swiper-card ${animation ? "animation" : "base"}`}
     >
       <div className="swiper-card-thumbnail">

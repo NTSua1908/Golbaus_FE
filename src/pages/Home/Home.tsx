@@ -1,28 +1,22 @@
-import React from "react";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
-import PostBlockLarge from "../../components/PostBlock/PostBlockLarge/PostBlockLarge";
-import "./home.scss";
-import FeaturedPost from "../../components/PostBlock/FeaturedPost/FeaturedPost";
-import { PostBlock, PostList } from "../../model/postModel";
-import TrendingPost from "../../components/PostBlock/TrendingPost/TrendingPost";
-import { QuestionListModel } from "../../model/questionModel";
-import { title } from "@uiw/react-md-editor";
-import { queries } from "@testing-library/react";
-import QuestionBlock from "../../components/QuestionBlock/QuestionBlock";
-import SwipperContent, {
-  SwiperCardContent,
-} from "../../components/SwiperContent/SwiperContent";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ParsePostTrendingToPostBlock } from "../../Helper/ObjectParser";
+import Footer from "../../components/Footer/Footer";
+import Header from "../../components/Header/Header";
+import FeaturedPost from "../../components/PostBlock/FeaturedPost/FeaturedPost";
+import PostBlockLarge from "../../components/PostBlock/PostBlockLarge/PostBlockLarge";
+import TrendingPost from "../../components/PostBlock/TrendingPost/TrendingPost";
+import QuestionBlock from "../../components/QuestionBlock/QuestionBlock";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
+import SwipperContent from "../../components/SwiperContent/SwiperContent";
 import ViewMoreButton from "../../components/ViewMoreButton/ViewMoreButton";
 import Banner from "../../images/home_banner.png";
-import { useNavigate } from "react-router-dom";
+import { PostBlock, PostList } from "../../model/postModel";
+import { QuestionListModel } from "../../model/questionModel";
+import "./home.scss";
 
 const contents: PostList[] = [
   {
-    id: "1231231",
+    id: "18dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail:
       "https://tintuc-divineshop.cdn.vccloud.vn/wp-content/uploads/2020/08/782784.jpg",
     title: "Stardev Valley 123",
@@ -38,7 +32,7 @@ const contents: PostList[] = [
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
   {
-    id: "1231231",
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
     upvote: 10,
@@ -53,7 +47,7 @@ const contents: PostList[] = [
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
   {
-    id: "1231231",
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley 456",
     upvote: 10,
@@ -68,7 +62,7 @@ const contents: PostList[] = [
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
   {
-    id: "1231231",
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
     upvote: 10,
@@ -83,7 +77,7 @@ const contents: PostList[] = [
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
   {
-    id: "1231231",
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
     upvote: 10,
@@ -98,7 +92,7 @@ const contents: PostList[] = [
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
   {
-    id: "1231231",
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
     upvote: 10,
@@ -113,7 +107,7 @@ const contents: PostList[] = [
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
   {
-    id: "1231231",
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
     upvote: 10,
@@ -128,7 +122,7 @@ const contents: PostList[] = [
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
   {
-    id: "1231231",
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
     upvote: 10,
@@ -143,7 +137,7 @@ const contents: PostList[] = [
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
   {
-    id: "1231231",
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title:
       "New mod for Stardev Valley, New mod for Stardev Valley, New mod for Stardev Valley",
@@ -300,6 +294,7 @@ function Home() {
               <div className="home-content-trending-container">
                 {contents.map((post, index) => (
                   <TrendingPost
+                    key={index}
                     index={index + 1}
                     post={ParsePostTrendingToPostBlock(post)}
                   />

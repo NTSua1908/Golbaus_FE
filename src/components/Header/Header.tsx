@@ -256,9 +256,10 @@ function Header() {
                         }`}
                       >
                         {notifications.map((notification, index) => (
-                          <a
-                            href={notification.link}
+                          <Link
+                            to={notification.link}
                             className="notification-container"
+                            key={index}
                           >
                             <div
                               key={index}
@@ -266,15 +267,15 @@ function Header() {
                                 !notification.isRead && "unread"
                               }`}
                             >
-                              <a
-                                href={notification.userUrl}
+                              <Link
+                                to={notification.userUrl}
                                 className="user-avatar"
                               >
                                 <img
                                   src={notification.avatarUrl}
                                   alt={`${notification.user}'s avatar`}
                                 />
-                              </a>
+                              </Link>
                               <div className="notification-content">
                                 <p>
                                   <a
@@ -291,7 +292,7 @@ function Header() {
                                 </span>
                               </div>
                             </div>
-                          </a>
+                          </Link>
                         ))}
                       </div>
                     )}
