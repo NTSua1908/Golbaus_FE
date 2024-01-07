@@ -1,5 +1,8 @@
+import { Dayjs } from "dayjs";
 import PublishType from "../enums/PublishType";
 import VoteType from "../enums/VoteType";
+import OrderBy from "../enums/OrderBy";
+import OrderType from "../enums/OrderType";
 
 export interface PostBlock {
   thumbnail: string;
@@ -53,4 +56,14 @@ export interface PostDetailModel {
   viewCount: number;
   vote: VoteType;
   tags: string[];
+}
+
+export interface PostFilter {
+  title: string;
+  tags: string[];
+  user: string;
+  dateFrom: Dayjs | null;
+  dateTo: Dayjs | null;
+  orderBy: OrderBy | null;
+  orderType: OrderType | null;
 }

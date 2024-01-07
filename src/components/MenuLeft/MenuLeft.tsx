@@ -18,18 +18,25 @@ interface MenuLetProps {
 function MenuLeft({ items, avartar, fullName, userName }: MenuLetProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isHidden, setHidden] = useState(false);
+  const [isHiddenMobile, setHiddenMobile] = useState(true);
 
   const handleSelectMenuItem = (index: number, onClick: () => void) => {
     setSelectedIndex(index);
+    setHiddenMobile(true);
     onClick();
   };
 
   const handleHideMenu = () => {
     setHidden(!isHidden);
+    setHiddenMobile(!isHiddenMobile);
   };
 
   return (
-    <div className={`menu-left ${isHidden && "hidden"}`}>
+    <div
+      className={`menu-left ${isHidden && "hidden"} ${
+        isHiddenMobile && "hiddenMobile"
+      }`}
+    >
       <div className="menu-left-container">
         <div className="menu-left-header">
           <div className="menu-left-header-avatar">
@@ -58,7 +65,9 @@ function MenuLeft({ items, avartar, fullName, userName }: MenuLetProps) {
         </div>
       </div>
       <div
-        className={`menu-left-toggle ${isHidden && "hidden"}`}
+        className={`menu-left-toggle ${isHidden && "hidden"} ${
+          isHiddenMobile && "hiddenMobile"
+        }`}
         onClick={handleHideMenu}
       >
         <FaAngleLeft />

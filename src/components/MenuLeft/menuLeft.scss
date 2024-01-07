@@ -2,27 +2,30 @@
 @import "../../breakPoint.scss";
 
 .menu-left {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
   height: 100vh;
   width: 300px;
-  background-color: $menu-left-background;
+  background-color: $background-color;
+  // background-color: $menu-left-background;
   color: #f1f1f1;
   transition: width ease-in-out 0.2s, left ease-in-out 0.5s;
 
   @include for-size(phone, min) {
+    position: absolute;
+    top: 0;
     width: 100vw;
-    left: -100vw;
+    left: 0;
   }
 
   &.hidden {
     @include for-size(phone, max) {
       width: 110px;
     }
+  }
 
+  &.hiddenMobile {
     @include for-size(phone, min) {
-      left: 0;
+      left: -100vw;
     }
   }
 
@@ -35,6 +38,10 @@
     display: flex;
     align-items: center;
     border-bottom: 1px solid #f1f1f1;
+
+    @include for-size(phone, min) {
+      justify-content: center;
+    }
 
     &-avatar {
       height: 90px;
@@ -65,6 +72,11 @@
   &-body {
     padding: 40px 0px 0px 25px;
     height: calc(100vh - 151px);
+
+    @include for-size(phone, min) {
+      padding: 40px 25px 0px 25px;
+    }
+
     &-item {
       height: 60px;
       display: flex;
@@ -76,8 +88,11 @@
 
       &.active {
         background-color: $body-background;
-        color: $menu-left-background;
+        color: $background-color;
         border-radius: 60px 0px 0px 60px;
+        @include for-size(phone, min) {
+          border-radius: 60px;
+        }
 
         &::after {
           content: "";
@@ -88,6 +103,10 @@
           border-bottom-right-radius: 50%;
           box-shadow: 1px 20px 0px 0px $body-background;
           right: 0px;
+
+          @include for-size(phone, min) {
+            content: none;
+          }
         }
 
         &::before {
@@ -99,6 +118,10 @@
           border-top-right-radius: 50%;
           box-shadow: 1px -20px 0px 0px $body-background;
           right: 0px;
+
+          @include for-size(phone, min) {
+            content: none;
+          }
         }
       }
       &-icon {
@@ -119,7 +142,7 @@
     justify-content: center;
     border-radius: 50%;
     border: 1px solid #fff;
-    background-color: $menu-left-background;
+    background-color: $background-color;
     position: absolute;
     top: 135px;
     left: calc(100% - 15px);
@@ -127,21 +150,24 @@
     transition: transform ease-in-out 0.2s;
 
     @include for-size(phone, min) {
-      right: -50px;
-      left: auto;
+      right: 20px;
       top: 50px;
-      transform: rotate(180deg);
+      left: auto;
+      transform: rotate(0deg);
     }
 
     &.hidden {
       @include for-size(phone, max) {
         transform: rotate(180deg);
       }
+    }
 
+    &.hiddenMobile {
       @include for-size(phone, min) {
-        right: 20px;
-        top: 50px;
-        transform: rotate(0deg);
+        right: -50px;
+        left: auto;
+        top: 25px;
+        transform: rotate(180deg);
       }
     }
   }

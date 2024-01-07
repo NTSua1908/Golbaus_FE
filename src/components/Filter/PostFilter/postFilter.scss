@@ -1,0 +1,63 @@
+@import "../../../variable.scss";
+@import "../../../breakPoint.scss";
+
+.filterPost {
+  &-tags {
+    padding: 5px;
+    border: solid 1px #ccc;
+    border-radius: 8px;
+  }
+
+  & .ant-picker-range {
+    height: 40px;
+  }
+
+  &-input {
+    height: 45px;
+    width: 100% !important;
+    & .ant-input-prefix {
+      padding: 0 5px;
+    }
+    & .ant-input {
+      font-size: 17px;
+      text-indent: 10px;
+    }
+  }
+
+  &-label {
+    margin: 10px 0px 10px 5px;
+    display: block;
+  }
+
+  &-item {
+    padding: 5px 0px;
+
+    &.function {
+      display: flex;
+      justify-content: space-evenly;
+    }
+  }
+
+  &-button {
+    padding: 15px 25px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-top: 20px;
+    cursor: pointer;
+
+    &.apply {
+      background-color: green;
+      color: #ccc;
+    }
+
+    &.cancel {
+      background-color: #949494;
+      color: #333;
+      display: none;
+
+      @include for-size(desktop, min) {
+        display: block;
+      }
+    }
+  }
+}

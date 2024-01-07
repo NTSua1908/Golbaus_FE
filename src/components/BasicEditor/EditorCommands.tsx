@@ -24,10 +24,7 @@ export const createUploadImageCommand = (
             accept="image/*"
             onChange={handle.execute}
           />
-          <label
-            htmlFor="imageInput" // Corrected attribute name
-            id="imageLabel"
-          >
+          <label htmlFor="imageInput" id="imageLabel">
             Select Image
           </label>
         </div>

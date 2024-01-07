@@ -1,7 +1,8 @@
-import { AutoComplete, Space, Tag, Tooltip, theme } from 'antd';
-import type { BaseSelectRef } from 'rc-select';
-import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
-import { GoPlus } from 'react-icons/go';
+import { AutoComplete, Space, Tag, Tooltip, theme } from "antd";
+import type { BaseSelectRef } from "rc-select";
+import React, { KeyboardEvent, useEffect, useRef, useState } from "react";
+import { GoPlus } from "react-icons/go";
+import "./addTag.scss";
 
 interface AddTagProps {
   tags: string[];
@@ -18,9 +19,9 @@ let timeoutId: NodeJS.Timeout;
 const AddTag: React.FC<AddTagProps> = ({ tags, setTags }) => {
   const { token } = theme.useToken();
   const [inputVisible, setInputVisible] = useState(false);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [editInputIndex, setEditInputIndex] = useState(-1);
-  const [editInputValue, setEditInputValue] = useState('');
+  const [editInputValue, setEditInputValue] = useState("");
   const inputRef = useRef<BaseSelectRef>(null);
   const editInputRef = useRef<BaseSelectRef>(null);
   const [anotherOptions, setAnotherOptions] = useState<{ value: string }[]>([]);
@@ -57,7 +58,7 @@ const AddTag: React.FC<AddTagProps> = ({ tags, setTags }) => {
       setTags([...tags, inputValue]);
     }
     setInputVisible(false);
-    setInputValue('');
+    setInputValue("");
   };
 
   const handleEditInputConfirm = () => {
@@ -65,17 +66,17 @@ const AddTag: React.FC<AddTagProps> = ({ tags, setTags }) => {
     newTags[editInputIndex] = editInputValue;
     setTags(newTags);
     setEditInputIndex(-1);
-    setEditInputValue('');
+    setEditInputValue("");
   };
 
   const handleEditEnter = (event: KeyboardEvent) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleEditInputConfirm();
     }
   };
 
   const handleInputEnter = (e: KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleInputConfirm();
     }
   };
@@ -84,13 +85,13 @@ const AddTag: React.FC<AddTagProps> = ({ tags, setTags }) => {
     width: 150,
     height: 22,
     marginInlineEnd: 8,
-    verticalAlign: 'top',
+    verticalAlign: "top",
   };
 
   const tagPlusStyle: React.CSSProperties = {
     height: 22,
     background: token.colorBgContainer,
-    borderStyle: 'dashed',
+    borderStyle: "dashed",
   };
   const onEditChange = (data: string) => {
     setEditInputValue(data);
@@ -108,15 +109,13 @@ const AddTag: React.FC<AddTagProps> = ({ tags, setTags }) => {
   };
 
   return (
-    <Space
-      size={[0, 8]}
-      wrap>
+    <Space size={[0, 8]} wrap className="addTag">
       {tags.map((tag, index) => {
         if (editInputIndex === index) {
           return (
             <AutoComplete
               key={tag}
-              size='small'
+              size="small"
               value={editInputValue}
               style={tagInputStyle}
               onChange={onEditChange}
@@ -124,7 +123,7 @@ const AddTag: React.FC<AddTagProps> = ({ tags, setTags }) => {
               onKeyDown={handleEditEnter}
               options={anotherOptions}
               onSearch={handleSearch}
-              placeholder='Edit tag'
+              placeholder="Edit tag"
               ref={editInputRef}
             />
           );
@@ -133,25 +132,23 @@ const AddTag: React.FC<AddTagProps> = ({ tags, setTags }) => {
         const tagElem = (
           <Tag
             key={tag}
-            closable={index !== 0}
-            style={{ userSelect: 'none' }}
-            onClose={() => handleClose(tag)}>
+            closable
+            style={{ userSelect: "none" }}
+            onClose={() => handleClose(tag)}
+          >
             <span
               onDoubleClick={(e) => {
-                if (index !== 0) {
-                  setEditInputIndex(index);
-                  setEditInputValue(tag);
-                  e.preventDefault();
-                }
-              }}>
+                setEditInputIndex(index);
+                setEditInputValue(tag);
+                e.preventDefault();
+              }}
+            >
               {isLongTag ? `${tag.slice(0, 20)}...` : tag}
             </span>
           </Tag>
         );
         return isLongTag ? (
-          <Tooltip
-            title={tag}
-            key={tag}>
+          <Tooltip title={tag} key={tag}>
             {tagElem}
           </Tooltip>
         ) : (
@@ -161,7 +158,7 @@ const AddTag: React.FC<AddTagProps> = ({ tags, setTags }) => {
       {inputVisible ? (
         <AutoComplete
           ref={inputRef}
-          size='small'
+          size="small"
           value={inputValue}
           style={tagInputStyle}
           onChange={onInputChange}
@@ -169,13 +166,10 @@ const AddTag: React.FC<AddTagProps> = ({ tags, setTags }) => {
           onKeyDown={handleInputEnter}
           options={anotherOptions}
           onSearch={handleSearch}
-          placeholder='New tag'
+          placeholder="New tag"
         />
       ) : (
-        <Tag
-          style={tagPlusStyle}
-          icon={<GoPlus />}
-          onClick={showInput}>
+        <Tag style={tagPlusStyle} icon={<GoPlus />} onClick={showInput}>
           New Tag
         </Tag>
       )}
