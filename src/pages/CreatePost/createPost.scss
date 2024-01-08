@@ -11,6 +11,22 @@
     padding: 10px;
   }
 
+  &-logo {
+    height: 110px;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+  }
+  &-title {
+    text-align: center;
+    color: $background-color;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.2;
+    display: block;
+    padding-top: 20px;
+  }
+
   &-label {
     padding: 3px 0px 6px 5px;
     font-size: 16px;

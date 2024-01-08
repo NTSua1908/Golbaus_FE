@@ -47,10 +47,10 @@ const App = () => {
           <Router>
             <Routes>
               <Route path="/post" element={<Post />} />
-              <Route path="/post/:postName" element={<PostDetail />} />
+              <Route path="/post/:postId" element={<PostDetail />} />
               <Route path="/" element={<Home />} />
               <Route path="/create-post" element={<CreatePost />} />
-              <Route path="/edit-post/:postName" element={<EditPost />} />
+              <Route path="/edit-post/:postId" element={<EditPost />} />
               <Route path="/profile/:userId" element={<Profile />} />
               <Route path="*" element={<NotFound />} />
               <Route path="/login" element={<Login />} />

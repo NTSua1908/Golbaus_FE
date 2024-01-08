@@ -1,5 +1,6 @@
-import { Button, Input, Popover, notification } from "antd";
+import { Button, Input, Popover, message, notification } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import { AxiosError } from "axios";
 import { Dayjs } from "dayjs";
 import React, {
   ChangeEvent,
@@ -22,8 +23,10 @@ import {
   deleteImage,
   resizeAndUploadImage,
 } from "../../services/FireBaseService";
-import "./createPost.scss";
 import { Create as CreateNewPost } from "../../services/PostService";
+import "./createPost.scss";
+import { Logo } from "../../Logo";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost: React.FC = () => {
   const [publishType, setPublishType] = useState<PublishType>(
@@ -34,11 +37,31 @@ const CreatePost: React.FC = () => {
   const [publishDay, setPublishDay] = useState<Dayjs | null>(null);
   const [value, setValue] = useState<string>("");
   const editorRef = useRef<EditorRef>(null);
-  const [api, contextHolder] = notification.useNotification();
   const [tags, setTags] = useState<string[]>([]);
   const [thumbnail, setThumbnail] = useState<ImageUploaded[]>([]);
 
   const [isUploading, setIsUploading] = useState(false);
+
+  const [api, contextHolder] = notification.useNotification();
+
+  const navigate = useNavigate();
+
+  const openNotificationSuccess = () => {
+    api.info({
+      message: `Notification`,
+      description: "Login successful",
+      placement: "topRight",
+    });
+  };
+
+  const openNotificationFailure = (message: string) => {
+    api.error({
+      message: `Notification`,
+      description: message,
+      placement: "topRight",
+      type: "error",
+    });
+  };
 
   const onPublish = async () => {
     if (editorRef.current) {
@@ -55,20 +78,18 @@ const CreatePost: React.FC = () => {
           };
           await CreateNewPost(post)
             .then((res) => {
-              console.log(res);
+              openNotificationSuccess();
+              setTimeout(() => {
+                navigate("/post/" + res.data);
+              }, 2000);
             })
-            .catch((error) => {
-              console.log(error);
+            .catch((error: AxiosError) => {
+              const errors = (error.response?.data as any).errors;
+              const errorMessage = errors.join("\n") as string;
+              openNotificationFailure(errorMessage);
             });
         })
-        .catch(() => {
-          api.open({
-            message: "Error",
-            description:
-              "I will never close automatically. This is a purposely very very long description that has many many characters and words.",
-            duration: 0,
-          });
-        });
+        .catch();
 
       console.log("Created");
     }
@@ -122,10 +143,6 @@ const CreatePost: React.FC = () => {
     }
   };
 
-  const handleLeaveOk = () => {};
-
-  const handleLeaveCancel = () => {};
-
   const isDataChanged = () => {
     return (
       value.length != 0 ||
@@ -138,9 +155,11 @@ const CreatePost: React.FC = () => {
 
   return (
     <div className="create-post">
-      {/* Headder */}
-      <Header />
-      {/* Body */}
+      {contextHolder}
+      <div className="create-post-logo">
+        <Logo />
+      </div>
+      <h5 className="edit-post-title">Create post</h5>
       <div className="create-post-container">
         <label className="create-post-label">Title</label>
         <Input placeholder="Title" value={title} onChange={onTitleChange} />
@@ -221,7 +240,7 @@ const CreatePost: React.FC = () => {
         </div>
         <BasicEditor ref={editorRef} value={value} setValue={setValue} />
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

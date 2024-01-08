@@ -13,7 +13,7 @@ import SwipperContent, {
   SwiperCardContent,
   SwiperContentProps,
 } from "../../components/SwiperContent/SwiperContent";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import PostGrid from "../../components/PostGrid/PostGrid";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/configureStore";
@@ -29,6 +29,7 @@ import {
 } from "../../actions/postAction";
 import NotFound from "../../images/not_found.png";
 import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
+import RequiredLogin from "../../components/RequiredLogin/RequiredLogin";
 
 const value = `## Horizontal Rules
 ___
@@ -279,7 +280,7 @@ It converts "HTML", but keep intact partial entries like "xxxHTMLyyy" and so on.
 
 const contents: SwiperCardContent[] = [
   {
-    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
+    id: "18dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail:
       "https://tintuc-divineshop.cdn.vccloud.vn/wp-content/uploads/2020/08/782784.jpg",
     title: "Stardev Valley",
@@ -513,15 +514,30 @@ function PostDetail() {
   const isLoading = useSelector((state: RootState) => state.post.isLoading);
   const dispatch = useDispatch();
 
+  const [isRequiredLogin, setRequiredLogin] = useState(false);
+
+  let { postId } = useParams();
   let { state } = useLocation();
 
+  const handleCloseRequiredLogin = () => {
+    setRequiredLogin(false);
+  };
+
   useEffect(() => {
-    if (!isLoading && (!post || post.id != state.id)) {
+    window.scrollTo(0, 0);
+    if (
+      !isLoading &&
+      postId &&
+      (!post || post.id != postId || (state && state.isReload))
+    ) {
       if (post) {
         dispatch(removePost());
       }
+      if (state && state.isReload) {
+        state.isReload = false;
+      }
       dispatch(postLoading());
-      GetDetail(state.id)
+      GetDetail(postId)
         .then((res) => {
           dispatch(setPostContent(res.data));
         })
@@ -531,25 +547,26 @@ function PostDetail() {
           }
         });
     }
-  }, [post]);
+  }, [postId]);
 
   return (
     <div>
       <Header />
       {isNotFound && (
-        <div className="postDetail-notFound">
-          <img src={NotFound} alt="Not Found" />
+        <div className='postDetail-notFound'>
+          <img src={NotFound} alt='Not Found' />
         </div>
       )}
       {isLoading && (
         <div>
-          <Spin fullscreen size="large" />
+          <Spin fullscreen size='large' />
         </div>
       )}
-      {post && post.id === state.id && (
-        <div className="postDetail">
-          <div className="postDetail-content">
+      {post && post.id === postId && (
+        <div className='postDetail'>
+          <div className='postDetail-content'>
             <PostContent
+              id={post.id}
               title={post.title}
               content={post.content}
               thumbnail={post.thumbnail}
@@ -558,7 +575,7 @@ function PostDetail() {
               fullname={post.fullName}
               username={post.userName}
               date={
-                post.publishDate
+                post.publishDate != null
                   ? formatDateToString(post.publishDate)
                   : "Unpublished"
               }
@@ -569,21 +586,28 @@ function PostDetail() {
               countVote={post.countVote}
               isMyPost={post.isMyPost}
               vote={post.vote}
+              publishType={post.publishType}
+              willBePublishedOn={
+                post.willBePublishedOn != null
+                  ? formatDateToString(post.willBePublishedOn)
+                  : "Published"
+              }
               tags={post.tags}
+              handleOpenModal={setRequiredLogin}
             />
           </div>
-          <div className="postDetail-more">
-            <h2 className="postDetail-more-other">
+          <div className='postDetail-more'>
+            <h2 className='postDetail-more-other'>
               Other posts by {post.fullName}
             </h2>
             <SwipperContent contents={contents} />
-            <h2 className="postDetail-more-related">Related Posts</h2>
-            <div className="postDetail-more-related-container">
+            <h2 className='postDetail-more-related'>Related Posts</h2>
+            <div className='postDetail-more-related-container'>
               <PostGrid posts={contents} />
             </div>
           </div>
-          <div className="postDetail-comment">
-            <h2 className="postDetail-comment-title">Comments</h2>
+          <div className='postDetail-comment'>
+            <h2 className='postDetail-comment-title'>Comments</h2>
             <CommentsTree
               data={commentProps.data}
               amount={commentProps.amount}
@@ -593,6 +617,10 @@ function PostDetail() {
           </div>
         </div>
       )}
+      <RequiredLogin
+        show={isRequiredLogin}
+        handleClose={handleCloseRequiredLogin}
+      />
       <ScrollToTop />
       <Footer />
     </div>

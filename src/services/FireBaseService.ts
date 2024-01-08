@@ -69,7 +69,8 @@ export function deleteImage(
           const desertRef = ref(storage, x.path);
           await deleteObject(desertRef)
             .then()
-            .catch(() => {
+            .catch((err) => {
+              console.log(err);
               reject();
             });
         }

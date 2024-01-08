@@ -357,8 +357,13 @@ function Header() {
               </li>
             ) : (
               <div className="header-menu-right-auth">
-                <Link to={"/login"}>Login</Link> -{" "}
-                <Link to={"/register"}>Register</Link>
+                <Link
+                  to={"/login"}
+                  state={{ returnPath: window.location.pathname }}
+                >
+                  Login
+                </Link>{" "}
+                - <Link to={"/register"}>Register</Link>
               </div>
             )}
           </div>

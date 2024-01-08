@@ -55,6 +55,8 @@ export interface PostDetailModel {
   commentCount: number;
   viewCount: number;
   vote: VoteType;
+  publishType: PublishType;
+  willBePublishedOn: Date;
   tags: string[];
 }
 

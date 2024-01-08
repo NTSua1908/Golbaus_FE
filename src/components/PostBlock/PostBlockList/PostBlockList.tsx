@@ -14,7 +14,7 @@ interface PostBlockListProps {
 function PostBlockList({ post }: PostBlockListProps) {
   return (
     <Link
-      to={`/post/${post.title}}`}
+      to={`/post/${post.id}}`}
       state={{ id: post.id }}
       className="post-block-list"
     >

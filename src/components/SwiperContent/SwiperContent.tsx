@@ -34,8 +34,7 @@ export interface SwiperContentProps {
 export function SwipperCard({ content, animation }: SwiperCardProps) {
   return (
     <Link
-      to={"/post/" + content.title}
-      state={{ id: content.id }}
+      to={"/post/" + content.id}
       className={`swiper-card ${animation ? "animation" : "base"}`}
     >
       <div className="swiper-card-thumbnail">

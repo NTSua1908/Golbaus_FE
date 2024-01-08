@@ -1,0 +1,102 @@
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
+
+.RequiredLogin {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba($color: #333, $alpha: 0.1);
+  z-index: 99999;
+  display: none;
+
+  &.show {
+    display: flex;
+  }
+
+  &-background {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
+
+  &-container {
+    width: 475px;
+    height: 300px;
+    border-radius: 15px;
+    box-shadow: 2px 2px 18px #333;
+    position: relative;
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid $text-menu-color;
+
+    @include for-size(500px, min) {
+      width: 95vw;
+      height: fit-content;
+    }
+  }
+
+  &-logo {
+    display: flex;
+    justify-content: center;
+    height: 100px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  &-message {
+    color: #333;
+    line-height: 25px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    text-indent: 25px;
+    text-align: center;
+    padding: 10px;
+  }
+
+  &-function {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    &-button {
+      outline: none;
+      flex: 1;
+      padding: 8px;
+      border-radius: 5px;
+      margin: 5px;
+      cursor: pointer;
+      background-color: #20004d;
+      border: 1px solid #b08b4b;
+      & a {
+        display: block;
+        color: #ffc562;
+        text-align: center;
+        text-decoration: none;
+      }
+    }
+  }
+
+  &-close {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+    color: #333;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    transform-origin: center;
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+}
