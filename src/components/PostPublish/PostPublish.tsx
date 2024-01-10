@@ -48,9 +48,9 @@ const PostPublish: React.FC<PostPublishProps> = ({
   }, [publishDay]);
 
   return (
-    <div className="post-publish">
-      <div className="post-publish-container">
-        <div className="post-publish-heading">
+    <div className='post-publish'>
+      <div className='post-publish-container'>
+        <div className='post-publish-heading'>
           <Radio.Group onChange={onChange} value={publishType}>
             {/* <Space direction='vertical'> */}
             <Radio value={PublishType.Public}>Public</Radio>
@@ -65,25 +65,25 @@ const PostPublish: React.FC<PostPublishProps> = ({
               }`}
             >
               <DatePicker
-                format="YYYY-MM-DD HH:mm:ss"
+                format='YYYY-MM-DD HH:mm:ss'
                 disabledDate={disabledDate}
                 showTime={{ defaultValue: dayjs("00:00:00", "HH:mm:ss") }}
                 onChange={setPublishDay}
               />
               {error && (
                 <div>
-                  <Text type="danger">
-                    The publication time must be 30 minutes after the current
-                    time
+                  <Text type='danger'>
+                    The publication time must be at least 30 minutes after the
+                    current time
                   </Text>
                 </div>
               )}
             </div>
           )}
         </div>
-        <div className="post-publish-footer">
+        <div className='post-publish-footer'>
           <Button
-            className="post-publish-footer-publish"
+            className='post-publish-footer-publish'
             onClick={onPublish}
             disabled={
               !error &&

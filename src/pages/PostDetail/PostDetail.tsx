@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PostContent from "../../components/PostContent/PostContent";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
@@ -17,7 +17,7 @@ import { useLocation, useParams } from "react-router-dom";
 import PostGrid from "../../components/PostGrid/PostGrid";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/configureStore";
-import { GetDetail } from "../../services/PostService";
+import { GetDetail, IncreateView } from "../../services/PostService";
 import { formatDateToString } from "../../Helper/DateHelper";
 import { Spin } from "antd";
 import { AxiosError } from "axios";
@@ -515,6 +515,7 @@ function PostDetail() {
   const dispatch = useDispatch();
 
   const [isRequiredLogin, setRequiredLogin] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   let { postId } = useParams();
   let { state } = useLocation();
@@ -548,6 +549,22 @@ function PostDetail() {
         });
     }
   }, [postId]);
+
+  useEffect(() => {
+    timeoutRef.current = setTimeout(async () => {
+      if (postId) {
+        await IncreateView(postId)
+          .then()
+          .catch((err) => {});
+      }
+    }, 15000);
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div>

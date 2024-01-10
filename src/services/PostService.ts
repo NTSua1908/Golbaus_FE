@@ -26,3 +26,7 @@ export function DownVote(id: string) {
 export function Delete(id: string) {
   return api.delete(BASE_URL_POST + "delete/" + id);
 }
+
+export function IncreateView(id: string) {
+  return api.put(BASE_URL_POST + "IncreaseView/" + id);
+}

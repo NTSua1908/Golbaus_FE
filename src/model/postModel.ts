@@ -34,6 +34,7 @@ export interface PostCreateModel {
   tags: string[];
   content: string;
   publishType: PublishType;
+  willBePublishedOn: Date | null;
 }
 
 export interface PostDetailModel {

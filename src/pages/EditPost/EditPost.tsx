@@ -33,6 +33,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { GetDetail, Update } from "../../services/PostService";
 import { AxiosError } from "axios";
 import NotFound from "../../images/not_found.png";
+import { PostCreateModel } from "../../model/postModel";
 
 const EditPost: React.FC = () => {
   const [publishType, setPublishType] = useState<PublishType>(
@@ -54,13 +55,14 @@ const EditPost: React.FC = () => {
       await editorRef.current
         .onSavePost()
         .then(async () => {
-          const post = {
+          const post: PostCreateModel = {
             title: title,
             content: value,
             excerpt: excerpt,
             publishType: publishType,
             tags: tags,
             thumbnail: thumbnail[0].link,
+            willBePublishedOn: null,
           };
           console.log("Post: ", post);
           await Update(postId as string, post)
@@ -204,67 +206,67 @@ const EditPost: React.FC = () => {
   // };
 
   return (
-    <div className="edit-post">
+    <div className='edit-post'>
       {contextHolder}
       {isNotFound && (
-        <div className="postDetail-notFound">
-          <img src={NotFound} alt="Not Found" />
+        <div className='postDetail-notFound'>
+          <img src={NotFound} alt='Not Found' />
         </div>
       )}
       {isLoading && (
         <div>
-          <Spin fullscreen size="large" />
+          <Spin fullscreen size='large' />
         </div>
       )}
       {value.length > 0 && (
         <div>
-          <div className="edit-post-logo">
+          <div className='edit-post-logo'>
             <Logo />
           </div>
-          <h5 className="edit-post-title">Edit post</h5>
-          <div className="edit-post-container">
-            <label className="edit-post-label">Title</label>
-            <Input placeholder="Title" value={title} onChange={onTitleChange} />
-            <div className="edit-post-excerpt">
-              <label className="edit-post-label">Excerpt</label>{" "}
-              <span className="edit-post-describe">
+          <h5 className='edit-post-title'>Edit post</h5>
+          <div className='edit-post-container'>
+            <label className='edit-post-label'>Title</label>
+            <Input placeholder='Title' value={title} onChange={onTitleChange} />
+            <div className='edit-post-excerpt'>
+              <label className='edit-post-label'>Excerpt</label>{" "}
+              <span className='edit-post-describe'>
                 (at least 50 characters)
               </span>
               <TextArea
-                placeholder="Describe your post (at least 50 characters)"
+                placeholder='Describe your post (at least 50 characters)'
                 minLength={50}
                 value={excerpt}
                 onChange={onExcerptChange}
               />
             </div>
-            <div className="edit-post-thumbnail">
+            <div className='edit-post-thumbnail'>
               <input
-                type="file"
-                id="edit-post-thumbnail-input"
-                className="edit-post-thumbnail-input"
-                accept="image/*"
+                type='file'
+                id='edit-post-thumbnail-input'
+                className='edit-post-thumbnail-input'
+                accept='image/*'
                 onChange={onThumbnailChange}
               />
               <label
-                htmlFor="edit-post-thumbnail-input" // Corrected attribute name
-                className="edit-post-thumbnail-label"
+                htmlFor='edit-post-thumbnail-input' // Corrected attribute name
+                className='edit-post-thumbnail-label'
               >
                 <IoMdCloudUpload /> Thumbnail
               </label>
-              <div className="edit-post-thumbnail-image">
+              <div className='edit-post-thumbnail-image'>
                 {isUploading && "Loading....."}
                 {!isUploading && thumbnail.length > 0 && (
                   <img src={thumbnail[0].link} />
                 )}
               </div>
             </div>
-            <label className="edit-post-label">Tag</label>{" "}
-            <span className="edit-post-describe">(at least 1 tag)</span>
-            <div className="edit-post-function">
-              <div className="edit-post-function-tag">
+            <label className='edit-post-label'>Tag</label>{" "}
+            <span className='edit-post-describe'>(at least 1 tag)</span>
+            <div className='edit-post-function'>
+              <div className='edit-post-function-tag'>
                 <AddTag tags={tags} setTags={setTags} />
               </div>
-              <div className="edit-post-function-publish">
+              <div className='edit-post-function-publish'>
                 <Popover
                   content={
                     <PostPublish
@@ -274,9 +276,9 @@ const EditPost: React.FC = () => {
                       isEdit
                     />
                   }
-                  title="Update your article"
-                  placement="bottomRight"
-                  trigger="click"
+                  title='Update your article'
+                  placement='bottomRight'
+                  trigger='click'
                 >
                   <Button
                     disabled={

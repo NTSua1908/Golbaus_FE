@@ -1,16 +1,17 @@
-import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosInstance, AxiosResponse, AxiosError } from "axios";
 
 // Create an Axios instance with a base URL
 const api: AxiosInstance = axios.create({
-  baseURL: 'https://localhost:7032/',
+  baseURL: "https://localhost:7032/",
   timeout: 5000,
+  withCredentials: true,
 });
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
-    config.headers['Authorization'] = `Bearer ${token || ''}`;
-    config.headers['Content-Type'] = 'application/json';
+    const token = localStorage.getItem("token");
+    config.headers["Authorization"] = `Bearer ${token || ""}`;
+    config.headers["Content-Type"] = "application/json";
     return config;
   },
   (error) => {
@@ -23,12 +24,12 @@ api.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error: AxiosError) => {
     if (error.response) {
-      console.error('Response error:', error.response.data);
-      console.error('Status code:', error.response.status);
+      console.error("Response error:", error.response.data);
+      console.error("Status code:", error.response.status);
     } else if (error.request) {
-      console.error('Request error:', error.request);
+      console.error("Request error:", error.request);
     } else {
-      console.error('Error:', error.message);
+      console.error("Error:", error.message);
     }
     return Promise.reject(error);
   }

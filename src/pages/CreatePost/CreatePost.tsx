@@ -27,6 +27,7 @@ import { Create as CreateNewPost } from "../../services/PostService";
 import "./createPost.scss";
 import { Logo } from "../../Logo";
 import { useNavigate } from "react-router-dom";
+import { PostCreateModel } from "../../model/postModel";
 
 const CreatePost: React.FC = () => {
   const [publishType, setPublishType] = useState<PublishType>(
@@ -65,16 +66,25 @@ const CreatePost: React.FC = () => {
 
   const onPublish = async () => {
     if (editorRef.current) {
+      console.log(
+        publishType == PublishType.Schedule &&
+          publishDay != null &&
+          publishDay.toDate()
+      );
       await editorRef.current
         .onSavePost()
         .then(async (res) => {
-          const post = {
+          const post: PostCreateModel = {
             title: title,
             content: value,
             excerpt: excerpt,
             publishType: publishType,
             tags: tags,
             thumbnail: thumbnail[0].link,
+            willBePublishedOn:
+              publishType == PublishType.Schedule && publishDay != null
+                ? publishDay.toDate()
+                : null,
           };
           await CreateNewPost(post)
             .then((res) => {
@@ -112,6 +122,7 @@ const CreatePost: React.FC = () => {
     };
 
     window.addEventListener("beforeunload", handler);
+
     return () => {
       window.removeEventListener("beforeunload", handler);
     };
@@ -154,53 +165,53 @@ const CreatePost: React.FC = () => {
   };
 
   return (
-    <div className="create-post">
+    <div className='create-post'>
       {contextHolder}
-      <div className="create-post-logo">
+      <div className='create-post-logo'>
         <Logo />
       </div>
-      <h5 className="edit-post-title">Create post</h5>
-      <div className="create-post-container">
-        <label className="create-post-label">Title</label>
-        <Input placeholder="Title" value={title} onChange={onTitleChange} />
-        <div className="create-post-excerpt">
-          <label className="create-post-label">Excerpt</label>{" "}
-          <span className="create-post-describe">(at least 50 characters)</span>
+      <h5 className='edit-post-title'>Create post</h5>
+      <div className='create-post-container'>
+        <label className='create-post-label'>Title</label>
+        <Input placeholder='Title' value={title} onChange={onTitleChange} />
+        <div className='create-post-excerpt'>
+          <label className='create-post-label'>Excerpt</label>{" "}
+          <span className='create-post-describe'>(at least 50 characters)</span>
           <TextArea
-            placeholder="Describe your post (at least 50 characters)"
+            placeholder='Describe your post (at least 50 characters)'
             minLength={50}
             value={excerpt}
             onChange={onExcerptChange}
           />
         </div>
-        <div className="create-post-thumbnail">
+        <div className='create-post-thumbnail'>
           <input
-            type="file"
-            id="create-post-thumbnail-input"
-            className="create-post-thumbnail-input"
-            accept="image/*"
+            type='file'
+            id='create-post-thumbnail-input'
+            className='create-post-thumbnail-input'
+            accept='image/*'
             onChange={onThumbnailChange}
           />
           <label
-            htmlFor="create-post-thumbnail-input" // Corrected attribute name
-            className="create-post-thumbnail-label"
+            htmlFor='create-post-thumbnail-input' // Corrected attribute name
+            className='create-post-thumbnail-label'
           >
             <IoMdCloudUpload /> Thumbnail
           </label>
-          <div className="create-post-thumbnail-image">
+          <div className='create-post-thumbnail-image'>
             {isUploading && "Loading....."}
             {!isUploading && thumbnail.length > 0 && (
               <img src={thumbnail[0].link} />
             )}
           </div>
         </div>
-        <label className="create-post-label">Tag</label>{" "}
-        <span className="create-post-describe">(at least 1 tag)</span>
-        <div className="create-post-function">
-          <div className="create-post-function-tag">
+        <label className='create-post-label'>Tag</label>{" "}
+        <span className='create-post-describe'>(at least 1 tag)</span>
+        <div className='create-post-function'>
+          <div className='create-post-function-tag'>
             <AddTag tags={tags} setTags={setTags} />
           </div>
-          <div className="create-post-function-publish">
+          <div className='create-post-function-publish'>
             <Popover
               content={
                 <PostPublish
@@ -211,9 +222,9 @@ const CreatePost: React.FC = () => {
                   setPublishDay={setPublishDay}
                 />
               }
-              title="Post your article"
-              placement="bottomRight"
-              trigger="click"
+              title='Post your article'
+              placement='bottomRight'
+              trigger='click'
             >
               <Button
                 disabled={
