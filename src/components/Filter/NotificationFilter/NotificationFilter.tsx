@@ -3,22 +3,28 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import OrderBy from "../../../enums/OrderBy";
 import OrderType from "../../../enums/OrderType";
 import { Input, Select } from "antd";
-import { PostFilter as FilterProps } from "../../../model/postModel";
+import { NotificationFilter as FilterProps } from "../../../model/notificationModel";
 import AddTag from "../../Tags/AddTag";
 import { DatePicker } from "antd";
 import { RangeValue } from "rc-picker/lib/interface";
-import "./postFilter.scss";
+import "./notificationFilter.scss";
+import NotificationType from "../../../enums/NotificationType";
 
 const { RangePicker } = DatePicker;
 
-interface PostFilterProps {
+interface NotificationFilterProps {
   filter: FilterProps;
   setFilter: React.Dispatch<React.SetStateAction<FilterProps>>;
   onFilter: () => void;
   onClose: () => void;
 }
 
-function PostFilter({ filter, setFilter, onFilter, onClose }: PostFilterProps) {
+function NotificationFilter({
+  filter,
+  setFilter,
+  onFilter,
+  onClose,
+}: NotificationFilterProps) {
   const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFilter((prevState) => {
       return { ...prevState, title: e.currentTarget.value };
@@ -43,12 +49,17 @@ function PostFilter({ filter, setFilter, onFilter, onClose }: PostFilterProps) {
     });
   };
 
-  const handleOrderByChange = (value: string) => {
-    const orderBy =
-      value === "None" ? null : OrderBy[value as keyof typeof OrderBy];
+  const handleFilterType = (value: string | string[]) => {
+    const notificationType =
+      value.length === 0
+        ? null
+        : (value as string[]).map(
+            (x) => NotificationType[x as keyof typeof NotificationType]
+          );
     setFilter((prevState) => {
-      return { ...prevState, orderBy };
+      return { ...prevState, notificationType };
     });
+    console.log(notificationType);
   };
 
   const handleOrderTypeChange = (value: string) => {
@@ -65,60 +76,46 @@ function PostFilter({ filter, setFilter, onFilter, onClose }: PostFilterProps) {
   };
 
   return (
-    <div className='filterPost'>
-      <h2 className='filterPost-title'>Filter</h2>
-      <div className='filterPost-container'>
-        <div className='filterPost-item'>
-          <label className='filterPost-label' htmlFor='fullname'>
-            Title
-          </label>
-          <Input
-            name='fullname'
-            className='filterPost-input'
-            placeholder='Title'
-            value={filter.title}
-            onChange={onTitleChange}
-          />
-        </div>
-        <div className='filterPost-item'>
-          <label className='filterPost-label'>Tags</label>
-          <div className='filterPost-tags'>
-            <AddTag tags={tags} setTags={setTags} />
-          </div>
-        </div>
-        <div className='filterPost-item'>
-          <label className='filterPost-label' htmlFor='publishDate'>
-            Published date
+    <div className='filterNotification'>
+      <h2 className='filterNotification-title'>Filter</h2>
+      <div className='filterNotification-container'>
+        <div className='filterNotification-item'>
+          <label className='filterNotification-label' htmlFor='fullname'>
+            Notification date
           </label>
           <RangePicker
-            name='publishDate'
             allowEmpty={[true, true]}
             value={[filter.dateFrom, filter.dateTo]}
             onChange={handleDateChange}
           />
         </div>
-        <div className='filterPost-item'>
-          <label className='filterPost-label'>Order by</label>
+        <div className='filterNotification-item'>
+          <label className='filterNotification-label'>Notification Type</label>
           <Select
-            className='filterPost-input'
+            // className='filterNotification-input'
+            mode='multiple'
             defaultValue={
-              filter.orderBy === null ? "None" : OrderBy[filter.orderBy]
+              filter.notificationType === null
+                ? []
+                : filter.notificationType.map((x) => NotificationType[x])
             }
-            style={{ width: 120 }}
-            onChange={handleOrderByChange}
+            size='large'
+            style={{ width: "100%" }}
+            onChange={handleFilterType}
             options={[
-              { value: null, label: "None" },
-              { value: OrderBy[0], label: OrderBy[0] },
-              { value: OrderBy[1], label: OrderBy[1] },
-              { value: OrderBy[2], label: OrderBy[2] },
-              { value: OrderBy[3], label: OrderBy[3] },
+              { value: NotificationType[0], label: NotificationType[0] },
+              { value: NotificationType[1], label: NotificationType[1] },
+              { value: NotificationType[2], label: NotificationType[2] },
+              { value: NotificationType[3], label: NotificationType[3] },
+              { value: NotificationType[4], label: NotificationType[4] },
+              { value: NotificationType[5], label: NotificationType[5] },
             ]}
           />
         </div>
-        <div className='filterPost-item'>
-          <label className='filterPost-label'>Order type</label>
+        <div className='filterNotification-item'>
+          <label className='filterNotification-label'>Order type</label>
           <Select
-            className='filterPost-input'
+            className='filterNotification-input'
             defaultValue={
               filter.orderType === null ? "None" : OrderType[filter.orderType]
             }
@@ -131,11 +128,14 @@ function PostFilter({ filter, setFilter, onFilter, onClose }: PostFilterProps) {
             ]}
           />
         </div>
-        <div className='filterPost-item function'>
-          <div className='filterPost-button cancel' onClick={onClose}>
+        <div className='filterNotification-item function'>
+          <div className='filterNotification-button cancel' onClick={onClose}>
             Cancel
           </div>
-          <div className='filterPost-button apply' onClick={onApplyFilter}>
+          <div
+            className='filterNotification-button apply'
+            onClick={onApplyFilter}
+          >
             Apply
           </div>
         </div>
@@ -144,4 +144,4 @@ function PostFilter({ filter, setFilter, onFilter, onClose }: PostFilterProps) {
   );
 }
 
-export default PostFilter;
+export default NotificationFilter;

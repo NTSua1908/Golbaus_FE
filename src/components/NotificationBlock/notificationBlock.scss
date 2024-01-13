@@ -1,0 +1,114 @@
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
+
+.notificationBlock {
+  display: block;
+  text-decoration: none;
+  color: #333;
+  position: relative;
+  &-item {
+    display: flex;
+    padding: 20px 10px;
+    border-bottom: 1px solid #ccc;
+    background-color: #fff;
+    &.unread {
+      background-color: #e2f0ff;
+    }
+    &:hover {
+      background-color: #a8d2ff;
+    }
+
+    &-avatar {
+      margin-right: 10px;
+      & img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+
+    &-content {
+      flex-grow: 1;
+      & > p {
+        font-size: 18px;
+      }
+    }
+
+    &-userLink {
+      font-weight: bold;
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    &-date {
+      color: #777;
+      font-size: 15px;
+      margin-top: 5px;
+      display: block;
+    }
+  }
+
+  &-options {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    @include for-size(desktop, min) {
+      display: block;
+    }
+
+    &-menu {
+      position: absolute;
+      display: none;
+      top: 22px;
+      right: -8px;
+      width: 130px;
+      border: 1px solid $text-menu-color;
+      border-radius: 5px;
+      font-size: 13px;
+      color: #333;
+      z-index: 99;
+      background-color: $body-background;
+      border-radius: 5px;
+      overflow: hidden;
+      z-index: 1;
+
+      &.show {
+        display: block;
+      }
+
+      @include for-size(tablet, min) {
+        top: 30px;
+        left: -77px;
+      }
+      &-item {
+        list-style-type: none;
+        padding: 8px 10px;
+        cursor: pointer;
+        border-top: 1px solid #ccc;
+        & a {
+          text-decoration: none;
+          color: #333;
+        }
+        & span {
+          margin-left: 7px;
+        }
+      }
+      &-item:first-child {
+        border-top: none;
+      }
+      &-item:hover {
+        background-color: #e8e8e8;
+      }
+      &.show {
+        display: block;
+      }
+    }
+  }
+
+  &:hover &-options {
+    display: block;
+  }
+}

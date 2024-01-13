@@ -1,7 +1,7 @@
 export enum ProfileMenu {
   Profile,
   Posts,
-  Activity,
+  Bookmarked,
   Question,
   Notification,
 }

@@ -26,10 +26,23 @@ import { ImageUploaded } from "../../components/BasicEditor/BasicEditor";
 import DefaultAvatar from "../../images/default_avatar.png";
 import { QuestionListModel } from "../../model/questionModel";
 import QuestionBlock from "../../components/QuestionBlock/QuestionBlock";
-import { PostFilter as FilterProps } from "../../model/postModel";
+import {
+  PostFilter as FilterProps,
+  PostBlock,
+  PostList,
+} from "../../model/postModel";
+import { FaBookmark } from "react-icons/fa";
 import PostFilter from "../../components/Filter/PostFilter/PostFilter";
+import NotificationFilter from "../../components/Filter/NotificationFilter/NotificationFilter";
 import { Logo } from "../../Logo";
 import { Link } from "react-router-dom";
+import PostBlockSmall from "../../components/PostBlock/PostBlockSmall/PostBlockSmall";
+import PostBlockList from "../../components/PostBlock/PostBlockList/PostBlockList";
+import {
+  NotificationFilter as NotificationFilterProps,
+  NotificationModel,
+} from "../../model/notificationModel";
+import NotificationBlock from "../../components/NotificationBlock/NotificationBlock";
 
 function Profile() {
   const menuItems: MenuItem[] = [
@@ -62,10 +75,10 @@ function Profile() {
       },
     },
     {
-      title: "Activity",
-      icon: <FaHistory />,
+      title: "Bookmarked",
+      icon: <FaBookmark />,
       onClick: () => {
-        setSelectedMenu(ProfileMenu.Activity);
+        setSelectedMenu(ProfileMenu.Bookmarked);
       },
     },
   ];
@@ -82,26 +95,26 @@ function Profile() {
         return <PersonalQuestion />;
       case ProfileMenu.Notification:
         return <PersonalNotification />;
-      case ProfileMenu.Activity:
-        return <PersonalActivity />;
+      case ProfileMenu.Bookmarked:
+        return <PersonalBookmarked />;
       default:
         break;
     }
   };
 
   return (
-    <div className="profile">
-      <div className="profile-left">
+    <div className='profile'>
+      <div className='profile-left'>
         <MenuLeft
           items={menuItems}
-          avartar="https://i.pinimg.com/736x/24/21/85/242185eaef43192fc3f9646932fe3b46.jpg"
-          fullName="Nguyen Thien Sua"
-          userName="NTSua1908"
+          avartar='https://i.pinimg.com/736x/24/21/85/242185eaef43192fc3f9646932fe3b46.jpg'
+          fullName='Nguyen Thien Sua'
+          userName='NTSua1908'
         />
       </div>
-      <div className="profile-right">
+      <div className='profile-right'>
         {renderMenu()}
-        <Link to={"/"} className="profile-right-logo">
+        <Link to={"/"} className='profile-right-logo'>
           <Logo />
         </Link>
       </div>
@@ -157,109 +170,109 @@ const PersonalInfo = () => {
   };
 
   return (
-    <div className="profile-right-container">
-      <div className="profile-right-header">Personal Information</div>
-      <div className="profile-right-content">
-        <div className="profile-right-content-left">
-          <div className="profile-right-content-left-avatar">
-            <img src={avatar[0]?.link ?? DefaultAvatar} alt="" />
+    <div className='profile-right-container'>
+      <div className='profile-right-header'>Personal Information</div>
+      <div className='profile-right-content'>
+        <div className='profile-right-content-left'>
+          <div className='profile-right-content-left-avatar'>
+            <img src={avatar[0]?.link ?? DefaultAvatar} alt='' />
             <label
-              className="profile-right-content-left-avatar-icon"
-              htmlFor="profile-avatar-input"
-              title="Change avatar"
+              className='profile-right-content-left-avatar-icon'
+              htmlFor='profile-avatar-input'
+              title='Change avatar'
             >
               <FaCamera />
             </label>
             <input
-              type="file"
-              id="profile-avatar-input"
-              accept="image/*"
+              type='file'
+              id='profile-avatar-input'
+              accept='image/*'
               onChange={onAvatarChange}
               style={{ display: "none" }}
             />
           </div>
-          <div className="profile-right-content-left-button">
+          <div className='profile-right-content-left-button'>
             <span style={{ marginRight: "5px" }}>Save</span> <FaSave />
           </div>
           {isUploading && (
             <div style={{ textAlign: "center" }}>Uploading...</div>
           )}
         </div>
-        <div className="profile-right-content-right">
-          <div className="profile-right-content-container">
-            <div className="profile-right-content-container-right">
-              <label className="profile-right-content-label" htmlFor="fullname">
+        <div className='profile-right-content-right'>
+          <div className='profile-right-content-container'>
+            <div className='profile-right-content-container-right'>
+              <label className='profile-right-content-label' htmlFor='fullname'>
                 Full name
               </label>
               <Input
-                name="fullname"
-                className="profile-right-content-input"
+                name='fullname'
+                className='profile-right-content-input'
                 prefix={<UserOutlined />}
-                placeholder="Full name"
+                placeholder='Full name'
                 value={fullName}
                 onChange={onFullNameChange}
               />
-              <label className="profile-right-content-label" htmlFor="username">
+              <label className='profile-right-content-label' htmlFor='username'>
                 Username
               </label>
               <Input
-                name="username"
-                className="profile-right-content-input"
+                name='username'
+                className='profile-right-content-input'
                 prefix={<UserOutlined />}
-                placeholder="Username"
+                placeholder='Username'
                 value={username}
                 onChange={onUserNameChange}
               />
             </div>
           </div>
-          <div className="profile-right-content-container evenly">
-            <div className="profile-right-content-container-left">
-              <label className="profile-right-content-label" htmlFor="email">
+          <div className='profile-right-content-container evenly'>
+            <div className='profile-right-content-container-left'>
+              <label className='profile-right-content-label' htmlFor='email'>
                 Email
               </label>
               <Input
-                name="email"
-                className="profile-right-content-input"
+                name='email'
+                className='profile-right-content-input'
                 prefix={<MailOutlined />}
-                placeholder="Email"
+                placeholder='Email'
                 disabled
                 value={email}
               />
             </div>
-            <div className="profile-right-content-container-right">
+            <div className='profile-right-content-container-right'>
               <label
-                className="profile-right-content-label"
-                htmlFor="datejoined"
+                className='profile-right-content-label'
+                htmlFor='datejoined'
               >
                 Date joined
               </label>
               <DatePicker
-                name="datejoined"
-                className="profile-right-content-input"
-                placeholder="Date joined"
+                name='datejoined'
+                className='profile-right-content-input'
+                placeholder='Date joined'
                 value={dateJoined}
                 disabled
               />
             </div>
           </div>
-          <div className="profile-right-content-container evenly">
-            <div className="profile-right-content-container-left">
-              <label className="profile-right-content-label" htmlFor="dob">
+          <div className='profile-right-content-container evenly'>
+            <div className='profile-right-content-container-left'>
+              <label className='profile-right-content-label' htmlFor='dob'>
                 Date of birth
               </label>
               <DatePicker
-                name="dob"
-                className="profile-right-content-input"
-                placeholder="Date of birth"
+                name='dob'
+                className='profile-right-content-input'
+                placeholder='Date of birth'
                 value={dob}
                 onChange={setDoB}
               />
             </div>
 
-            <div className="profile-right-content-container-right">
-              <label className="profile-right-content-label">Gender</label>
+            <div className='profile-right-content-container-right'>
+              <label className='profile-right-content-label'>Gender</label>
               <Select
-                className="profile-right-content-input"
+                className='profile-right-content-input'
                 defaultValue={Gender[gender]}
                 style={{ width: 120 }}
                 onChange={handleChange}
@@ -271,13 +284,13 @@ const PersonalInfo = () => {
               />
             </div>
           </div>
-          <div className="profile-right-content-container-bio">
-            <label className="profile-right-content-label" htmlFor="bio">
+          <div className='profile-right-content-container-bio'>
+            <label className='profile-right-content-label' htmlFor='bio'>
               Bio
             </label>
             <TextArea
-              name="bio"
-              placeholder="Bio"
+              name='bio'
+              placeholder='Bio'
               value={bio}
               onChange={onBioChange}
             />
@@ -289,10 +302,84 @@ const PersonalInfo = () => {
 };
 
 const PersonalPost = () => {
+  const [posts, setPosts] = useState(postData);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showFilter, setShowFilter] = useState(false);
+  const totalPage = 100;
+
+  //filter state
+  const [filter, setFilter] = useState<FilterProps>({
+    title: "",
+    tags: [],
+    dateFrom: null,
+    dateTo: null,
+    orderBy: null,
+    orderType: null,
+    user: "", //Not used
+  });
+
+  const onChange: PaginationProps["onChange"] = (pageNumber) => {
+    console.log("Page: ", pageNumber);
+    setCurrentPage(pageNumber);
+  };
+
+  const handleShowFilter = () => {
+    setShowFilter((prev) => !prev);
+  };
+
+  const handleCloseFilter = () => {
+    setShowFilter(false);
+  };
+
+  const onFilter = () => {};
+
   return (
-    <div className="profile-right-container">
-      <div className="profile-right-header">My Posts</div>
-      <div className="profile-right-content"></div>
+    <div className='profile-right-container'>
+      <div className='profile-right-header'>My Posts</div>
+      <div className='profile-right-content'>
+        <div className='profile-right-content-filterLeft'>
+          <h2 className='profile-right-content-title'>Questions</h2>
+          <div className='profile-right-content-filterLeft-container'>
+            {posts.map((post, index) => (
+              <PostBlockList key={index} post={post} />
+            ))}
+          </div>
+          <div className='profile-right-content-filterLeft-pagination'>
+            <Pagination
+              showQuickJumper
+              current={currentPage}
+              total={totalPage}
+              onChange={onChange}
+            />
+          </div>
+        </div>
+        <div className='profile-right-content-filterRight'>
+          <div
+            className={`profile-right-content-filterRight-container ${
+              showFilter && "show"
+            }`}
+          >
+            <div
+              className='profile-right-content-filterRight-container-background'
+              onClick={handleCloseFilter}
+            ></div>
+            <div className='profile-right-content-filterRight-container-filter'>
+              <PostFilter
+                filter={filter}
+                setFilter={setFilter}
+                onFilter={onFilter}
+                onClose={handleCloseFilter}
+              />
+            </div>
+          </div>
+          <div
+            className='profile-right-content-filterRight-toggle'
+            onClick={handleShowFilter}
+          >
+            <FaFilter />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
@@ -330,17 +417,17 @@ const PersonalQuestion = () => {
   const onFilter = () => {};
 
   return (
-    <div className="profile-right-container">
-      <div className="profile-right-header">My Questions</div>
-      <div className="profile-right-content">
-        <div className="profile-right-content-filterLeft">
-          <h2 className="profile-right-content-title">Questions</h2>
-          <div className="profile-right-content-filterLeft-container">
+    <div className='profile-right-container'>
+      <div className='profile-right-header'>My Questions</div>
+      <div className='profile-right-content'>
+        <div className='profile-right-content-filterLeft'>
+          <h2 className='profile-right-content-title'>Questions</h2>
+          <div className='profile-right-content-filterLeft-container'>
             {questions.map((question, index) => (
               <QuestionBlock key={index} question={question} />
             ))}
           </div>
-          <div className="profile-right-content-filterLeft-pagination">
+          <div className='profile-right-content-filterLeft-pagination'>
             <Pagination
               showQuickJumper
               current={currentPage}
@@ -349,17 +436,17 @@ const PersonalQuestion = () => {
             />
           </div>
         </div>
-        <div className="profile-right-content-filterRight">
+        <div className='profile-right-content-filterRight'>
           <div
             className={`profile-right-content-filterRight-container ${
               showFilter && "show"
             }`}
           >
             <div
-              className="profile-right-content-filterRight-container-background"
+              className='profile-right-content-filterRight-container-background'
               onClick={handleCloseFilter}
             ></div>
-            <div className="profile-right-content-filterRight-container-filter">
+            <div className='profile-right-content-filterRight-container-filter'>
               <PostFilter
                 filter={filter}
                 setFilter={setFilter}
@@ -369,7 +456,7 @@ const PersonalQuestion = () => {
             </div>
           </div>
           <div
-            className="profile-right-content-filterRight-toggle"
+            className='profile-right-content-filterRight-toggle'
             onClick={handleShowFilter}
           >
             <FaFilter />
@@ -380,20 +467,166 @@ const PersonalQuestion = () => {
   );
 };
 
-const PersonalActivity = () => {
+const PersonalBookmarked = () => {
+  const [posts, setPosts] = useState(postData);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showFilter, setShowFilter] = useState(false);
+  const totalPage = 100;
+
+  //filter state
+  const [filter, setFilter] = useState<FilterProps>({
+    title: "",
+    tags: [],
+    dateFrom: null,
+    dateTo: null,
+    orderBy: null,
+    orderType: null,
+    user: "", //Not used
+  });
+
+  const onChange: PaginationProps["onChange"] = (pageNumber) => {
+    console.log("Page: ", pageNumber);
+    setCurrentPage(pageNumber);
+  };
+
+  const handleShowFilter = () => {
+    setShowFilter((prev) => !prev);
+  };
+
+  const handleCloseFilter = () => {
+    setShowFilter(false);
+  };
+
+  const onFilter = () => {};
+
   return (
-    <div className="profile-right-container">
-      <div className="profile-right-header">My Activities</div>
-      <div className="profile-right-content"></div>
+    <div className='profile-right-container'>
+      <div className='profile-right-header'>My Bookmarked</div>
+      <div className='profile-right-content'>
+        <div className='profile-right-content-filterLeft'>
+          <h2 className='profile-right-content-title'>Bookmarked</h2>
+          <div className='profile-right-content-filterLeft-container'>
+            {posts.map((post, index) => (
+              <PostBlockList key={index} post={post} />
+            ))}
+          </div>
+          <div className='profile-right-content-filterLeft-pagination'>
+            <Pagination
+              showQuickJumper
+              current={currentPage}
+              total={totalPage}
+              onChange={onChange}
+            />
+          </div>
+        </div>
+        <div className='profile-right-content-filterRight'>
+          <div
+            className={`profile-right-content-filterRight-container ${
+              showFilter && "show"
+            }`}
+          >
+            <div
+              className='profile-right-content-filterRight-container-background'
+              onClick={handleCloseFilter}
+            ></div>
+            <div className='profile-right-content-filterRight-container-filter'>
+              <PostFilter
+                filter={filter}
+                setFilter={setFilter}
+                onFilter={onFilter}
+                onClose={handleCloseFilter}
+              />
+            </div>
+          </div>
+          <div
+            className='profile-right-content-filterRight-toggle'
+            onClick={handleShowFilter}
+          >
+            <FaFilter />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
 const PersonalNotification = () => {
+  const [notifications, setNotifications] = useState(notificationData);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showFilter, setShowFilter] = useState(false);
+  const totalPage = 100;
+
+  //filter state
+  const [filter, setFilter] = useState<NotificationFilterProps>({
+    dateFrom: null,
+    dateTo: null,
+    notificationType: null,
+    orderType: null,
+    isRead: null,
+  });
+
+  const onChange: PaginationProps["onChange"] = (pageNumber) => {
+    console.log("Page: ", pageNumber);
+    setCurrentPage(pageNumber);
+  };
+
+  const handleShowFilter = () => {
+    setShowFilter((prev) => !prev);
+  };
+
+  const handleCloseFilter = () => {
+    setShowFilter(false);
+  };
+
+  const onFilter = () => {};
+
   return (
-    <div className="profile-right-container">
-      <div className="profile-right-header">Notifications</div>
-      <div className="profile-right-content"></div>
+    <div className='profile-right-container'>
+      <div className='profile-right-header'>Notifications</div>
+      <div className='profile-right-content'>
+        <div className='profile-right-content-filterLeft'>
+          <h2 className='profile-right-content-title'>Notifications</h2>
+          <div className='profile-right-content-filterLeft-container'>
+            {notifications.map((notification, index) => (
+              <NotificationBlock key={index} notification={notification} />
+            ))}
+          </div>
+          <div className='profile-right-content-filterLeft-pagination'>
+            <Pagination
+              showQuickJumper
+              current={currentPage}
+              total={totalPage}
+              onChange={onChange}
+            />
+          </div>
+        </div>
+        <div className='profile-right-content-filterRight'>
+          <div
+            className={`profile-right-content-filterRight-container ${
+              showFilter && "show"
+            }`}
+          >
+            <div
+              className='profile-right-content-filterRight-container-background'
+              onClick={handleCloseFilter}
+            ></div>
+            <div className='profile-right-content-filterRight-container-filter'>
+              <NotificationFilter
+                filter={filter}
+                setFilter={setFilter}
+                onFilter={onFilter}
+                onClose={handleCloseFilter}
+              />
+            </div>
+          </div>
+          <div
+            className='profile-right-content-filterRight-toggle'
+            onClick={handleShowFilter}
+          >
+            <FaFilter />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
@@ -508,5 +741,211 @@ const questionData: QuestionListModel[] = [
     viewCount: 123,
     commentCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
+  },
+];
+
+const postData: PostList[] = [
+  {
+    id: "18dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
+    thumbnail:
+      "https://tintuc-divineshop.cdn.vccloud.vn/wp-content/uploads/2020/08/782784.jpg",
+    title: "Stardew Valley 1",
+    upvote: 10,
+    downvote: 1,
+    viewCount: 432,
+    authorName: "Lewis",
+    authorAvatar:
+      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
+    commentCount: 3,
+    date: new Date(2023, 12, 23, 15, 22),
+    excerpt:
+      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
+  },
+  {
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
+    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
+    title: "New mod for Stardew Valley 2",
+    upvote: 10,
+    downvote: 1,
+    viewCount: 432,
+    authorName: "Lewis",
+    authorAvatar:
+      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
+    commentCount: 3,
+    date: new Date(2023, 12, 23, 15, 22),
+    excerpt:
+      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
+  },
+  {
+    id: "08dc0c4a-13aa-4cc7-856e-09f0ac174146",
+    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
+    title: "New mod for Stardew Valley 3",
+    upvote: 10,
+    downvote: 1,
+    viewCount: 432,
+    authorName: "Lewis",
+    authorAvatar:
+      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
+    commentCount: 3,
+    date: new Date(2023, 12, 23, 15, 22),
+    excerpt:
+      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
+  },
+  {
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
+    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
+    title: "New mod for Stardev Valley",
+    upvote: 10,
+    downvote: 1,
+    viewCount: 432,
+    authorName: "Lewis",
+    authorAvatar:
+      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
+    commentCount: 3,
+    date: new Date(2023, 12, 23, 15, 22),
+    excerpt:
+      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
+  },
+  {
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
+    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
+    title: "New mod for Stardev Valley",
+    upvote: 10,
+    downvote: 1,
+    viewCount: 432,
+    authorName: "Lewis",
+    authorAvatar:
+      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
+    commentCount: 3,
+    date: new Date(2023, 12, 23, 15, 22),
+    excerpt:
+      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
+  },
+  {
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
+    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
+    title: "New mod for Stardev Valley",
+    upvote: 10,
+    downvote: 1,
+    viewCount: 432,
+    authorName: "Lewis",
+    authorAvatar:
+      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
+    commentCount: 3,
+    date: new Date(2023, 12, 23, 15, 22),
+    excerpt:
+      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
+  },
+  {
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
+    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
+    title: "New mod for Stardev Valley",
+    upvote: 10,
+    downvote: 1,
+    viewCount: 432,
+    authorName: "Lewis",
+    authorAvatar:
+      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
+    commentCount: 3,
+    date: new Date(2023, 12, 23, 15, 22),
+    excerpt:
+      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
+  },
+  {
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
+    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
+    title: "New mod for Stardev Valley",
+    upvote: 10,
+    downvote: 1,
+    viewCount: 432,
+    authorName: "Lewis",
+    authorAvatar:
+      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
+    commentCount: 3,
+    date: new Date(2023, 12, 23, 15, 22),
+    excerpt:
+      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
+  },
+  {
+    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
+    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
+    title:
+      "New mod for Stardev Valley, New mod for Stardev Valley, New mod for Stardev Valley",
+    upvote: 10,
+    downvote: 1,
+    viewCount: 432,
+    authorName: "Lewis",
+    authorAvatar:
+      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
+    commentCount: 3,
+    date: new Date(2023, 12, 23, 15, 22),
+    excerpt:
+      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games, How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
+  },
+];
+
+const notificationData: NotificationModel[] = [
+  {
+    user: "@Halley",
+    userId: "#",
+    avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
+    content: "upvoted your post",
+    date: new Date(2023, 12, 12, 12, 45, 12),
+    link: "#",
+    isRead: false,
+  },
+  {
+    user: "@Halley",
+    userId: "#",
+    avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
+    content: "followed you",
+    date: new Date(2023, 12, 12, 12, 45, 12),
+    link: "#",
+    isRead: false,
+  },
+  {
+    user: "@Halley",
+    userId: "#",
+    avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
+    content: "has responded to your comment",
+    date: new Date(2023, 12, 12, 12, 45, 12),
+    link: "#",
+    isRead: true,
+  },
+  {
+    user: "@Halley",
+    userId: "#",
+    avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
+    content: "commented on your post",
+    date: new Date(2023, 12, 12, 12, 45, 12),
+    link: "#",
+    isRead: false,
+  },
+  {
+    user: "@Halley",
+    userId: "#",
+    avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
+    content: "has responded to your comment",
+    date: new Date(2023, 12, 12, 12, 45, 12),
+    link: "#",
+    isRead: true,
+  },
+  {
+    user: "@Halley",
+    userId: "#",
+    avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
+    content: "commented on your post",
+    date: new Date(2023, 12, 12, 12, 45, 12),
+    link: "#",
+    isRead: false,
+  },
+  {
+    user: "@Halley",
+    userId: "#",
+    avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
+    content: "commented on your post",
+    date: new Date(2023, 12, 12, 12, 45, 12),
+    link: "#",
+    isRead: false,
   },
 ];
