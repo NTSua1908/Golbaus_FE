@@ -6,45 +6,38 @@ import { ChangeEvent, useState } from "react";
 import { BsPostcard } from "react-icons/bs";
 import {
   FaBell,
+  FaBookmark,
   FaCamera,
   FaFilter,
-  FaHistory,
   FaQuestionCircle,
+  FaSave,
   FaUser,
 } from "react-icons/fa";
-import { IoSettings } from "react-icons/io5";
+import { Link } from "react-router-dom";
+import { Logo } from "../../Logo";
+import { ImageUploaded } from "../../components/BasicEditor/BasicEditor";
+import NotificationFilter from "../../components/Filter/NotificationFilter/NotificationFilter";
+import PostFilter from "../../components/Filter/PostFilter/PostFilter";
 import MenuLeft, { MenuItem } from "../../components/MenuLeft/MenuLeft";
+import NotificationBlock from "../../components/NotificationBlock/NotificationBlock";
+import PostBlockList from "../../components/PostBlock/PostBlockList/PostBlockList";
+import QuestionBlock from "../../components/QuestionBlock/QuestionBlock";
 import Gender from "../../enums/Gender";
 import { ProfileMenu } from "../../enums/ProfileMenu";
-import { FaSave } from "react-icons/fa";
-import "./profile.scss";
-import {
-  deleteImage,
-  resizeAndUploadImage,
-} from "../../services/FireBaseService";
-import { ImageUploaded } from "../../components/BasicEditor/BasicEditor";
 import DefaultAvatar from "../../images/default_avatar.png";
-import { QuestionListModel } from "../../model/questionModel";
-import QuestionBlock from "../../components/QuestionBlock/QuestionBlock";
-import {
-  PostFilter as FilterProps,
-  PostBlock,
-  PostList,
-} from "../../model/postModel";
-import { FaBookmark } from "react-icons/fa";
-import PostFilter from "../../components/Filter/PostFilter/PostFilter";
-import NotificationFilter from "../../components/Filter/NotificationFilter/NotificationFilter";
-import { Logo } from "../../Logo";
-import { Link } from "react-router-dom";
-import PostBlockSmall from "../../components/PostBlock/PostBlockSmall/PostBlockSmall";
-import PostBlockList from "../../components/PostBlock/PostBlockList/PostBlockList";
 import {
   NotificationFilter as NotificationFilterProps,
   NotificationModel,
 } from "../../model/notificationModel";
-import NotificationBlock from "../../components/NotificationBlock/NotificationBlock";
+import { PostFilter as FilterProps, PostList } from "../../model/postModel";
+import { QuestionListModel } from "../../model/questionModel";
+import {
+  deleteImage,
+  resizeAndUploadImage,
+} from "../../services/FireBaseService";
+import "./myProfile.scss";
 
-function Profile() {
+function MyProfile() {
   const menuItems: MenuItem[] = [
     {
       title: "Profile",
@@ -103,8 +96,8 @@ function Profile() {
   };
 
   return (
-    <div className='profile'>
-      <div className='profile-left'>
+    <div className='myProfile'>
+      <div className='myProfile-left'>
         <MenuLeft
           items={menuItems}
           avartar='https://i.pinimg.com/736x/24/21/85/242185eaef43192fc3f9646932fe3b46.jpg'
@@ -112,9 +105,9 @@ function Profile() {
           userName='NTSua1908'
         />
       </div>
-      <div className='profile-right'>
+      <div className='myProfile-right'>
         {renderMenu()}
-        <Link to={"/"} className='profile-right-logo'>
+        <Link to={"/"} className='myProfile-right-logo'>
           <Logo />
         </Link>
       </div>
@@ -122,7 +115,7 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default MyProfile;
 
 const PersonalInfo = () => {
   const [avatar, setAvatar] = useState<ImageUploaded[]>([]);
@@ -170,14 +163,14 @@ const PersonalInfo = () => {
   };
 
   return (
-    <div className='profile-right-container'>
-      <div className='profile-right-header'>Personal Information</div>
-      <div className='profile-right-content'>
-        <div className='profile-right-content-left'>
-          <div className='profile-right-content-left-avatar'>
+    <div className='myProfile-right-container'>
+      <div className='myProfile-right-header'>Personal Information</div>
+      <div className='myProfile-right-content'>
+        <div className='myProfile-right-content-left'>
+          <div className='myProfile-right-content-left-avatar'>
             <img src={avatar[0]?.link ?? DefaultAvatar} alt='' />
             <label
-              className='profile-right-content-left-avatar-icon'
+              className='myProfile-right-content-left-avatar-icon'
               htmlFor='profile-avatar-input'
               title='Change avatar'
             >
@@ -191,33 +184,39 @@ const PersonalInfo = () => {
               style={{ display: "none" }}
             />
           </div>
-          <div className='profile-right-content-left-button'>
+          <div className='myProfile-right-content-left-button'>
             <span style={{ marginRight: "5px" }}>Save</span> <FaSave />
           </div>
           {isUploading && (
             <div style={{ textAlign: "center" }}>Uploading...</div>
           )}
         </div>
-        <div className='profile-right-content-right'>
-          <div className='profile-right-content-container'>
-            <div className='profile-right-content-container-right'>
-              <label className='profile-right-content-label' htmlFor='fullname'>
+        <div className='myProfile-right-content-right'>
+          <div className='myProfile-right-content-container'>
+            <div className='myProfile-right-content-container-right'>
+              <label
+                className='myProfile-right-content-label'
+                htmlFor='fullname'
+              >
                 Full name
               </label>
               <Input
                 name='fullname'
-                className='profile-right-content-input'
+                className='myProfile-right-content-input'
                 prefix={<UserOutlined />}
                 placeholder='Full name'
                 value={fullName}
                 onChange={onFullNameChange}
               />
-              <label className='profile-right-content-label' htmlFor='username'>
+              <label
+                className='myProfile-right-content-label'
+                htmlFor='username'
+              >
                 Username
               </label>
               <Input
                 name='username'
-                className='profile-right-content-input'
+                className='myProfile-right-content-input'
                 prefix={<UserOutlined />}
                 placeholder='Username'
                 value={username}
@@ -225,54 +224,54 @@ const PersonalInfo = () => {
               />
             </div>
           </div>
-          <div className='profile-right-content-container evenly'>
-            <div className='profile-right-content-container-left'>
-              <label className='profile-right-content-label' htmlFor='email'>
+          <div className='myProfile-right-content-container evenly'>
+            <div className='myProfile-right-content-container-left'>
+              <label className='myProfile-right-content-label' htmlFor='email'>
                 Email
               </label>
               <Input
                 name='email'
-                className='profile-right-content-input'
+                className='myProfile-right-content-input'
                 prefix={<MailOutlined />}
                 placeholder='Email'
                 disabled
                 value={email}
               />
             </div>
-            <div className='profile-right-content-container-right'>
+            <div className='myProfile-right-content-container-right'>
               <label
-                className='profile-right-content-label'
+                className='myProfile-right-content-label'
                 htmlFor='datejoined'
               >
                 Date joined
               </label>
               <DatePicker
                 name='datejoined'
-                className='profile-right-content-input'
+                className='myProfile-right-content-input'
                 placeholder='Date joined'
                 value={dateJoined}
                 disabled
               />
             </div>
           </div>
-          <div className='profile-right-content-container evenly'>
-            <div className='profile-right-content-container-left'>
-              <label className='profile-right-content-label' htmlFor='dob'>
+          <div className='myProfile-right-content-container evenly'>
+            <div className='myProfile-right-content-container-left'>
+              <label className='myProfile-right-content-label' htmlFor='dob'>
                 Date of birth
               </label>
               <DatePicker
                 name='dob'
-                className='profile-right-content-input'
+                className='myProfile-right-content-input'
                 placeholder='Date of birth'
                 value={dob}
                 onChange={setDoB}
               />
             </div>
 
-            <div className='profile-right-content-container-right'>
-              <label className='profile-right-content-label'>Gender</label>
+            <div className='myProfile-right-content-container-right'>
+              <label className='myProfile-right-content-label'>Gender</label>
               <Select
-                className='profile-right-content-input'
+                className='myProfile-right-content-input'
                 defaultValue={Gender[gender]}
                 style={{ width: 120 }}
                 onChange={handleChange}
@@ -284,8 +283,8 @@ const PersonalInfo = () => {
               />
             </div>
           </div>
-          <div className='profile-right-content-container-bio'>
-            <label className='profile-right-content-label' htmlFor='bio'>
+          <div className='myProfile-right-content-container-bio'>
+            <label className='myProfile-right-content-label' htmlFor='bio'>
               Bio
             </label>
             <TextArea
@@ -334,17 +333,17 @@ const PersonalPost = () => {
   const onFilter = () => {};
 
   return (
-    <div className='profile-right-container'>
-      <div className='profile-right-header'>My Posts</div>
-      <div className='profile-right-content'>
-        <div className='profile-right-content-filterLeft'>
-          <h2 className='profile-right-content-title'>Questions</h2>
-          <div className='profile-right-content-filterLeft-container'>
+    <div className='myProfile-right-container'>
+      <div className='myProfile-right-header'>My Posts</div>
+      <div className='myProfile-right-content'>
+        <div className='myProfile-right-content-filterLeft'>
+          <h2 className='myProfile-right-content-title'>Questions</h2>
+          <div className='myProfile-right-content-filterLeft-container'>
             {posts.map((post, index) => (
               <PostBlockList key={index} post={post} />
             ))}
           </div>
-          <div className='profile-right-content-filterLeft-pagination'>
+          <div className='myProfile-right-content-filterLeft-pagination'>
             <Pagination
               showQuickJumper
               current={currentPage}
@@ -353,17 +352,17 @@ const PersonalPost = () => {
             />
           </div>
         </div>
-        <div className='profile-right-content-filterRight'>
+        <div className='myProfile-right-content-filterRight'>
           <div
-            className={`profile-right-content-filterRight-container ${
+            className={`myProfile-right-content-filterRight-container ${
               showFilter && "show"
             }`}
           >
             <div
-              className='profile-right-content-filterRight-container-background'
+              className='myProfile-right-content-filterRight-container-background'
               onClick={handleCloseFilter}
             ></div>
-            <div className='profile-right-content-filterRight-container-filter'>
+            <div className='myProfile-right-content-filterRight-container-filter'>
               <PostFilter
                 filter={filter}
                 setFilter={setFilter}
@@ -373,7 +372,7 @@ const PersonalPost = () => {
             </div>
           </div>
           <div
-            className='profile-right-content-filterRight-toggle'
+            className='myProfile-right-content-filterRight-toggle'
             onClick={handleShowFilter}
           >
             <FaFilter />
@@ -417,17 +416,17 @@ const PersonalQuestion = () => {
   const onFilter = () => {};
 
   return (
-    <div className='profile-right-container'>
-      <div className='profile-right-header'>My Questions</div>
-      <div className='profile-right-content'>
-        <div className='profile-right-content-filterLeft'>
-          <h2 className='profile-right-content-title'>Questions</h2>
-          <div className='profile-right-content-filterLeft-container'>
+    <div className='myProfile-right-container'>
+      <div className='myProfile-right-header'>My Questions</div>
+      <div className='myProfile-right-content'>
+        <div className='myProfile-right-content-filterLeft'>
+          <h2 className='myProfile-right-content-title'>Questions</h2>
+          <div className='myProfile-right-content-filterLeft-container'>
             {questions.map((question, index) => (
               <QuestionBlock key={index} question={question} />
             ))}
           </div>
-          <div className='profile-right-content-filterLeft-pagination'>
+          <div className='myProfile-right-content-filterLeft-pagination'>
             <Pagination
               showQuickJumper
               current={currentPage}
@@ -436,17 +435,17 @@ const PersonalQuestion = () => {
             />
           </div>
         </div>
-        <div className='profile-right-content-filterRight'>
+        <div className='myProfile-right-content-filterRight'>
           <div
-            className={`profile-right-content-filterRight-container ${
+            className={`myProfile-right-content-filterRight-container ${
               showFilter && "show"
             }`}
           >
             <div
-              className='profile-right-content-filterRight-container-background'
+              className='myProfile-right-content-filterRight-container-background'
               onClick={handleCloseFilter}
             ></div>
-            <div className='profile-right-content-filterRight-container-filter'>
+            <div className='myProfile-right-content-filterRight-container-filter'>
               <PostFilter
                 filter={filter}
                 setFilter={setFilter}
@@ -456,7 +455,7 @@ const PersonalQuestion = () => {
             </div>
           </div>
           <div
-            className='profile-right-content-filterRight-toggle'
+            className='myProfile-right-content-filterRight-toggle'
             onClick={handleShowFilter}
           >
             <FaFilter />
@@ -500,17 +499,17 @@ const PersonalBookmarked = () => {
   const onFilter = () => {};
 
   return (
-    <div className='profile-right-container'>
-      <div className='profile-right-header'>My Bookmarked</div>
-      <div className='profile-right-content'>
-        <div className='profile-right-content-filterLeft'>
-          <h2 className='profile-right-content-title'>Bookmarked</h2>
-          <div className='profile-right-content-filterLeft-container'>
+    <div className='myProfile-right-container'>
+      <div className='myProfile-right-header'>My Bookmarked</div>
+      <div className='myProfile-right-content'>
+        <div className='myProfile-right-content-filterLeft'>
+          <h2 className='myProfile-right-content-title'>Bookmarked</h2>
+          <div className='myProfile-right-content-filterLeft-container'>
             {posts.map((post, index) => (
               <PostBlockList key={index} post={post} />
             ))}
           </div>
-          <div className='profile-right-content-filterLeft-pagination'>
+          <div className='myProfile-right-content-filterLeft-pagination'>
             <Pagination
               showQuickJumper
               current={currentPage}
@@ -519,17 +518,17 @@ const PersonalBookmarked = () => {
             />
           </div>
         </div>
-        <div className='profile-right-content-filterRight'>
+        <div className='myProfile-right-content-filterRight'>
           <div
-            className={`profile-right-content-filterRight-container ${
+            className={`myProfile-right-content-filterRight-container ${
               showFilter && "show"
             }`}
           >
             <div
-              className='profile-right-content-filterRight-container-background'
+              className='myProfile-right-content-filterRight-container-background'
               onClick={handleCloseFilter}
             ></div>
-            <div className='profile-right-content-filterRight-container-filter'>
+            <div className='myProfile-right-content-filterRight-container-filter'>
               <PostFilter
                 filter={filter}
                 setFilter={setFilter}
@@ -539,7 +538,7 @@ const PersonalBookmarked = () => {
             </div>
           </div>
           <div
-            className='profile-right-content-filterRight-toggle'
+            className='myProfile-right-content-filterRight-toggle'
             onClick={handleShowFilter}
           >
             <FaFilter />
@@ -581,17 +580,17 @@ const PersonalNotification = () => {
   const onFilter = () => {};
 
   return (
-    <div className='profile-right-container'>
-      <div className='profile-right-header'>Notifications</div>
-      <div className='profile-right-content'>
-        <div className='profile-right-content-filterLeft'>
-          <h2 className='profile-right-content-title'>Notifications</h2>
-          <div className='profile-right-content-filterLeft-container'>
+    <div className='myProfile-right-container'>
+      <div className='myProfile-right-header'>Notifications</div>
+      <div className='myProfile-right-content'>
+        <div className='myProfile-right-content-filterLeft'>
+          <h2 className='myProfile-right-content-title'>Notifications</h2>
+          <div className='myProfile-right-content-filterLeft-container'>
             {notifications.map((notification, index) => (
               <NotificationBlock key={index} notification={notification} />
             ))}
           </div>
-          <div className='profile-right-content-filterLeft-pagination'>
+          <div className='myProfile-right-content-filterLeft-pagination'>
             <Pagination
               showQuickJumper
               current={currentPage}
@@ -600,17 +599,17 @@ const PersonalNotification = () => {
             />
           </div>
         </div>
-        <div className='profile-right-content-filterRight'>
+        <div className='myProfile-right-content-filterRight'>
           <div
-            className={`profile-right-content-filterRight-container ${
+            className={`myProfile-right-content-filterRight-container ${
               showFilter && "show"
             }`}
           >
             <div
-              className='profile-right-content-filterRight-container-background'
+              className='myProfile-right-content-filterRight-container-background'
               onClick={handleCloseFilter}
             ></div>
-            <div className='profile-right-content-filterRight-container-filter'>
+            <div className='myProfile-right-content-filterRight-container-filter'>
               <NotificationFilter
                 filter={filter}
                 setFilter={setFilter}
@@ -620,7 +619,7 @@ const PersonalNotification = () => {
             </div>
           </div>
           <div
-            className='profile-right-content-filterRight-toggle'
+            className='myProfile-right-content-filterRight-toggle'
             onClick={handleShowFilter}
           >
             <FaFilter />

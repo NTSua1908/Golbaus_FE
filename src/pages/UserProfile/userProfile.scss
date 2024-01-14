@@ -1,0 +1,177 @@
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
+
+.userProfile {
+  padding-bottom: calc($footer-height + 20px);
+  @include for-size(tablet, min) {
+    padding-bottom: calc($footer-height-res + 20px);
+  }
+
+  &-content {
+    width: 90%;
+    max-width: 1400px;
+    min-width: 350px;
+    margin: 0 auto;
+    margin-top: 20px;
+    @include for-size(desktop, min) {
+      width: 98%;
+    }
+  }
+
+  &-container {
+    border: 1px solid $text-menu-color;
+    border-radius: 10px;
+  }
+  &-header {
+    background-color: $background-color;
+    // background-image: url("../../images/background.png");
+    overflow: hidden;
+    border-top-right-radius: inherit;
+    border-top-left-radius: inherit;
+    border-bottom: 1px solid $text-menu-color;
+
+    &-top {
+      height: 50px;
+      padding: 10px;
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      padding-left: 20px;
+      border-bottom: 1px solid $text-menu-color;
+      &-left,
+      &-right,
+      &-middle {
+        height: 18px;
+        width: 18px;
+        border-radius: 50%;
+        margin-left: 15px;
+      }
+
+      &-left {
+        background-color: red;
+      }
+      &-middle {
+        background-color: yellow;
+      }
+      &-right {
+        background-color: green;
+      }
+      // background-color: $background-color;
+    }
+    &-content {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid $text-menu-color;
+
+      @include for-size(phone, min) {
+        display: block;
+      }
+
+      &-left {
+        display: flex;
+        &-avatar {
+          height: 90px;
+          min-width: 90px;
+          width: 90px;
+          border: 1px solid #333;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+        &-info {
+          margin-left: 30px;
+          min-width: 180px;
+          // color: $text-menu-color;
+          color: #ffc562;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          &-fullname {
+            padding-bottom: 10px;
+            font-size: 23px;
+          }
+          &-username {
+            font-size: 14px;
+          }
+        }
+      }
+
+      &-right {
+        &-btnfollow {
+          margin-left: 10px;
+          border: 1px solid $text-menu-color;
+          color: #ffc562;
+          padding: 10px 25px 10px 14px;
+          border-radius: 5px;
+          line-height: 10px;
+          position: relative;
+          font-size: 13px;
+          cursor: pointer;
+          font-weight: 600;
+          width: fit-content;
+
+          @include for-size(phone, min) {
+            margin-top: 30px;
+          }
+
+          & svg {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+          }
+        }
+      }
+    }
+    &-menu {
+      display: flex;
+      padding: 0px 20px;
+      border-bottom: 1px solid $text-menu-color;
+
+      @include for-size(phone-sm, min) {
+        padding: 0;
+      }
+
+      &-item {
+        padding: 20px 30px;
+        font-size: 15px;
+        // color: $text-menu-color;
+        color: #ffc562;
+        cursor: pointer;
+
+        @include for-size(phone-sm, min) {
+          flex: 1;
+        }
+
+        &.active {
+          border-bottom: 4px solid $text-menu-color;
+        }
+        &:hover {
+          background-color: rgba($color: $background-color, $alpha: 0.8);
+        }
+      }
+    }
+  }
+  &-body {
+    &-info {
+      padding: 30px;
+      &-item {
+        & td {
+          border: 1px solid #ddd;
+          padding: 8px 20px;
+          text-align: left;
+          background-color: #f2f2f2;
+        }
+
+        &:nth-child(even) {
+          background-color: #f9f9f9;
+        }
+
+        /* Hover effect on rows */
+        &:hover {
+          background-color: #e6e6e6;
+        }
+      }
+    }
+  }
+}

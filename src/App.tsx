@@ -1,23 +1,21 @@
 import { ConfigProvider } from "antd";
 import { useEffect } from "react";
-import { Provider, useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.scss";
 import { loginSuccess } from "./actions/loginAction";
-import Footer from "./components/Footer/Footer";
-import Header from "./components/Header/Header";
 import CreatePost from "./pages/CreatePost/CreatePost";
+import EditPost from "./pages/EditPost/EditPost";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import NotFound from "./pages/NotFound/NotFound";
-import PostDetail from "./pages/PostDetail/PostDetail";
 import Post from "./pages/Post/Post";
-import Profile from "./pages/Profile/Profile";
+import PostDetail from "./pages/PostDetail/PostDetail";
+import MyProfile from "./pages/Profile/MyProfile";
 import Register from "./pages/Register/Register";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
-import store, { RootState } from "./store/configureStore";
-import EditPost from "./pages/EditPost/EditPost";
+import UserProfile from "./pages/UserProfile/UserProfile";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -42,21 +40,22 @@ const App = () => {
         },
       }}
     >
-      <div className="App">
-        <div className="content-wrap">
+      <div className='App'>
+        <div className='content-wrap'>
           <Router>
             <Routes>
-              <Route path="/post" element={<Post />} />
-              <Route path="/post/:postId" element={<PostDetail />} />
-              <Route path="/" element={<Home />} />
-              <Route path="/create-post" element={<CreatePost />} />
-              <Route path="/edit-post/:postId" element={<EditPost />} />
-              <Route path="/profile/:userId" element={<Profile />} />
-              <Route path="*" element={<NotFound />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/register" element={<Register />} />
+              <Route path='/post' element={<Post />} />
+              <Route path='/post/:postId' element={<PostDetail />} />
+              <Route path='/' element={<Home />} />
+              <Route path='/create-post' element={<CreatePost />} />
+              <Route path='/edit-post/:postId' element={<EditPost />} />
+              <Route path='/profile' element={<MyProfile />} />
+              <Route path='/user/:userId' element={<UserProfile />} />
+              <Route path='*' element={<NotFound />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/reset-password' element={<ResetPassword />} />
+              <Route path='/forgot-password' element={<ForgotPassword />} />
+              <Route path='/register' element={<Register />} />
             </Routes>
           </Router>
         </div>
