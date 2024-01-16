@@ -1,90 +1,123 @@
+import { Pagination, Spin, notification } from "antd";
+import { AxiosError } from "axios";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import "./commentTree.scss";
+import { CiEdit, CiFlag1 } from "react-icons/ci";
+import { ImReply } from "react-icons/im";
+import { MdDeleteOutline } from "react-icons/md";
+import { SlOptionsVertical } from "react-icons/sl";
 import {
   TiArrowRight,
   TiArrowSortedDown,
   TiArrowSortedUp,
 } from "react-icons/ti";
-import { SlOptionsVertical } from "react-icons/sl";
-import VoteType from "../../enums/VoteType";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { command } from "yargs";
-import { Pagination } from "antd";
-import { ImReply } from "react-icons/im";
-import { CiEdit, CiFlag1 } from "react-icons/ci";
-import { MdDeleteOutline } from "react-icons/md";
+import { formatDateToString } from "../../Helper/DateHelper";
+import VoteType from "../../enums/VoteType";
+import {
+  CommentCreateModel,
+  CommentDetailModel,
+  CommentUpdateModel,
+} from "../../model/commentModel";
+import {
+  AddPostComment,
+  DeletePostComment,
+  GetPostCommentReply,
+  UpdatePostComment,
+} from "../../services/CommentService";
+import { RootState } from "../../store/configureStore";
+import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
+import RequiredLogin from "../RequiredLogin/RequiredLogin";
+import "./commentTree.scss";
+import { setPostCommentPage } from "../../actions/postAction";
 
-export interface Comment {
-  id: string;
-  avatar: string;
-  username: string;
-  fullName: string;
-  date: string;
-  text: string;
-  upvotes: number;
-  downvotes: number;
-  replyFor: string; //username
-  replies: Comment[]; // Array of nested comments
-  totalReplyCount: number;
-  vote: VoteType;
-}
+const amoutPerPage = 5;
 
 interface CommentProps {
-  comment: Comment;
-  addParentComment?: (comment: Comment) => void;
+  comment: CommentDetailModel;
+  addParentComment?: (comment: CommentDetailModel) => void;
   onDelete: (id: string) => void;
+  postId: string; //for create reply
+  parentId: string; //for create reply
+  setOnConfirm: React.Dispatch<React.SetStateAction<() => void>>;
+  setOnCancel: React.Dispatch<React.SetStateAction<() => void>>;
+  setShowDeleteConfirm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Comment = React.memo(
-  ({ comment, addParentComment, onDelete }: CommentProps) => {
+  ({
+    comment,
+    addParentComment,
+    onDelete,
+    postId,
+    parentId,
+    setOnConfirm,
+    setOnCancel,
+    setShowDeleteConfirm,
+  }: CommentProps) => {
     const [isReply, setReply] = useState(false);
     const [isEdit, setEdit] = useState(false);
     const [showComment, setShowComment] = useState(false);
-    const [replies, setReplies] = useState(comment.replies); // list comment reply
+    const [replies, setReplies] = useState(comment.replies ?? []); // list comment reply
     const [isShowOption, setShowOption] = useState(false);
     const optionRef = useRef<HTMLDivElement>(null);
-    const [content, setContent] = useState(comment.text);
-    const [editContent, setEditContent] = useState(comment.text);
+    const [content, setContent] = useState(comment.content);
+    const [editContent, setEditContent] = useState(comment.content);
     const [totalCommentCount, setTotalCommentCount] = useState(
-      comment.totalReplyCount
+      comment.replyCount
     );
 
     //vote state
-    const [upvote, setUpvote] = useState(comment.upvotes);
-    const [downvote, setDownvote] = useState(comment.downvotes);
-    const [vote, setVote] = useState(comment.vote);
+    const [upvote, setUpvote] = useState(comment.upVote);
+    const [downvote, setDownvote] = useState(comment.downVote);
+    const [vote, setVote] = useState(comment.voteType);
+
+    const [api, contextHolder] = notification.useNotification();
 
     //Pagination for reply
-    const [currentPage, setCurrentPage] = useState(1);
-    const handleLoadMoreReplies = () => {};
+    const [currentPage, setCurrentPage] = useState(
+      Math.ceil(replies.length / amoutPerPage)
+    );
+    const handleLoadMoreReplies = () => {
+      setLoadingReply(true);
+      if (!isLoadingReply) {
+        GetPostCommentReply(postId, comment.id, currentPage, amoutPerPage)
+          .then((res) => {
+            setCurrentPage(currentPage + 1);
+            setReplies([...replies, ...res.data.data]);
+          })
+          .catch()
+          .finally(() => {
+            setLoadingReply(false);
+          });
+      }
+    };
     //add reply
     const [addReply, setAddReply] = useState("");
-    const handleReply = () => {
-      // debugger;
-      const commentReply: Comment = {
-        avatar:
-          "https://i.pinimg.com/564x/94/9b/8d/949b8d8d9229693ba9d53b054b738e2a.jpg", //My avatar
-        fullName: "Nguyen Thien Sua", //My full name,
-        username: "ntsua", //My username,
-        replyFor: comment.username, //Post author user name
-        date: "2023-12-12 12:34 PM",
-        downvotes: 0,
-        upvotes: 0,
-        id: "1.4" + addReply,
-        text: addReply,
-        totalReplyCount: 0,
-        replies: [],
-        vote: VoteType.Unvote,
+    const [isLoadingReply, setLoadingReply] = useState(false);
+
+    const handleReply = async () => {
+      const commentReply: CommentCreateModel = {
+        content: addReply,
+        parentId: parentId,
+        replyFor: comment.userName,
+        postId: postId,
       };
-      if (addParentComment) {
-        addParentComment(commentReply);
-      } else {
-        setReplies([...replies, commentReply]);
-        if (totalCommentCount == 0) {
-          setTotalCommentCount(1);
-          setShowComment(true);
+
+      await AddPostComment(commentReply).then((res) => {
+        console.log(res.data);
+        if (addParentComment) {
+          addParentComment(res.data);
+        } else {
+          setReplies([res.data, ...replies]);
+          if (totalCommentCount == 0) {
+            setTotalCommentCount(1);
+            setCurrentPage(1);
+            setShowComment(true);
+          }
         }
-      }
+      });
+
       setAddReply("");
       setReply(false);
     };
@@ -100,6 +133,18 @@ const Comment = React.memo(
 
     const handleShowReplyClick = () => {
       setShowComment(!showComment);
+      if (replies.length == 0) {
+        setLoadingReply(true);
+        GetPostCommentReply(postId, comment.id, 0, amoutPerPage)
+          .then((res) => {
+            setCurrentPage(currentPage + 1);
+            setReplies([...replies, ...res.data.data]);
+          })
+          .catch()
+          .finally(() => {
+            setLoadingReply(false);
+          });
+      }
     };
 
     const handleShowOption = () => {
@@ -123,12 +168,21 @@ const Comment = React.memo(
       };
     }, []);
 
-    const handleSaveEditComment = () => {
-      //Handle save (call API...)
-
-      //Assume save success
-      setContent(editContent);
-      setEdit(false);
+    const handleSaveEditComment = async (id: string) => {
+      const comment: CommentUpdateModel = {
+        content: editContent,
+      };
+      UpdatePostComment(id, comment)
+        .then((res) => {
+          setContent(editContent);
+          setEdit(false);
+          openNotificationSuccess("Updated successfully");
+        })
+        .catch((error: AxiosError) => {
+          const errors = (error.response?.data as any).errors;
+          const errorMessage = errors.join("\n") as string;
+          openNotificationFailure(errorMessage);
+        });
     };
 
     const handleCancelEditComment = () => {
@@ -164,47 +218,77 @@ const Comment = React.memo(
       }
     };
 
-    const AddParentComment = (comment: Comment) => {
+    const AddItsReply = (comment: CommentDetailModel) => {
       setReplies([...replies, comment]);
     };
 
     const handleDeleteComment = (id: string) => {
-      setReplies(replies.filter((x) => x.id != id));
+      DeletePostComment(id)
+        .then((res) => {
+          setReplies(replies.filter((x) => x.id != id));
+          openNotificationSuccess("Deleted successfully");
+        })
+        .catch((error: AxiosError) => {
+          const errors = (error.response?.data as any).errors;
+          const errorMessage = errors.join("\n") as string;
+          openNotificationFailure(errorMessage);
+        });
+    };
+
+    const openNotificationSuccess = (message: string) => {
+      api.info({
+        message: `Notification`,
+        description: message,
+        placement: "topRight",
+      });
+    };
+
+    const openNotificationFailure = (message: string) => {
+      api.error({
+        message: `Notification`,
+        description: message,
+        placement: "topRight",
+        type: "error",
+      });
     };
 
     return (
-      <div className="comment">
-        <div className="comment-header">
+      <div className='comment'>
+        {contextHolder}
+        <div className='comment-header'>
           <img
             src={comment.avatar}
-            alt="User Avatar"
-            className="comment-header-avatar"
+            alt='User Avatar'
+            className='comment-header-avatar'
           />
         </div>
-        <div className="comment-content">
+        <div className='comment-content'>
           {isEdit ? (
             <ReplyForm
               content={editContent}
               setContent={setEditContent}
-              onSave={handleSaveEditComment}
+              onSave={() => {
+                return handleSaveEditComment(comment.id);
+              }}
               onCancel={handleCancelEditComment}
+              parentComment={null}
             />
           ) : (
-            <div className="comment-content-container">
-              <div className="comment-content-left">
-                <div className="comment-content-details">
-                  <span className="comment-content-details-fullname">
+            <div className='comment-content-container'>
+              <div className='comment-content-left'>
+                <div className='comment-content-details'>
+                  <span className='comment-content-details-fullname'>
                     {comment.fullName}
                   </span>
-                  <span className="comment-content-details-username">
-                    @{comment.username}
+                  <span className='comment-content-details-username'>
+                    @{comment.userName}
                   </span>
-                  <span className="comment-content-details-date">
-                    {comment.date}
+                  <span className='comment-content-details-date'>
+                    {formatDateToString(comment.createdDate)}
                   </span>
                 </div>
                 <div
-                  className="comment-content-option"
+                  className='comment-content-option'
                   ref={optionRef}
                   onClick={handleShowOption}
                 >
@@ -215,41 +299,51 @@ const Comment = React.memo(
                     }`}
                   >
                     <ul>
-                      <li className="comment-content-option-menu-item">
-                        <CiFlag1 />
-                        <span>Report</span>
-                      </li>
-                      {/* Validate later */}
-                      <li
-                        className="comment-content-option-menu-item"
-                        onClick={() => {
-                          setEdit(true);
-                        }}
-                      >
-                        <CiEdit /> <span>Edit</span>
-                      </li>
-                      <li
-                        className="comment-content-option-menu-item"
-                        onClick={() => {
-                          onDelete(comment.id);
-                        }}
-                      >
-                        <MdDeleteOutline />
-                        <span>Delete</span>
-                      </li>
+                      {!comment.isMyComment && (
+                        <li className='comment-content-option-menu-item'>
+                          <CiFlag1 />
+                          <span>Report</span>
+                        </li>
+                      )}
+
+                      {comment.isMyComment && (
+                        <>
+                          <li
+                            className='comment-content-option-menu-item'
+                            onClick={() => {
+                              setEdit(true);
+                            }}
+                          >
+                            <CiEdit /> <span>Edit</span>
+                          </li>
+                          <li
+                            className='comment-content-option-menu-item'
+                            onClick={() => {
+                              console.log(comment);
+                              setOnConfirm(() => () => {
+                                onDelete(comment.id);
+                              });
+                              setShowDeleteConfirm(true);
+                            }}
+                          >
+                            <MdDeleteOutline />
+                            <span>Delete</span>
+                          </li>
+                        </>
+                      )}
                     </ul>
                   </div>
                 </div>
               </div>
 
-              <div className="comment-content-message">
+              <div className='comment-content-message'>
                 <Link to={`/user/profile/${"fill-later"}`}>
                   @{comment.replyFor}
                 </Link>{" "}
                 {content}
               </div>
-              <div className="comment-content-function">
-                <div className="comment-content-function-votes">
+              <div className='comment-content-function'>
+                <div className='comment-content-function-votes'>
                   <div
                     className={`comment-content-function-votes-up ${
                       vote == VoteType.Up && "selected"
@@ -270,7 +364,7 @@ const Comment = React.memo(
                   </div>
                 </div>
                 <div
-                  className="comment-content-function-reply"
+                  className='comment-content-function-reply'
                   onClick={handleReplyClick}
                 >
                   Reply
@@ -280,8 +374,8 @@ const Comment = React.memo(
           )}
 
           {isReply && (
-            <div className="comment-content-form">
-              <div className="comment-content-form-icon">
+            <div className='comment-content-form'>
+              <div className='comment-content-form-icon'>
                 <ImReply />
               </div>
               <ReplyForm
@@ -290,13 +384,14 @@ const Comment = React.memo(
                 setContent={setAddReply}
                 onSave={handleReply}
                 onCancel={handleCancelReply}
+                parentComment={comment.id}
               />
             </div>
           )}
 
           {totalCommentCount > 0 && (
             <div
-              className="comment-content-showComment"
+              className='comment-content-showComment'
               onClick={handleShowReplyClick}
             >
               <div
@@ -306,7 +401,7 @@ const Comment = React.memo(
               >
                 <TiArrowRight />
               </div>
-              <div className="comment-content-showComment-label">
+              <div className='comment-content-showComment-label'>
                 Show replies
               </div>
             </div>
@@ -321,14 +416,24 @@ const Comment = React.memo(
               replies.map((reply) => (
                 <Comment
                   key={reply.id}
+                  postId={postId}
+                  parentId={comment.id}
                   comment={reply}
-                  addParentComment={AddParentComment}
+                  addParentComment={AddItsReply}
                   onDelete={handleDeleteComment}
+                  setOnCancel={setOnCancel}
+                  setOnConfirm={setOnConfirm}
+                  setShowDeleteConfirm={setShowDeleteConfirm}
                 />
               ))}
-            {currentPage < Math.ceil(totalCommentCount / 10) && (
+            {isLoadingReply && (
+              <div className='comment-content-loading'>
+                <Spin />
+              </div>
+            )}
+            {currentPage <= Math.ceil(totalCommentCount / amoutPerPage) - 1 && (
               <div
-                className="comment-content-replies-more"
+                className='comment-content-replies-more'
                 onClick={handleLoadMoreReplies}
               >
                 Show more comments...
@@ -342,10 +447,11 @@ const Comment = React.memo(
 );
 
 interface ReplyFormProps {
-  onSave: () => void;
+  onSave: () => Promise<void>;
   onCancel: () => void;
   content: string;
   autoFocus?: boolean;
+  parentComment: string | null;
   setContent: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -356,30 +462,76 @@ export const ReplyForm: React.FC<ReplyFormProps> = ({
   content,
   setContent,
 }) => {
+  const isAuthenticated = localStorage.getItem("token") !== null;
+  const [isRequiredLogin, setRequiredLogin] = useState(false);
+
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.currentTarget.value);
-    // console.log(e.currentTarget.value, e.currentTarget.value.length === 0);
+  };
+
+  const handleCloseRequiredLogin = () => {
+    setRequiredLogin(false);
+  };
+
+  const [api, contextHolder] = notification.useNotification();
+
+  const handleSavePost = async () => {
+    if (isAuthenticated) {
+      await onSave()
+        .then(() => {
+          openNotificationSuccess("Post successful");
+        })
+        .catch((error: AxiosError) => {
+          const errors = (error.response?.data as any).errors;
+          const errorMessage = errors.join("\n") as string;
+          openNotificationFailure(errorMessage);
+        });
+    } else {
+      setRequiredLogin(true);
+    }
+  };
+
+  const openNotificationSuccess = (message: string) => {
+    api.info({
+      message: `Notification`,
+      description: message,
+      placement: "topRight",
+    });
+  };
+
+  const openNotificationFailure = (message: string) => {
+    api.error({
+      message: `Notification`,
+      description: message,
+      placement: "topRight",
+      type: "error",
+    });
   };
 
   return (
-    <div className="comment-reply-form">
+    <div className='comment-reply-form'>
+      {contextHolder}
+      <RequiredLogin
+        show={isRequiredLogin}
+        handleClose={handleCloseRequiredLogin}
+      />
       <textarea
         autoFocus={autoFocus}
-        className="comment-reply-form-input"
+        className='comment-reply-form-input'
         value={content}
         onChange={handleChange}
-        placeholder="Write your comment..."
+        placeholder='Write your comment...'
       />
-      <div className="comment-reply-form-function">
+      <div className='comment-reply-form-function'>
         <button
-          className="comment-reply-form-function-save"
-          onClick={onSave}
+          className='comment-reply-form-function-save'
+          onClick={handleSavePost}
           disabled={content.length === 0}
         >
           Save changes
         </button>
         <button
-          className="comment-reply-form-function-cancel"
+          className='comment-reply-form-function-cancel'
           onClick={onCancel}
         >
           Cancel
@@ -390,73 +542,122 @@ export const ReplyForm: React.FC<ReplyFormProps> = ({
 };
 
 export interface CommentTreeProps {
-  data: Comment[];
+  postId: string; //for create reply
+  userName: string; //for create reply
+  data: CommentDetailModel[];
   page: number;
   amount: number;
   totalCount: number;
 }
 
-const CommentsTree = ({ data, page, amount, totalCount }: CommentTreeProps) => {
-  const [comments, setComment] = useState(data);
+const CommentsTree = ({
+  postId,
+  userName,
+  data,
+  page,
+  amount,
+  totalCount,
+}: CommentTreeProps) => {
+  const [comments, setComments] = useState<CommentDetailModel[]>([]);
   const [reply, setReply] = useState("");
-  const [currentPage, setCurrentPage] = useState(page);
+  const [api, contextHolder] = notification.useNotification();
+  const dispatch = useDispatch();
 
-  const handleOnAddComment = () => {
-    // console.log(reply);
+  const handleOnAddComment = async () => {
+    const comment: CommentCreateModel = {
+      content: reply,
+      parentId: null,
+      replyFor: userName,
+      postId: postId,
+    };
+
+    await AddPostComment(comment).then((res) => {
+      console.log(res.data);
+      setComments([res.data, ...comments]);
+    });
     setReply("");
-    setComment([
-      {
-        avatar:
-          "https://i.pinimg.com/564x/94/9b/8d/949b8d8d9229693ba9d53b054b738e2a.jpg", //My avatar
-        fullName: "Nguyen Thien Sua", //My full name,
-        username: "ntsua", //My username,
-        replyFor: "Haley", //Post author user name
-        date: "2023-12-12 12:34 PM",
-        downvotes: 0,
-        upvotes: 0,
-        id: "1.4" + reply,
-        text: reply,
-        totalReplyCount: 0,
-        replies: [],
-        vote: VoteType.Unvote,
-      },
-      ...comments,
-    ]);
   };
 
   const handleDeleteComment = (id: string) => {
-    setComment(comments.filter((x) => x.id != id));
+    DeletePostComment(id)
+      .then((res) => {
+        setComments(comments.filter((x) => x.id != id));
+        openNotificationSuccess("Deleted successfully");
+      })
+      .catch((error: AxiosError) => {
+        const errors = (error.response?.data as any).errors;
+        const errorMessage = errors.join("\n") as string;
+        openNotificationFailure(errorMessage);
+      });
   };
 
   const handleOnCancelComment = () => {
     setReply("");
   };
 
-  const onChangePage = (page: number, pageSize: Number) => {};
+  useEffect(() => {
+    setComments(data);
+  }, [data]);
+
+  const onChangePage = (page: number, pageSize: Number) => {
+    dispatch(setPostCommentPage(page - 1));
+  };
+
+  const openNotificationSuccess = (message: string) => {
+    api.info({
+      message: `Notification`,
+      description: message,
+      placement: "topRight",
+    });
+  };
+
+  const openNotificationFailure = (message: string) => {
+    api.error({
+      message: `Notification`,
+      description: message,
+      placement: "topRight",
+      type: "error",
+    });
+  };
+
+  const [onConfirm, setOnConfirm] = useState(() => () => {
+    console.log("state");
+  });
+  const [onCancel, setOnCancel] = useState(() => () => {
+    setShowDeleteConfirm(false);
+  });
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   return (
-    <div className="comments-tree">
-      <div className="comments-tree-new">
+    <div className='comments-tree'>
+      {contextHolder}
+      <div className='comments-tree-new'>
         <ReplyForm
           content={reply}
           setContent={setReply}
           onSave={handleOnAddComment}
           onCancel={handleOnCancelComment}
+          parentComment={null}
         />
       </div>
       {comments.length > 0 ? (
-        <div className="comments-tree-list">
+        <div className='comments-tree-list'>
           {comments.map((comment) => (
             <Comment
               key={comment.id}
+              postId={postId}
+              parentId={comment.id}
               comment={comment}
               onDelete={handleDeleteComment}
+              setOnConfirm={setOnConfirm}
+              setOnCancel={setOnCancel}
+              setShowDeleteConfirm={setShowDeleteConfirm}
             />
           ))}
-          <div className="comments-tree-list-pagination">
+          <div className='comments-tree-list-pagination'>
             <Pagination
               simple
-              defaultCurrent={currentPage}
+              defaultCurrent={page + 1}
               pageSize={amount}
               total={totalCount}
               onChange={onChangePage}
@@ -464,10 +665,17 @@ const CommentsTree = ({ data, page, amount, totalCount }: CommentTreeProps) => {
           </div>
         </div>
       ) : (
-        <div className="comments-tree-empty">
+        <div className='comments-tree-empty'>
           <p>This post has no comments</p>
         </div>
       )}
+      <ConfirmDialog
+        onCancel={onCancel}
+        onConfirm={onConfirm}
+        title='You are about to delete this comment'
+        message='Do you really want to delete this comment? This action cannot be undone. Are you sure you want to proceed?'
+        show={showDeleteConfirm}
+      />
     </div>
   );
 };

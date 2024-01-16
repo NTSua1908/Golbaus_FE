@@ -176,53 +176,56 @@ function Header() {
   };
 
   return (
-    <div className="header">
-      <div className="header-container">
-        <Link to={"/"} className="header-logo">
+    <div className='header'>
+      <div className='header-container'>
+        <Link to={"/"} className='header-logo'>
           <Logo />
         </Link>
-        <div className="header-menu">
-          <div className="header-menu-left">
+        <div className='header-menu'>
+          <div className='header-menu-left'>
             <ul>
-              <li className="pointer">
+              <li className='pointer'>
                 <Link to={"/Post"}>Posts</Link>
               </li>
-              <li className="pointer">
+              <li className='pointer'>
                 <Link to={"/QuestionAndAnswer"}>Questions and Answers</Link>
               </li>
             </ul>
           </div>
-          <div className="header-menu-right">
-            <li className="header-menu-right-search">
-              <input type="text" className="header-menu-right-search-input" />
-              <div className="header-menu-right-search-spin">
+          <div className='header-menu-right'>
+            <li className='header-menu-right-search'>
+              <input type='text' className='header-menu-right-search-input' />
+              <div className='header-menu-right-search-spin'>
                 {isLoading && <Spin />}
               </div>
-              <button className="header-menu-right-search-btn">
+              <button className='header-menu-right-search-btn'>
                 <IoSearchSharp />
               </button>
             </li>
             <li
-              className="header-menu-right-searchbutton pointer"
-              title="Search"
+              className='header-menu-right-searchbutton pointer'
+              title='Search'
             >
               <FaSearch />
             </li>
             {isAuthenticated && userInfo && (
-              <li
-                className="header-menu-right-write pointer"
-                title="Write post"
-              >
-                <FaPen />
+              <li>
+                <Link
+                  to={"/create-post"}
+                  className='header-menu-right-write pointer'
+                  title='Write post'
+                >
+                  <FaPen />
+                </Link>
               </li>
             )}
             {isAuthenticated && userInfo && (
-              <li className="header-menu-right-notification">
+              <li className='header-menu-right-notification'>
                 <div onClick={toggleNotification} ref={buttonNotificationRef}>
-                  <div className="header-menu-right-notification-count">
+                  <div className='header-menu-right-notification-count'>
                     {notifications.length}
                   </div>
-                  <FaBell className="pointer" />
+                  <FaBell className='pointer' />
                 </div>
                 <div
                   className={`header-menu-right-notification-menu ${
@@ -230,21 +233,21 @@ function Header() {
                   }`}
                   ref={notificationRef}
                 >
-                  <div className="header-menu-right-notification-menu-header">
-                    <span className="header-menu-right-notification-menu-header-title pointer">
+                  <div className='header-menu-right-notification-menu-header'>
+                    <span className='header-menu-right-notification-menu-header-title pointer'>
                       Notifications
                     </span>
-                    <span className="header-menu-right-notification-menu-header-read pointer">
+                    <span className='header-menu-right-notification-menu-header-read pointer'>
                       Mark read
                     </span>
                   </div>
-                  <div className="header-menu-right-notification-menu-body">
+                  <div className='header-menu-right-notification-menu-body'>
                     {notifications.length === 0 && (
-                      <div className="header-menu-right-notification-menu-body-empty ">
-                        <span className="header-menu-right-notification-menu-body-empty-icon pointer">
+                      <div className='header-menu-right-notification-menu-body-empty '>
+                        <span className='header-menu-right-notification-menu-body-empty-icon pointer'>
                           <GiEmptyHourglass />
                         </span>
-                        <span className="header-menu-right-notification-menu-body-empty-content pointer">
+                        <span className='header-menu-right-notification-menu-body-empty-content pointer'>
                           You have no notifications
                         </span>
                       </div>
@@ -258,7 +261,7 @@ function Header() {
                         {notifications.map((notification, index) => (
                           <Link
                             to={notification.link}
-                            className="notification-container"
+                            className='notification-container'
                             key={index}
                           >
                             <div
@@ -269,25 +272,25 @@ function Header() {
                             >
                               <Link
                                 to={notification.userUrl}
-                                className="user-avatar"
+                                className='user-avatar'
                               >
                                 <img
                                   src={notification.avatarUrl}
                                   alt={`${notification.user}'s avatar`}
                                 />
                               </Link>
-                              <div className="notification-content">
+                              <div className='notification-content'>
                                 <p>
                                   <a
                                     href={notification.userUrl}
-                                    className="user-link"
+                                    className='user-link'
                                   >
                                     {notification.user}
                                   </a>{" "}
                                   {notification.content}
                                   {"."}
                                 </p>
-                                <span className="date">
+                                <span className='date'>
                                   {notification.date}
                                 </span>
                               </div>
@@ -297,23 +300,23 @@ function Header() {
                       </div>
                     )}
                   </div>
-                  <div className="header-menu-right-notification-menu-footer">
-                    <span className="pointer">All notifications</span>
+                  <div className='header-menu-right-notification-menu-footer'>
+                    <span className='pointer'>All notifications</span>
                   </div>
                 </div>
               </li>
             )}
             {isAuthenticated && userInfo ? (
-              <li className="header-menu-right-profile">
+              <li className='header-menu-right-profile'>
                 <div
-                  className="header-menu-right-profile-container pointer"
+                  className='header-menu-right-profile-container pointer'
                   onClick={toggleProfileMenu}
                 >
                   <img
                     ref={buttonProfileRef}
-                    className="header-menu-right-profile-image"
+                    className='header-menu-right-profile-image'
                     src={userInfo?.avatar as string}
-                    alt="Your profile"
+                    alt='Your profile'
                   />
                   {isMenuProfileOpen && userInfo && (
                     <div
@@ -322,33 +325,44 @@ function Header() {
                       }`}
                       ref={menuProfileRef}
                     >
-                      <li className="header-menu-right-profile-menu-first">
-                        <div className="header-menu-right-profile-menu-first-left">
+                      <li
+                        className='header-menu-right-profile-menu-first'
+                        onClick={() => {
+                          navigate("/profile");
+                        }}
+                      >
+                        {/* <Link to={"/profile"} style={{ display: "block" }}> */}
+                        <div className='header-menu-right-profile-menu-first-left'>
                           <img
-                            src="https://i.pinimg.com/564x/94/9b/8d/949b8d8d9229693ba9d53b054b738e2a.jpg"
-                            alt="Your profile"
+                            src='https://i.pinimg.com/564x/94/9b/8d/949b8d8d9229693ba9d53b054b738e2a.jpg'
+                            alt='Your profile'
                           />
                         </div>
 
-                        <div className="header-menu-right-profile-menu-first-right">
-                          <div className="name">{userInfo?.fullName}</div>
-                          <div className="userName">@{userInfo?.userName}</div>
+                        <div className='header-menu-right-profile-menu-first-right'>
+                          <div className='name'>{userInfo?.fullName}</div>
+                          <div className='userName'>@{userInfo?.userName}</div>
                         </div>
+                        {/* </Link> */}
                       </li>
-                      <li>
-                        <IoPerson className="padding-icon" />
+                      <li
+                        onClick={() => {
+                          navigate("/user/" + userInfo.id);
+                        }}
+                      >
+                        <IoPerson className='padding-icon' />
                         Personal page
                       </li>
                       <li>
-                        <IoNewspaperOutline className="padding-icon" />
+                        <IoNewspaperOutline className='padding-icon' />
                         Content management
                       </li>
                       <li>
-                        <FaHistory className="padding-icon" />
+                        <FaHistory className='padding-icon' />
                         Activity history
                       </li>
                       <li onClick={handleLogout}>
-                        <IoLogOutSharp className="padding-icon" />
+                        <IoLogOutSharp className='padding-icon' />
                         Logout
                       </li>
                     </div>
@@ -356,7 +370,7 @@ function Header() {
                 </div>
               </li>
             ) : (
-              <div className="header-menu-right-auth">
+              <div className='header-menu-right-auth'>
                 <Link
                   to={"/login"}
                   state={{ returnPath: window.location.pathname }}

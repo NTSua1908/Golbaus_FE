@@ -9,6 +9,7 @@
   width: 100vw;
   display: none;
   z-index: 999;
+  transform: scaleY(1);
 
   &.show {
     display: block;

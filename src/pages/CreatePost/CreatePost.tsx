@@ -50,7 +50,7 @@ const CreatePost: React.FC = () => {
   const openNotificationSuccess = () => {
     api.info({
       message: `Notification`,
-      description: "Login successful",
+      description: "Created successfully",
       placement: "topRight",
     });
   };

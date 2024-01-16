@@ -51,6 +51,11 @@
       color: $background-color;
       margin: 20px 0px;
     }
+
+    &-loading {
+      display: flex;
+      justify-content: center;
+    }
   }
 
   &-more {

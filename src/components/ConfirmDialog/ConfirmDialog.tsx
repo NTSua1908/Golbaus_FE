@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { FaQuestionCircle } from "react-icons/fa";
 import "./confirmDialog.scss";
 
@@ -8,6 +8,7 @@ interface ConfirmDialogProps {
   onCancel: () => void;
   onConfirm: () => void;
   show: boolean;
+  fixed?: boolean;
 }
 
 function ConfirmDialog({
@@ -16,11 +17,30 @@ function ConfirmDialog({
   onCancel,
   onConfirm,
   show,
+  fixed,
 }: ConfirmDialogProps) {
   const handleConfirm = () => {
     onCancel();
     onConfirm();
   };
+
+  // const dialogRef = useRef<HTMLDivElement>(null);
+
+  // useEffect(() => {
+  //   if (fixed) {
+  //     const handleScroll = () => {
+  //       if (dialogRef.current) {
+  //         dialogRef.current.style.top = `${window.scrollY}px`;
+  //       }
+  //     };
+
+  //     document.addEventListener("scroll", handleScroll);
+
+  //     return () => {
+  //       document.removeEventListener("scroll", handleScroll);
+  //     };
+  //   }
+  // });
 
   return (
     <div className={`confirmDialog ${show && "show"}`}>

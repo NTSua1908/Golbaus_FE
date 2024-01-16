@@ -18,6 +18,7 @@ import {
 import { NotificationPlacement } from "antd/es/notification/interface";
 import { notification } from "antd";
 import { useNavigate } from "react-router-dom";
+import { removePost } from "../../actions/postAction";
 
 interface LoginFormProps {
   onLogin: (values: any) => void;
@@ -32,9 +33,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, returnPath }) => {
   };
 
   return (
-    <Form className="login-form" name="login" onFinish={onFinish}>
+    <Form className='login-form' name='login' onFinish={onFinish}>
       <Form.Item
-        name="email"
+        name='email'
         rules={[
           { required: true, message: "Please input your email!" },
           {
@@ -46,40 +47,40 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, returnPath }) => {
         hasFeedback
       >
         <Input
-          className="login-form-input"
+          className='login-form-input'
           prefix={<UserOutlined />}
-          placeholder="Email"
+          placeholder='Email'
         />
       </Form.Item>
       <Form.Item
-        name="password"
+        name='password'
         rules={[{ required: true, message: "Please input your password!" }]}
       >
         <Input.Password
-          className="login-form-input"
+          className='login-form-input'
           prefix={<LockOutlined />}
-          placeholder="Password"
+          placeholder='Password'
         />
       </Form.Item>
       <Form.Item>
-        <div className="login-form-function">
+        <div className='login-form-function'>
           <Link
             to={"/forgot-password"}
             state={{ returnPath }}
-            className="login-form-function-item"
+            className='login-form-function-item'
           >
             Forgot password?
           </Link>
           <Link
             to={"/register"}
             state={{ returnPath }}
-            className="login-form-function-item"
+            className='login-form-function-item'
           >
             Create account
           </Link>
         </div>
-        <button className="login-form-submit" type="submit">
-          Login{isLoading && <Spin className="login-form-submit-spin" />}
+        <button className='login-form-submit' type='submit'>
+          Login{isLoading && <Spin className='login-form-submit-spin' />}
         </button>
       </Form.Item>
     </Form>
@@ -113,6 +114,7 @@ const Login: React.FC = () => {
           localStorage.setItem("token", res.data.token.access_token);
           openNotificationSuccess();
           dispatch(loginSuccess());
+          dispatch(removePost());
           setTimeout(() => {
             if (state && state.returnPath) {
               navigate(state.returnPath, { state: { isReload: true } });
@@ -157,30 +159,30 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="login">
+    <div className='login'>
       {contextHolder}
-      <div className="login-container">
-        <div className="login-logo">
+      <div className='login-container'>
+        <div className='login-logo'>
           <Logo />
         </div>
-        <h5 className="login-title">Login Golbaus</h5>
+        <h5 className='login-title'>Login Golbaus</h5>
         <LoginForm onLogin={handleLogin} returnPath={state.returnPath} />
-        <div className="login-other">
+        <div className='login-other'>
           <hr />
-          <span className="mx-3">Sign in with</span>
+          <span className='mx-3'>Sign in with</span>
           <hr />
         </div>
-        <div className="login-other-function">
+        <div className='login-other-function'>
           <button
-            className="login-other-function-google"
+            className='login-other-function-google'
             onClick={handleGoogleLogin}
           >
             <FaGoogle style={{ color: "#e94820" }} />
             <span>Google</span>
           </button>
-          <div className="login-other-function-devider"></div>
+          <div className='login-other-function-devider'></div>
           <button
-            className="login-other-function-facebook"
+            className='login-other-function-facebook'
             onClick={handleFacebookLogin}
           >
             <FaFacebook style={{ color: "#3b5998" }} />

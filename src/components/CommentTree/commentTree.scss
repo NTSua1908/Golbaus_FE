@@ -1,5 +1,5 @@
-@import '../../variable.scss';
-@import '../../breakPoint.scss';
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
 
 .comment {
   margin: 10px 0px;
@@ -69,6 +69,12 @@
         text-decoration: underline;
       }
     }
+
+    &-loading {
+      display: flex;
+      justify-content: center;
+    }
+
     &-function {
       display: flex;
       margin-top: 5px;
@@ -183,7 +189,6 @@
     &-replies {
       border-radius: 8px;
       border-left: 1px solid #d1d1d1;
-      transform: scaleY(0);
       transform-origin: top center;
       -webkit-transition: all 0.2s ease-in-out;
       -moz-transition: all 0.2s ease-in-out;
@@ -191,6 +196,8 @@
       -o-transition: all 0.2s ease-in-out;
       transition: all 0.2s ease-in-out;
       max-height: 0;
+      transform: scaleY(0);
+
       &.show {
         margin: 10px 0px 10px 0px;
         max-height: 1000px;

@@ -1,18 +1,20 @@
-import { Comment } from "./../model/commentModel";
-import { PostDetailModel } from "../model/postModel";
 import {
   POST_LOADING,
   POST_NOT_FOUND,
   REMOVE_POST,
+  SET_POST_COMMENT_PAGE,
   SET_POST_CONTENT,
-  SET_POST_COMMENTS,
 } from "../actions/postAction";
+import { PostDetailModel } from "../model/postModel";
+import { CommentDetailModel } from "./../model/commentModel";
 
 interface PostState {
   post: PostDetailModel | null;
-  comments: Comment[];
+  comments: CommentDetailModel[];
   isNotFound: boolean;
   isLoading: boolean;
+  isCommentLoading: boolean;
+  page: number;
 }
 
 const initPostState: PostState = {
@@ -20,6 +22,8 @@ const initPostState: PostState = {
   comments: [],
   isNotFound: false,
   isLoading: false,
+  isCommentLoading: false,
+  page: 0,
 };
 
 interface PostAction {
@@ -35,13 +39,7 @@ const postReducer = (state = initPostState, action: PostAction) => {
         post: action.payload?.post,
         isNotFound: false,
         isLoading: false,
-      };
-    case SET_POST_COMMENTS:
-      return {
-        ...state,
-        comments: action.payload?.comments,
-        isNotFound: false,
-        isLoading: false,
+        page: 0,
       };
     case POST_LOADING:
       return {
@@ -51,17 +49,26 @@ const postReducer = (state = initPostState, action: PostAction) => {
       };
     case POST_NOT_FOUND:
       return {
+        ...state,
         post: null,
         comments: [],
         isNotFound: true,
         isLoading: false,
+        page: 0,
       };
     case REMOVE_POST:
       return {
+        ...state,
         post: null,
         comments: [],
         isNotFound: false,
         isLoading: false,
+        page: 0,
+      };
+    case SET_POST_COMMENT_PAGE:
+      return {
+        ...state,
+        page: action.payload?.page,
       };
     default:
       return state;

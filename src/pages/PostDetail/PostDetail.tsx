@@ -1,35 +1,33 @@
-import React, { useEffect, useRef, useState } from "react";
-import PostContent from "../../components/PostContent/PostContent";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
-import VoteType from "../../enums/VoteType";
-import CommentsTree from "../../components/CommentTree/CommentTree";
-import {
-  Comment,
-  CommentTreeProps,
-} from "../../components/CommentTree/CommentTree";
-import "./postDetail.scss";
-import SwipperContent, {
-  SwiperCardContent,
-  SwiperContentProps,
-} from "../../components/SwiperContent/SwiperContent";
-import { useLocation, useParams } from "react-router-dom";
-import PostGrid from "../../components/PostGrid/PostGrid";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/configureStore";
-import { GetDetail, IncreateView } from "../../services/PostService";
-import { formatDateToString } from "../../Helper/DateHelper";
 import { Spin } from "antd";
 import { AxiosError } from "axios";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useParams } from "react-router-dom";
+import { formatDateToString } from "../../Helper/DateHelper";
 import {
   postLoading,
   postNotFound,
   removePost,
+  setPostCommentPage,
   setPostContent,
 } from "../../actions/postAction";
-import NotFound from "../../images/not_found.png";
-import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
+import CommentsTree from "../../components/CommentTree/CommentTree";
+import Footer from "../../components/Footer/Footer";
+import Header from "../../components/Header/Header";
+import PostContent from "../../components/PostContent/PostContent";
+import PostGrid from "../../components/PostGrid/PostGrid";
 import RequiredLogin from "../../components/RequiredLogin/RequiredLogin";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
+import SwipperContent, {
+  SwiperCardContent,
+  SwiperContentProps,
+} from "../../components/SwiperContent/SwiperContent";
+import NotFound from "../../images/not_found.png";
+import { CommentDetailModel } from "../../model/commentModel";
+import { GetPostComment } from "../../services/CommentService";
+import { GetDetail, IncreateView } from "../../services/PostService";
+import { RootState } from "../../store/configureStore";
+import "./postDetail.scss";
 
 const value = `## Horizontal Rules
 ___
@@ -421,97 +419,108 @@ const relatedPost: SwiperContentProps = {
   contents: contents,
 };
 
-const comments: Comment[] = [
-  {
-    id: "1",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/0/04/Alex.png",
-    username: "alex",
-    fullName: "Alex",
-    date: "2023-12-05  13:34 PM",
-    text: "This is the first comment.",
-    upvotes: 10,
-    downvotes: 2,
-    replyFor: "Haley",
-    totalReplyCount: 30,
-    vote: VoteType.Down,
-    replies: [
-      {
-        id: "1.1",
-        avatar: "https://stardewvalleywiki.com/mediawiki/images/2/28/Emily.png",
-        username: "amily",
-        fullName: "Amily",
-        date: "2023-12-06  13:34 PM",
-        text: "Reply to the first comment. Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus sunt commodi possimus odio, officia accusantium nemo nobis eaque odit beatae aperiam dolore doloribus ullam quisquam omnis numquam ratione libero in.",
-        upvotes: 5,
-        downvotes: 1,
-        replyFor: "alex",
-        totalReplyCount: 0,
-        vote: VoteType.Up,
-        replies: [
-          // Add more replies as needed
-        ],
-      },
-      {
-        id: "1.2",
-        avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Robin.png",
-        username: "robin",
-        fullName: "Robin",
-        date: "2023-12-07  13:34 PM",
-        text: "This is the second comment.",
-        upvotes: 8,
-        downvotes: 0,
-        replyFor: "alex",
-        totalReplyCount: 0,
-        vote: VoteType.Unvote,
-        replies: [],
-      },
-      {
-        id: "1.1.1",
-        avatar: "https://stardewvalleywiki.com/mediawiki/images/0/04/Alex.png",
-        username: "alex",
-        fullName: "Alex",
-        date: "2023-12-06  13:34 PM",
-        text: "Reply to the first comment.",
-        replyFor: "robin",
-        upvotes: 5,
-        downvotes: 1,
-        totalReplyCount: 0,
-        vote: VoteType.Unvote,
-        replies: [],
-      },
-      // Add more replies as needed
-    ],
-  },
-  {
-    id: "2",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    username: "lewis",
-    fullName: "Lewis",
-    date: "2023-12-07 13:34 PM",
-    text: "This is the second comment.",
-    upvotes: 8,
-    replyFor: "alex",
-    downvotes: 0,
-    totalReplyCount: 0,
-    vote: VoteType.Up,
-    replies: [],
-  },
-  // Add more comments as needed
-];
+// const comments: Comment[] = [
+//   {
+//     id: "1",
+//     avatar: "https://stardewvalleywiki.com/mediawiki/images/0/04/Alex.png",
+//     username: "alex",
+//     fullName: "Alex",
+//     date: "2023-12-05  13:34 PM",
+//     text: "This is the first comment.",
+//     upvotes: 10,
+//     downvotes: 2,
+//     replyFor: "Haley",
+//     totalReplyCount: 30,
+//     vote: VoteType.Down,
+//     replies: [
+//       {
+//         id: "1.1",
+//         avatar: "https://stardewvalleywiki.com/mediawiki/images/2/28/Emily.png",
+//         username: "amily",
+//         fullName: "Amily",
+//         date: "2023-12-06  13:34 PM",
+//         text: "Reply to the first comment. Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus sunt commodi possimus odio, officia accusantium nemo nobis eaque odit beatae aperiam dolore doloribus ullam quisquam omnis numquam ratione libero in.",
+//         upvotes: 5,
+//         downvotes: 1,
+//         replyFor: "alex",
+//         totalReplyCount: 0,
+//         vote: VoteType.Up,
+//         replies: [
+//           // Add more replies as needed
+//         ],
+//       },
+//       {
+//         id: "1.2",
+//         avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Robin.png",
+//         username: "robin",
+//         fullName: "Robin",
+//         date: "2023-12-07  13:34 PM",
+//         text: "This is the second comment.",
+//         upvotes: 8,
+//         downvotes: 0,
+//         replyFor: "alex",
+//         totalReplyCount: 0,
+//         vote: VoteType.Unvote,
+//         replies: [],
+//       },
+//       {
+//         id: "1.1.1",
+//         avatar: "https://stardewvalleywiki.com/mediawiki/images/0/04/Alex.png",
+//         username: "alex",
+//         fullName: "Alex",
+//         date: "2023-12-06  13:34 PM",
+//         text: "Reply to the first comment.",
+//         replyFor: "robin",
+//         upvotes: 5,
+//         downvotes: 1,
+//         totalReplyCount: 0,
+//         vote: VoteType.Unvote,
+//         replies: [],
+//       },
+//       // Add more replies as needed
+//     ],
+//   },
+//   {
+//     id: "2",
+//     avatar: "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
+//     username: "lewis",
+//     fullName: "Lewis",
+//     date: "2023-12-07 13:34 PM",
+//     text: "This is the second comment.",
+//     upvotes: 8,
+//     replyFor: "alex",
+//     downvotes: 0,
+//     totalReplyCount: 0,
+//     vote: VoteType.Up,
+//     replies: [],
+//   },
+//   // Add more comments as needed
+// ];
 
-const commentProps: CommentTreeProps = {
-  data: comments,
-  amount: 10,
-  page: 1,
-  totalCount: 24,
-};
+// const commentProps: CommentTreeProps = {
+//   postId: "",
+//   userName: "NTSua",
+//   data: comments,
+//   amount: 10,
+//   page: 1,
+//   totalCount: 24,
+// };
+
+const amount = 10;
 
 function PostDetail() {
   const isAuthenticated = localStorage.getItem("token") !== null;
   const post = useSelector((state: RootState) => state.post.post);
-  const comments = useSelector((state: RootState) => state.post.comments);
+
+  const [comments, setComments] = useState<CommentDetailModel[]>([]);
+  const page = useSelector((state: RootState) => state.post.page) ?? 0;
+  const [totalCount, setTotalCount] = useState(0);
+
   const isNotFound = useSelector((state: RootState) => state.post.isNotFound);
   const isLoading = useSelector((state: RootState) => state.post.isLoading);
+  const [isCommentLoading, setCommentLoading] = useState(false);
+  const [firstTime, setFirstTime] = useState(true);
+
   const dispatch = useDispatch();
 
   const [isRequiredLogin, setRequiredLogin] = useState(false);
@@ -548,7 +557,43 @@ function PostDetail() {
           }
         });
     }
+    if (!isCommentLoading && postId) {
+      setCommentLoading(true);
+      GetPostComment(postId)
+        .then((res) => {
+          setComments(res.data.data);
+          setTotalCount(res.data.totalCount);
+          setFirstTime(false);
+        })
+        .catch((error: AxiosError) => {
+          console.log(error);
+        })
+        .finally(() => {
+          setCommentLoading(false);
+        });
+    }
   }, [postId]);
+
+  useEffect(() => {
+    console.log("New page first", page, firstTime);
+    if (!isCommentLoading && postId && !firstTime) {
+      console.log("New page", page);
+      setCommentLoading(true);
+      GetPostComment(postId, page, 10)
+        .then((res) => {
+          console.log(res.data);
+          setComments(res.data.data);
+          dispatch(setPostCommentPage(res.data.page));
+          setTotalCount(res.data.totalCount);
+        })
+        .catch((error: AxiosError) => {
+          console.log(error);
+        })
+        .finally(() => {
+          setCommentLoading(false);
+        });
+    }
+  }, [page]);
 
   useEffect(() => {
     timeoutRef.current = setTimeout(async () => {
@@ -625,12 +670,21 @@ function PostDetail() {
           </div>
           <div className='postDetail-comment'>
             <h2 className='postDetail-comment-title'>Comments</h2>
-            <CommentsTree
-              data={commentProps.data}
-              amount={commentProps.amount}
-              page={commentProps.page}
-              totalCount={commentProps.totalCount}
-            />
+            {isCommentLoading && (
+              <div className='postDetail-comment-loading'>
+                <Spin />
+              </div>
+            )}
+            {!isCommentLoading && (
+              <CommentsTree
+                postId={post.id}
+                userName={post.userName}
+                data={comments != undefined ? comments : []}
+                amount={amount ? amount : 10}
+                page={page ? page : 0}
+                totalCount={totalCount ? totalCount : 0}
+              />
+            )}
           </div>
         </div>
       )}

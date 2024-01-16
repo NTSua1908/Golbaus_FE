@@ -1,7 +1,7 @@
 // src/reducers/index.ts
 import { combineReducers } from "redux";
 import authReducer from "./authReducer";
-import accountReducer from "./accountRecuder";
+import accountReducer from "./accountReducer";
 import postReducer from "./postReducer";
 
 const rootReducer = combineReducers({

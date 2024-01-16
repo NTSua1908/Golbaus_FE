@@ -2,6 +2,7 @@ import Gender from "../enums/Gender";
 import Role from "../enums/Role";
 
 export interface UserGetByToken {
+  id: string;
   fullName: string | null;
   avatar: string | null;
   userName: string | null;

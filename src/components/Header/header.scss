@@ -74,6 +74,9 @@
 
       & > li {
         margin-right: 30px;
+        & a {
+          color: $text-menu-color;
+        }
         @include for-size(phone, min) {
           margin-right: 20px;
         }

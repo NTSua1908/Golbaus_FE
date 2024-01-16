@@ -85,7 +85,7 @@ const EditPost: React.FC = () => {
   const openNotificationSuccess = () => {
     api.info({
       message: `Notification`,
-      description: "Update successful",
+      description: "Updated successfully",
       placement: "topRight",
     });
   };
