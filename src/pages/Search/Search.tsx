@@ -1,32 +1,32 @@
 import { Pagination, PaginationProps } from "antd";
 import { useState } from "react";
-import { FaFilter } from "react-icons/fa";
-import { GoPlus } from "react-icons/go";
-import PostFilter from "../../components/Filter/PostFilter/PostFilter";
-import Footer from "../../components/Footer/Footer";
-import Header from "../../components/Header/Header";
+import { useLocation, useParams } from "react-router-dom";
 import QuestionBlock from "../../components/QuestionBlock/QuestionBlock";
-import Gender from "../../enums/Gender";
-import DefaultAvatar from "../../images/default_avatar.png";
-import { UserProfileModel } from "../../model/accountModel";
 import { PostFilter as FilterProps, PostList } from "../../model/postModel";
 import { QuestionListModel } from "../../model/questionModel";
-import "./userProfile.scss";
+import "./search.scss";
+import PostFilter from "../../components/Filter/PostFilter/PostFilter";
+import { FaFilter } from "react-icons/fa";
 import PostBlockList from "../../components/PostBlock/PostBlockList/PostBlockList";
-import { formatDateToStringDay } from "../../Helper/DateHelper";
+import Footer from "../../components/Footer/Footer";
+import Header from "../../components/Header/Header";
+import InputSearch from "../../components/InputSearch/InputSearch";
 
-function UserProfile() {
-  const [info, setInfo] = useState(userInfo);
-  const [menuIndex, setMenuIndex] = useState(0);
+function Search() {
+  const location = useLocation();
+  const requestText = new URLSearchParams(location.search).get("searchText");
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const [questions, setQuestion] = useState(questionData);
   const [currentQuestionPage, setCurrentQuestionPage] = useState(1);
+  const [questionTotalPage, setQuestionTotalPage] = useState(100);
 
   const [posts, setPosts] = useState(postData);
   const [currentPostPage, setCurrentPostPage] = useState(1);
+  const [postTotalPage, setPostTotalPage] = useState(0);
 
   const [showFilter, setShowFilter] = useState(false);
-  const totalPage = 100;
+  const [searchText, setSearchText] = useState(requestText ?? "");
 
   //filter state
   const [filter, setFilter] = useState<FilterProps>({
@@ -55,215 +55,126 @@ function UserProfile() {
   const onFilter = () => {};
 
   return (
-    <div className='userProfile'>
+    <div className='search'>
       <Header />
-      <div className='userProfile-content'>
-        <div className='userProfile-container'>
-          <div className='userProfile-header'>
-            <div className='userProfile-header-top'>
-              <div className='userProfile-header-top-left'></div>
-              <div className='userProfile-header-top-middle'></div>
-              <div className='userProfile-header-top-right'></div>
-            </div>
-            <div className='userProfile-header-content'>
-              <div className='userProfile-header-content-left'>
-                <img
-                  src={info.avatar ?? DefaultAvatar}
-                  alt=''
-                  className='userProfile-header-content-left-avatar'
-                />
-                <div className='userProfile-header-content-left-info'>
-                  <h3 className='userProfile-header-content-left-info-fullname'>
-                    {info.fullName}
-                  </h3>
-                  <h2 className='userProfile-header-content-left-info-username'>
-                    @{info.userName}
-                  </h2>
-                </div>
-              </div>
-              <div className='userProfile-header-content-right'>
-                <div className='userProfile-header-content-right-btnfollow'>
-                  Follow <GoPlus />
-                </div>
-              </div>
-            </div>
-            <div className='userProfile-header-menu'>
-              <div
-                className={`userProfile-header-menu-item ${
-                  menuIndex == 0 && "active"
-                }`}
-                onClick={() => {
-                  setMenuIndex(0);
-                }}
-              >
-                Posts
-              </div>
-              <div
-                className={`userProfile-header-menu-item ${
-                  menuIndex == 1 && "active"
-                }`}
-                onClick={() => {
-                  setMenuIndex(1);
-                }}
-              >
-                Questions
-              </div>
-              <div
-                className={`userProfile-header-menu-item ${
-                  menuIndex == 2 && "active"
-                }`}
-                onClick={() => {
-                  setMenuIndex(2);
-                }}
-              >
-                Information
-              </div>
-            </div>
+      <div className='search-container'>
+        <div className='search-input'>
+          <InputSearch value={searchText} setValue={setSearchText} />
+        </div>
+        {requestText && requestText.length != 0 && (
+          <div className='search-title'>
+            <h2>Search results for:</h2> <h3>"{requestText}"</h3>
           </div>
-          <div className='userProfile-body'>
-            {menuIndex == 0 && (
-              <div className='myProfile-right-content'>
-                <div className='myProfile-right-content-filterLeft'>
-                  <h2 className='myProfile-right-content-title'>Posts</h2>
-                  <div className='myProfile-right-content-filterLeft-container'>
-                    {posts.map((post, index) => (
-                      <PostBlockList key={index} post={post} />
-                    ))}
-                  </div>
-                  <div className='myProfile-right-content-filterLeft-pagination'>
-                    <Pagination
-                      showQuickJumper
-                      current={currentPostPage}
-                      total={totalPage}
-                      onChange={onChange}
+        )}
+        <div className='search-menu'>
+          <div
+            className={`search-menu-item ${activeIndex == 0 && "active"}`}
+            onClick={() => {
+              setActiveIndex(0);
+            }}
+          >
+            Posts
+          </div>
+          <div
+            className={`search-menu-item ${activeIndex == 1 && "active"}`}
+            onClick={() => {
+              setActiveIndex(1);
+            }}
+          >
+            Questions
+          </div>
+        </div>
+        <div className='search-result'>
+          {activeIndex == 0 && (
+            <div className='search-result-content'>
+              <div className='search-result-content-filterLeft'>
+                <div className='search-result-content-filterLeft-container'>
+                  {posts.map((post, index) => (
+                    <PostBlockList key={index} post={post} />
+                  ))}
+                </div>
+                <div className='search-result-content-filterLeft-pagination'>
+                  <Pagination
+                    showQuickJumper
+                    current={currentPostPage}
+                    total={postTotalPage}
+                    onChange={onChange}
+                  />
+                </div>
+              </div>
+              <div className='search-result-content-filterRight'>
+                <div
+                  className={`search-result-content-filterRight-container ${
+                    showFilter && "show"
+                  }`}
+                >
+                  <div
+                    className='search-result-content-filterRight-container-background'
+                    onClick={handleCloseFilter}
+                  ></div>
+                  <div className='search-result-content-filterRight-container-filter'>
+                    <PostFilter
+                      filter={filter}
+                      setFilter={setFilter}
+                      onFilter={onFilter}
+                      onClose={handleCloseFilter}
                     />
                   </div>
                 </div>
-                <div className='myProfile-right-content-filterRight'>
-                  <div
-                    className={`myProfile-right-content-filterRight-container ${
-                      showFilter && "show"
-                    }`}
-                  >
-                    <div
-                      className='myProfile-right-content-filterRight-container-background'
-                      onClick={handleCloseFilter}
-                    ></div>
-                    <div className='myProfile-right-content-filterRight-container-filter'>
-                      <PostFilter
-                        filter={filter}
-                        setFilter={setFilter}
-                        onFilter={onFilter}
-                        onClose={handleCloseFilter}
-                      />
-                    </div>
-                  </div>
-                  <div
-                    className='myProfile-right-content-filterRight-toggle'
-                    onClick={handleShowFilter}
-                  >
-                    <FaFilter />
-                  </div>
+                <div
+                  className='search-result-content-filterRight-toggle'
+                  onClick={handleShowFilter}
+                >
+                  <FaFilter />
                 </div>
               </div>
-            )}
-            {menuIndex == 1 && (
-              <div className='myProfile-right-content'>
-                <div className='myProfile-right-content-filterLeft'>
-                  <h2 className='myProfile-right-content-title'>Questions</h2>
-                  <div className='myProfile-right-content-filterLeft-container'>
-                    {questions.map((question, index) => (
-                      <QuestionBlock key={index} question={question} />
-                    ))}
-                  </div>
-                  <div className='myProfile-right-content-filterLeft-pagination'>
-                    <Pagination
-                      showQuickJumper
-                      current={currentQuestionPage}
-                      total={totalPage}
-                      onChange={onChange}
+            </div>
+          )}
+          {activeIndex == 1 && (
+            <div className='search-result-content'>
+              <div className='search-result-content-filterLeft'>
+                <div className='search-result-content-filterLeft-container'>
+                  {questions.map((question, index) => (
+                    <QuestionBlock key={index} question={question} />
+                  ))}
+                </div>
+                <div className='search-result-content-filterLeft-pagination'>
+                  <Pagination
+                    showQuickJumper
+                    current={currentQuestionPage}
+                    total={questionTotalPage}
+                    onChange={onChange}
+                  />
+                </div>
+              </div>
+              <div className='search-result-content-filterRight'>
+                <div
+                  className={`search-result-content-filterRight-container ${
+                    showFilter && "show"
+                  }`}
+                >
+                  <div
+                    className='search-result-content-filterRight-container-background'
+                    onClick={handleCloseFilter}
+                  ></div>
+                  <div className='search-result-content-filterRight-container-filter'>
+                    <PostFilter
+                      filter={filter}
+                      setFilter={setFilter}
+                      onFilter={onFilter}
+                      onClose={handleCloseFilter}
                     />
                   </div>
                 </div>
-                <div className='myProfile-right-content-filterRight'>
-                  <div
-                    className={`myProfile-right-content-filterRight-container ${
-                      showFilter && "show"
-                    }`}
-                  >
-                    <div
-                      className='myProfile-right-content-filterRight-container-background'
-                      onClick={handleCloseFilter}
-                    ></div>
-                    <div className='myProfile-right-content-filterRight-container-filter'>
-                      <PostFilter
-                        filter={filter}
-                        setFilter={setFilter}
-                        onFilter={onFilter}
-                        onClose={handleCloseFilter}
-                      />
-                    </div>
-                  </div>
-                  <div
-                    className='myProfile-right-content-filterRight-toggle'
-                    onClick={handleShowFilter}
-                  >
-                    <FaFilter />
-                  </div>
+                <div
+                  className='search-result-content-filterRight-toggle'
+                  onClick={handleShowFilter}
+                >
+                  <FaFilter />
                 </div>
               </div>
-            )}
-            {menuIndex == 2 && (
-              <div className='userProfile-body-info'>
-                <table>
-                  <tr className='userProfile-body-info-item'>
-                    <td className='userProfile-body-info-item-lable'>
-                      Full name
-                    </td>
-                    <td className='userProfile-body-info-item-value'>
-                      {info.fullName}
-                    </td>
-                  </tr>
-                  <tr className='userProfile-body-info-item'>
-                    <td className='userProfile-body-info-item-lable'>
-                      UserName
-                    </td>
-                    <td className='userProfile-body-info-item-value'>
-                      {info.userName}
-                    </td>
-                  </tr>
-                  <tr className='userProfile-body-info-item'>
-                    <td className='userProfile-body-info-item-lable'>
-                      Date joined
-                    </td>
-                    <td className='userProfile-body-info-item-value'>
-                      {formatDateToStringDay(info.dateJoined)}
-                    </td>
-                  </tr>
-                  <tr className='userProfile-body-info-item'>
-                    <td className='userProfile-body-info-item-lable'>
-                      Date of birth
-                    </td>
-                    <td className='userProfile-body-info-item-value'>
-                      {info.dob ? formatDateToStringDay(info.dob) : "Unknow"}
-                    </td>
-                  </tr>
-                  <tr className='userProfile-body-info-item'>
-                    <td className='userProfile-body-info-item-lable'>Gender</td>
-                    <td className='userProfile-body-info-item-value'>
-                      {Gender[info.gender]}
-                    </td>
-                  </tr>
-                  <tr className='userProfile-body-info-item'>
-                    <td className='userProfile-body-info-item-lable'>Bio</td>
-                    <td className='userProfile-body-info-item-value'>
-                      {info.bio}
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
       <Footer />
@@ -271,18 +182,7 @@ function UserProfile() {
   );
 }
 
-export default UserProfile;
-
-const userInfo: UserProfileModel = {
-  avatar:
-    "https://i.pinimg.com/736x/24/21/85/242185eaef43192fc3f9646932fe3b46.jpg",
-  fullName: "Nguyen Thien Sua",
-  userName: "NTSua",
-  dob: new Date(2023, 9, 18),
-  dateJoined: new Date(2023, 10, 28),
-  bio: null, // "Binh tinh, di thang, ung dung",
-  gender: Gender.Male,
-};
+export default Search;
 
 const questionData: QuestionListModel[] = [
   {

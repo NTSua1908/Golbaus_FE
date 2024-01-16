@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Logo } from "../../Logo";
 import "./header.scss";
 import { ConfigProvider, Drawer, Spin } from "antd";
@@ -12,11 +12,12 @@ import { FaPen, FaBell, FaHistory, FaSearch } from "react-icons/fa";
 import { GiEmptyHourglass } from "react-icons/gi";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/configureStore";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GetByToken } from "../../services/AccountService";
 import { removeBaseInfo, setBaseInfo } from "../../actions/accountAction";
 import { Logout as HandleLogout } from "../../services/AuthService";
 import { logout } from "../../actions/loginAction";
+import InputSearch from "../InputSearch/InputSearch";
 
 interface NotificationProps {
   user: string;
@@ -29,7 +30,6 @@ interface NotificationProps {
 }
 
 function Header() {
-  const [isLoading, setIsLoading] = useState(true);
   const [isMenuProfileOpen, setMenuProfileOpen] = useState(false);
   const [isNotificationOpen, setNotificationOpen] = useState(false);
   const [notifications, setNotification] = useState<NotificationProps[]>([
@@ -109,6 +109,11 @@ function Header() {
   const notificationRef = useRef<HTMLDivElement>(null);
   const buttonNotificationRef = useRef<HTMLDivElement>(null);
 
+  const location = useLocation();
+  const [searchText, setSearchText] = useState(
+    new URLSearchParams(location.search).get("searchText") ?? ""
+  );
+
   const userInfo = useSelector((state: RootState) => state.account.BasicInfo);
 
   const dispatch = useDispatch();
@@ -148,9 +153,9 @@ function Header() {
     setNotificationOpen((prev) => !prev);
   };
 
-  // const isAuthenticated = useSelector(
-  //   (state: RootState) => state.auth.isAuthenticated
-  // );
+  const handleSearchTextChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.currentTarget.value);
+  };
 
   const isAuthenticated = localStorage.getItem("token") !== null;
 
@@ -194,17 +199,14 @@ function Header() {
           </div>
           <div className='header-menu-right'>
             <li className='header-menu-right-search'>
-              <input type='text' className='header-menu-right-search-input' />
-              <div className='header-menu-right-search-spin'>
-                {isLoading && <Spin />}
-              </div>
-              <button className='header-menu-right-search-btn'>
-                <IoSearchSharp />
-              </button>
+              <InputSearch setValue={setSearchText} value={searchText} />
             </li>
             <li
               className='header-menu-right-searchbutton pointer'
               title='Search'
+              onClick={() => {
+                navigate("/search");
+              }}
             >
               <FaSearch />
             </li>
