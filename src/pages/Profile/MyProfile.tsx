@@ -36,6 +36,8 @@ import {
   resizeAndUploadImage,
 } from "../../services/FireBaseService";
 import "./myProfile.scss";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/configureStore";
 
 function MyProfile() {
   const menuItems: MenuItem[] = [
@@ -118,6 +120,7 @@ function MyProfile() {
 export default MyProfile;
 
 const PersonalInfo = () => {
+  const userInfo = useSelector((state: RootState) => state.account.BasicInfo);
   const [avatar, setAvatar] = useState<ImageUploaded[]>([]);
   const [fullName, setFullName] = useState("");
   const [username, setUserName] = useState("");

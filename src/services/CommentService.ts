@@ -4,14 +4,14 @@ import {
 } from "./../model/commentModel";
 import api from "./api";
 
-const BASE_URL_ACCOUNT = "https://localhost:7032/api/comment/";
+const BASE_URL_COMMENT = "comment/";
 
 export function AddPostComment(model: CommentCreateModel) {
-  return api.post(BASE_URL_ACCOUNT + "CreateCommentPost", model);
+  return api.post(BASE_URL_COMMENT + "CreateCommentPost", model);
 }
 
 export function UpdatePostComment(id: string, model: CommentUpdateModel) {
-  return api.put(BASE_URL_ACCOUNT + "Update/Post/" + id, model);
+  return api.put(BASE_URL_COMMENT + "Update/Post/" + id, model);
 }
 
 export function GetPostComment(
@@ -19,7 +19,7 @@ export function GetPostComment(
   page: number = 0,
   amount: number = 10
 ) {
-  return api.get(BASE_URL_ACCOUNT + "getAll/post/" + postId, {
+  return api.get(BASE_URL_COMMENT + "getAll/post/" + postId, {
     params: {
       page,
       amount,
@@ -34,7 +34,7 @@ export function GetPostCommentReply(
   amount: number = 10
 ) {
   return api.get(
-    BASE_URL_ACCOUNT + `GetAll/Post/Reply/${postId}/${commentId}`,
+    BASE_URL_COMMENT + `GetAll/Post/Reply/${postId}/${commentId}`,
     {
       params: {
         page,
@@ -45,5 +45,13 @@ export function GetPostCommentReply(
 }
 
 export function DeletePostComment(commentId: string) {
-  return api.delete(BASE_URL_ACCOUNT + `Delete/PostComment/${commentId}`);
+  return api.delete(BASE_URL_COMMENT + `Delete/PostComment/${commentId}`);
+}
+
+export function UpVotePostComment(id: string) {
+  return api.put(BASE_URL_COMMENT + "ToggleUpVotePostComment/" + id);
+}
+
+export function DownVotePostComment(id: string) {
+  return api.put(BASE_URL_COMMENT + "ToggleDownVotePostComment/" + id);
 }

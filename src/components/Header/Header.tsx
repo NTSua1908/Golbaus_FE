@@ -17,6 +17,7 @@ import { GetByToken } from "../../services/AccountService";
 import { removeBaseInfo, setBaseInfo } from "../../actions/accountAction";
 import { Logout as HandleLogout } from "../../services/AuthService";
 import { logout } from "../../actions/loginAction";
+import DefaultAvatar from "../../images/default_avatar.png";
 
 interface NotificationProps {
   user: string;
@@ -315,7 +316,7 @@ function Header() {
                   <img
                     ref={buttonProfileRef}
                     className='header-menu-right-profile-image'
-                    src={userInfo?.avatar as string}
+                    src={userInfo?.avatar ?? DefaultAvatar}
                     alt='Your profile'
                   />
                   {isMenuProfileOpen && userInfo && (

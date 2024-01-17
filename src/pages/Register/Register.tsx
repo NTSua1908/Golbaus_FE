@@ -1,21 +1,24 @@
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
-import { Form, Input, message } from "antd";
-import React from "react";
+import { Form, Input, Spin, message, notification } from "antd";
+import React, { useState } from "react";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { validatePassword } from "../../Helper/InformationValidater";
 import { Logo } from "../../Logo";
 import "./register.scss";
+import { RegisterAccount } from "../../services/AccountService";
+import { AxiosError } from "axios";
 
 interface RegisterFormProps {
   onRegister: (values: any) => void;
   returnPath?: string;
-  id?: string | null;
+  loading: boolean;
 }
 
 const RegisterForm: React.FC<RegisterFormProps> = ({
   onRegister,
   returnPath,
+  loading,
 }) => {
   const onFinish = (values: any) => {
     onRegister(values);
@@ -23,6 +26,30 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 
   return (
     <Form className='register-form' name='register' onFinish={onFinish}>
+      <label htmlFor='fullName'>Full name</label>
+      <Form.Item
+        name='fullName'
+        rules={[{ required: true, message: "Please input your fullname!" }]}
+        hasFeedback
+      >
+        <Input
+          className='register-form-input'
+          prefix={<UserOutlined />}
+          placeholder='Full name'
+        />
+      </Form.Item>
+      <label htmlFor='userName'>User name</label>
+      <Form.Item
+        name='userName'
+        rules={[{ required: true, message: "Please input your user name!" }]}
+        hasFeedback
+      >
+        <Input
+          className='register-form-input'
+          prefix={<UserOutlined />}
+          placeholder='User name'
+        />
+      </Form.Item>
       <label htmlFor='email'>Email</label>
       <Form.Item
         name='email'
@@ -56,9 +83,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           placeholder='Password'
         />
       </Form.Item>
-      <label htmlFor='confirm'>Confirm Password</label>
+      <label htmlFor='confirmPassword'>Confirm Password</label>
       <Form.Item
-        name='confirm'
+        name='confirmPassword'
         dependencies={["password"]}
         hasFeedback
         rules={[
@@ -84,30 +111,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           placeholder='Confirm password'
         />
       </Form.Item>
-      <label htmlFor='fullname'>Full name</label>
-      <Form.Item
-        name='fullname'
-        rules={[{ required: true, message: "Please input your fullname!" }]}
-        hasFeedback
-      >
-        <Input
-          className='register-form-input'
-          prefix={<UserOutlined />}
-          placeholder='Full name'
-        />
-      </Form.Item>
-      <label htmlFor='username'>User name</label>
-      <Form.Item
-        name='username'
-        rules={[{ required: true, message: "Please input your user name!" }]}
-        hasFeedback
-      >
-        <Input
-          className='register-form-input'
-          prefix={<UserOutlined />}
-          placeholder='User name'
-        />
-      </Form.Item>
       <Form.Item>
         <div className='register-form-function'>
           <Link
@@ -119,7 +122,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           </Link>
         </div>
         <button className='register-form-submit' type='submit'>
-          Register
+          Register {loading && <Spin className='login-form-submit-spin' />}
         </button>
       </Form.Item>
     </Form>
@@ -127,8 +130,25 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 };
 
 const Register: React.FC = () => {
+  const [isLoading, setLoading] = useState(false);
+
   const handleRegister = (values: any) => {
-    console.log("Email/Password register:", values);
+    setLoading(true);
+    RegisterAccount(values)
+      .then((res) => {
+        openNotificationSuccess();
+        setTimeout(() => {
+          navigate("/CheckEmail/", { state: { email: values.email } });
+        }, 2000);
+      })
+      .catch((error: AxiosError) => {
+        const errors = (error.response?.data as any).errors;
+        const errorMessage = errors.join("\n") as string;
+        openNotificationFailure(errorMessage);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const handleGoogleLogin = () => {
@@ -141,8 +161,29 @@ const Register: React.FC = () => {
 
   const state = useLocation().state ?? { returnPath: null, id: null };
 
+  const navigate = useNavigate();
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotificationSuccess = () => {
+    api.info({
+      message: `Notification`,
+      description: "Register successfully",
+      placement: "topRight",
+    });
+  };
+
+  const openNotificationFailure = (message: string) => {
+    api.error({
+      message: `Notification`,
+      description: message,
+      placement: "topRight",
+      type: "error",
+    });
+  };
+
   return (
     <div className='register'>
+      {contextHolder}
       <div className='register-container'>
         <div className='register-logo'>
           <Logo />
@@ -151,6 +192,7 @@ const Register: React.FC = () => {
         <RegisterForm
           onRegister={handleRegister}
           returnPath={state.returnPath}
+          loading={isLoading}
         />
         <div className='register-other'>
           <hr />

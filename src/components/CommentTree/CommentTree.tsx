@@ -22,7 +22,9 @@ import {
 import {
   AddPostComment,
   DeletePostComment,
+  DownVotePostComment,
   GetPostCommentReply,
+  UpVotePostComment,
   UpdatePostComment,
 } from "../../services/CommentService";
 import { RootState } from "../../store/configureStore";
@@ -42,6 +44,8 @@ interface CommentProps {
   setOnConfirm: React.Dispatch<React.SetStateAction<() => void>>;
   setOnCancel: React.Dispatch<React.SetStateAction<() => void>>;
   setShowDeleteConfirm: React.Dispatch<React.SetStateAction<boolean>>;
+  isAuthenticated: boolean;
+  showRequireLogin: () => void;
 }
 
 const Comment = React.memo(
@@ -54,6 +58,8 @@ const Comment = React.memo(
     setOnConfirm,
     setOnCancel,
     setShowDeleteConfirm,
+    isAuthenticated,
+    showRequireLogin,
   }: CommentProps) => {
     const [isReply, setReply] = useState(false);
     const [isEdit, setEdit] = useState(false);
@@ -191,6 +197,11 @@ const Comment = React.memo(
     };
 
     const handleUpvote = () => {
+      if (!isAuthenticated) {
+        showRequireLogin();
+        return;
+      }
+
       if (vote == VoteType.Unvote) {
         setUpvote(upvote + 1);
         setVote(VoteType.Up);
@@ -202,9 +213,16 @@ const Comment = React.memo(
         setDownvote(downvote - 1);
         setVote(VoteType.Up);
       }
+
+      UpVotePostComment(comment.id).then().catch();
     };
 
     const handleDownvote = () => {
+      if (!isAuthenticated) {
+        showRequireLogin();
+        return;
+      }
+
       if (vote == VoteType.Unvote) {
         setDownvote(downvote + 1);
         setVote(VoteType.Down);
@@ -216,6 +234,8 @@ const Comment = React.memo(
         setUpvote(upvote - 1);
         setVote(VoteType.Down);
       }
+
+      DownVotePostComment(comment.id).then().catch();
     };
 
     const AddItsReply = (comment: CommentDetailModel) => {
@@ -272,6 +292,8 @@ const Comment = React.memo(
               }}
               onCancel={handleCancelEditComment}
               parentComment={null}
+              isAuthenticated={isAuthenticated}
+              showRequireLogin={showRequireLogin}
             />
           ) : (
             <div className='comment-content-container'>
@@ -385,6 +407,8 @@ const Comment = React.memo(
                 onSave={handleReply}
                 onCancel={handleCancelReply}
                 parentComment={comment.id}
+                isAuthenticated={isAuthenticated}
+                showRequireLogin={showRequireLogin}
               />
             </div>
           )}
@@ -424,6 +448,8 @@ const Comment = React.memo(
                   setOnCancel={setOnCancel}
                   setOnConfirm={setOnConfirm}
                   setShowDeleteConfirm={setShowDeleteConfirm}
+                  isAuthenticated={isAuthenticated}
+                  showRequireLogin={showRequireLogin}
                 />
               ))}
             {isLoadingReply && (
@@ -453,6 +479,8 @@ interface ReplyFormProps {
   autoFocus?: boolean;
   parentComment: string | null;
   setContent: React.Dispatch<React.SetStateAction<string>>;
+  isAuthenticated: boolean;
+  showRequireLogin: () => void;
 }
 
 export const ReplyForm: React.FC<ReplyFormProps> = ({
@@ -461,16 +489,11 @@ export const ReplyForm: React.FC<ReplyFormProps> = ({
   autoFocus,
   content,
   setContent,
+  isAuthenticated,
+  showRequireLogin,
 }) => {
-  const isAuthenticated = localStorage.getItem("token") !== null;
-  const [isRequiredLogin, setRequiredLogin] = useState(false);
-
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.currentTarget.value);
-  };
-
-  const handleCloseRequiredLogin = () => {
-    setRequiredLogin(false);
   };
 
   const [api, contextHolder] = notification.useNotification();
@@ -487,7 +510,7 @@ export const ReplyForm: React.FC<ReplyFormProps> = ({
           openNotificationFailure(errorMessage);
         });
     } else {
-      setRequiredLogin(true);
+      showRequireLogin();
     }
   };
 
@@ -511,10 +534,6 @@ export const ReplyForm: React.FC<ReplyFormProps> = ({
   return (
     <div className='comment-reply-form'>
       {contextHolder}
-      <RequiredLogin
-        show={isRequiredLogin}
-        handleClose={handleCloseRequiredLogin}
-      />
       <textarea
         autoFocus={autoFocus}
         className='comment-reply-form-input'
@@ -558,9 +577,11 @@ const CommentsTree = ({
   amount,
   totalCount,
 }: CommentTreeProps) => {
+  const isAuthenticated = localStorage.getItem("token") !== null;
   const [comments, setComments] = useState<CommentDetailModel[]>([]);
   const [reply, setReply] = useState("");
   const [api, contextHolder] = notification.useNotification();
+  const [isRequiredLogin, setRequiredLogin] = useState(false);
   const dispatch = useDispatch();
 
   const handleOnAddComment = async () => {
@@ -571,10 +592,12 @@ const CommentsTree = ({
       postId: postId,
     };
 
-    await AddPostComment(comment).then((res) => {
-      console.log(res.data);
-      setComments([res.data, ...comments]);
-    });
+    await AddPostComment(comment)
+      .then((res) => {
+        console.log(res.data);
+        setComments([res.data, ...comments]);
+      })
+      .catch();
     setReply("");
   };
 
@@ -628,6 +651,14 @@ const CommentsTree = ({
   });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
+  const handleCloseRequiredLogin = () => {
+    setRequiredLogin(false);
+  };
+
+  const showRequireLogin = () => {
+    setRequiredLogin(true);
+  };
+
   return (
     <div className='comments-tree'>
       {contextHolder}
@@ -638,6 +669,8 @@ const CommentsTree = ({
           onSave={handleOnAddComment}
           onCancel={handleOnCancelComment}
           parentComment={null}
+          isAuthenticated={isAuthenticated}
+          showRequireLogin={showRequireLogin}
         />
       </div>
       {comments.length > 0 ? (
@@ -652,6 +685,8 @@ const CommentsTree = ({
               setOnConfirm={setOnConfirm}
               setOnCancel={setOnCancel}
               setShowDeleteConfirm={setShowDeleteConfirm}
+              isAuthenticated={isAuthenticated}
+              showRequireLogin={showRequireLogin}
             />
           ))}
           <div className='comments-tree-list-pagination'>
@@ -675,6 +710,10 @@ const CommentsTree = ({
         title='You are about to delete this comment'
         message='Do you really want to delete this comment? This action cannot be undone. Are you sure you want to proceed?'
         show={showDeleteConfirm}
+      />
+      <RequiredLogin
+        show={isRequiredLogin}
+        handleClose={handleCloseRequiredLogin}
       />
     </div>
   );

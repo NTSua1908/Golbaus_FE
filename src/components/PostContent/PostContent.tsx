@@ -118,7 +118,9 @@ function PostContent({
     }
     setVoteCount(newVoteCount);
 
-    await UpVote(id);
+    await UpVote(id)
+      .then()
+      .catch((error: AxiosError) => {});
   };
 
   const handleDownvote = async () => {
@@ -138,7 +140,9 @@ function PostContent({
       newVoteCount = newVoteCount - 1;
     }
     setVoteCount(newVoteCount);
-    await DownVote(id);
+    await DownVote(id)
+      .then()
+      .catch((error: AxiosError) => {});
   };
 
   const gotoEditPage = () => {

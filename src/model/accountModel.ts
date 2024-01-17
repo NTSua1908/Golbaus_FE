@@ -18,3 +18,11 @@ export interface UserProfileModel {
   dateJoined: Date;
   bio: string | null;
 }
+
+export interface RegisterModel {
+  FullName: string;
+  UserName: string;
+  Email: string;
+  Password: string;
+  ConfirmPassword: string;
+}

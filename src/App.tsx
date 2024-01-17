@@ -16,6 +16,8 @@ import MyProfile from "./pages/Profile/MyProfile";
 import Register from "./pages/Register/Register";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import UserProfile from "./pages/UserProfile/UserProfile";
+import ConfirmEmail from "./pages/ConfirmEmail/ConfirmEmail";
+import RegisterSuccess from "./pages/RegisterSuccess/RegisterSuccess";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -56,6 +58,15 @@ const App = () => {
               <Route path='/reset-password' element={<ResetPassword />} />
               <Route path='/forgot-password' element={<ForgotPassword />} />
               <Route path='/register' element={<Register />} />
+              <Route path='/checkEmail' element={<RegisterSuccess />} />
+              <Route
+                path='/checkEmail/:emailResend'
+                element={<RegisterSuccess />}
+              />
+              <Route
+                path='/ConfirmEmail/:token/:email'
+                element={<ConfirmEmail />}
+              />
             </Routes>
           </Router>
         </div>

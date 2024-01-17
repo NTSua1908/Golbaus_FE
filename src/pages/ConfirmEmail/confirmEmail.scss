@@ -1,0 +1,87 @@
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
+
+.confirmEmail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #4e6ee5;
+  color: #1d1d1d;
+
+  &-container {
+    width: 70%;
+    max-width: 800px;
+    min-width: 350px;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 30px 0px;
+    border-radius: 20px;
+    background-color: #fff;
+    box-shadow: 2px 2px 8px #000;
+    display: flex;
+    align-items: center;
+    @include for-size(desktop, min) {
+      width: 90%;
+    }
+
+    @include for-size(phone, min) {
+      width: 95%;
+    }
+  }
+
+  &-img {
+    & img {
+      @include for-size(phone, min) {
+        width: 70%;
+        margin: 0 auto;
+        display: block;
+      }
+    }
+  }
+
+  &-content {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &-title {
+    font-size: 30px;
+    font-weight: 700;
+    margin: 20px 0px;
+    @include for-size(phone, min) {
+      font-size: 25px;
+      margin: 15px 0px;
+    }
+  }
+
+  &-message {
+    text-align: center;
+    font-size: 17px;
+    padding: 15px;
+    line-height: 30px;
+
+    @include for-size(phone, min) {
+      padding: 10px 20px;
+    }
+
+    & span {
+      font-weight: 600;
+    }
+  }
+
+  &-button button {
+    margin-top: 20px;
+    background-color: #4d7af7;
+    border-radius: 10px;
+    padding: 15px 30px;
+    outline: none;
+    font-size: 20px;
+    border: none;
+    color: #f1f1f1;
+    cursor: pointer;
+  }
+}

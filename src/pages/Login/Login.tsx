@@ -124,9 +124,10 @@ const Login: React.FC = () => {
           }, 2000);
         })
         .catch((error) => {
-          console.error("Error:", error);
+          const errors = (error.response?.data as any).errors;
+          const errorMessage = errors.join("\n") as string;
+          openNotificationFailure(errorMessage);
           dispatch(loginFailure());
-          openNotificationFailure();
         });
     }
   };
@@ -149,10 +150,10 @@ const Login: React.FC = () => {
     });
   };
 
-  const openNotificationFailure = () => {
+  const openNotificationFailure = (message: string) => {
     api.error({
       message: `Notification`,
-      description: "Login failure (Username or password is incorrect)",
+      description: message,
       placement: "topRight",
       type: "error",
     });
