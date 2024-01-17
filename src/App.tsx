@@ -18,6 +18,7 @@ import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import UserProfile from "./pages/UserProfile/UserProfile";
 import ConfirmEmail from "./pages/ConfirmEmail/ConfirmEmail";
 import RegisterSuccess from "./pages/RegisterSuccess/RegisterSuccess";
+import Search from "./pages/Search/Search";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -67,6 +68,7 @@ const App = () => {
                 path='/ConfirmEmail/:token/:email'
                 element={<ConfirmEmail />}
               />
+              <Route path='/search' element={<Search />} />
             </Routes>
           </Router>
         </div>
