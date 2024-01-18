@@ -80,19 +80,49 @@
           object-fit: cover;
         }
         &-info {
-          margin-left: 30px;
-          min-width: 180px;
-          // color: $text-menu-color;
-          color: #ffc562;
           display: flex;
           flex-direction: column;
           justify-content: center;
-          &-fullname {
-            padding-bottom: 10px;
-            font-size: 23px;
+          margin-left: 15px;
+          &-name {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            &-fullname {
+              font-size: 20px;
+              color: $text-menu-color;
+              margin-right: 5px;
+            }
+            &-username {
+              color: $text-menu-color;
+              font-weight: 600;
+              font-size: 14px;
+              margin-left: 15px;
+              @include for-size(phone-sm, min) {
+                margin-top: 10px;
+                margin-left: 0px;
+              }
+            }
+
+            @include for-size(phone-sm, min) {
+              display: block;
+            }
           }
-          &-username {
+          &-more {
+            display: flex;
+            align-items: center;
             font-size: 14px;
+            font-weight: 600;
+            color: $text-menu-color;
+            text-align: center;
+            margin-top: 10px;
+            &-post,
+            &-follow {
+              margin-right: 15px;
+              & span {
+                margin-left: 5px;
+              }
+            }
           }
         }
       }

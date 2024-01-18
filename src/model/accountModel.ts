@@ -17,6 +17,8 @@ export interface UserProfileModel {
   dob: Date | null;
   dateJoined: Date;
   bio: string | null;
+  followCount: number;
+  postCount: number;
 }
 
 export interface RegisterModel {

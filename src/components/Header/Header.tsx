@@ -8,7 +8,14 @@ import {
   IoPerson,
   IoSearchSharp,
 } from "react-icons/io5";
-import { FaPen, FaBell, FaHistory, FaSearch } from "react-icons/fa";
+import {
+  FaPen,
+  FaBell,
+  FaHistory,
+  FaSearch,
+  FaBookmark,
+  FaQuestionCircle,
+} from "react-icons/fa";
 import { GiEmptyHourglass } from "react-icons/gi";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/configureStore";
@@ -302,7 +309,14 @@ function Header() {
                     )}
                   </div>
                   <div className='header-menu-right-notification-menu-footer'>
-                    <span className='pointer'>All notifications</span>
+                    <span
+                      className='pointer'
+                      onClick={() => {
+                        navigate("/profile#notification");
+                      }}
+                    >
+                      All notifications
+                    </span>
                   </div>
                 </div>
               </li>
@@ -355,12 +369,31 @@ function Header() {
                         Personal page
                       </li>
                       <li>
-                        <IoNewspaperOutline className='padding-icon' />
-                        Content management
+                        <IoNewspaperOutline
+                          className='padding-icon'
+                          onClick={() => {
+                            navigate("/profile#post");
+                          }}
+                        />
+                        Posts management
                       </li>
                       <li>
-                        <FaHistory className='padding-icon' />
-                        Activity history
+                        <FaQuestionCircle
+                          className='padding-icon'
+                          onClick={() => {
+                            navigate("/profile#question");
+                          }}
+                        />
+                        Questions management
+                      </li>
+                      <li>
+                        <FaBookmark
+                          className='padding-icon'
+                          onClick={() => {
+                            navigate("/profile#bookmarked");
+                          }}
+                        />
+                        Bookmarked
                       </li>
                       <li onClick={handleLogout}>
                         <IoLogOutSharp className='padding-icon' />

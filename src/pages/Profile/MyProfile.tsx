@@ -22,7 +22,7 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   validateFullname,
   validatePassword,
@@ -101,7 +101,25 @@ function MyProfile() {
     },
   ];
 
-  const [selectedMenu, setSelectedMenu] = useState(ProfileMenu.Profile);
+  const location = useLocation();
+
+  const getFragment = (): ProfileMenu => {
+    const fragment = location.hash;
+    console.log(fragment);
+    switch (fragment) {
+      case "#post":
+        return ProfileMenu.Posts;
+      case "#question":
+        return ProfileMenu.Question;
+      case "#notification":
+        return ProfileMenu.Notification;
+      case "#bookmarked":
+        return ProfileMenu.Bookmarked;
+      default:
+        return ProfileMenu.Profile;
+    }
+  };
+  const [selectedMenu, setSelectedMenu] = useState(getFragment());
 
   const renderMenu = () => {
     switch (selectedMenu) {
@@ -138,7 +156,7 @@ function MyProfile() {
           });
       }
     } else {
-      navigate("/");
+      // navigate("/");
     }
   }, []);
 
@@ -150,6 +168,7 @@ function MyProfile() {
           avartar={userInfo?.avatar ?? DefaultAvatar}
           fullName={userInfo?.fullName ?? ""}
           userName={userInfo?.userName ?? ""}
+          index={selectedMenu}
         />
       </div>
       <div className='myProfile-right'>
@@ -174,32 +193,6 @@ const PersonalInfo = () => {
     if (userInfo && userInfo.avatar)
       setAvatar([convertLinkToImageUploaded(userInfo.avatar, Module.User)]);
   }, [userInfo]);
-
-  // const [fullName, setFullName] = useState("");
-  // const [username, setUserName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [dateJoined, setDateJoined] = useState<Dayjs | null>(
-  //   dayjs("2023-11-30")
-  // );
-  // const [dob, setDoB] = useState<Dayjs | null>(null);
-  // const [gender, setGender] = useState(Gender.Unknown);
-  // const [bio, setBio] = useState("");
-
-  // const onFullNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setFullName(e.currentTarget.value);
-  // };
-
-  // const onUserNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setUserName(e.currentTarget.value);
-  // };
-
-  // const handleChange = (value: string) => {
-  //   setGender(Gender[value as keyof typeof Gender]);
-  // };
-
-  // const onBioChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-  //   setBio(e.currentTarget.value);
-  // };
 
   const dispatch = useDispatch();
 

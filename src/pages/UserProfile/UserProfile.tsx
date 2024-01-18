@@ -14,6 +14,7 @@ import { QuestionListModel } from "../../model/questionModel";
 import "./userProfile.scss";
 import PostBlockList from "../../components/PostBlock/PostBlockList/PostBlockList";
 import { formatDateToStringDay } from "../../Helper/DateHelper";
+import { SlPencil, SlUserFollow } from "react-icons/sl";
 
 function UserProfile() {
   const [info, setInfo] = useState(userInfo);
@@ -73,12 +74,34 @@ function UserProfile() {
                   className='userProfile-header-content-left-avatar'
                 />
                 <div className='userProfile-header-content-left-info'>
-                  <h3 className='userProfile-header-content-left-info-fullname'>
-                    {info.fullName}
-                  </h3>
-                  <h2 className='userProfile-header-content-left-info-username'>
-                    @{info.userName}
-                  </h2>
+                  <div className='userProfile-header-content-left-info-name'>
+                    <h2 className='userProfile-header-content-left-info-name-fullname'>
+                      {info.fullName}
+                    </h2>
+                    <p className='userProfile-header-content-left-info-name-username'>
+                      @{info.userName}
+                    </p>
+                  </div>
+                  <div className='userProfile-header-content-left-info-more'>
+                    <div className='userProfile-header-content-left-info-more-post'>
+                      <SlPencil />
+                      <span className='userProfile-header-content-left-info-more-post-count'>
+                        {info.postCount}
+                      </span>
+                      <span className='userProfile-header-content-left-info-more-post-label'>
+                        Posts
+                      </span>
+                    </div>
+                    <div className='userProfile-header-content-left-info-more-follow'>
+                      <SlUserFollow />
+                      <span className='userProfile-header-content-left-info-more-follow-count'>
+                        {info.followCount}
+                      </span>
+                      <span className='userProfile-header-content-left-info-more-follow-label'>
+                        Followers
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className='userProfile-header-content-right'>
@@ -282,6 +305,8 @@ const userInfo: UserProfileModel = {
   dateJoined: new Date(2023, 10, 28),
   bio: null, // "Binh tinh, di thang, ung dung",
   gender: Gender.Male,
+  followCount: 235,
+  postCount: 10,
 };
 
 const questionData: QuestionListModel[] = [
