@@ -73,15 +73,24 @@
     }
   }
 
-  &-button button {
-    margin-top: 20px;
-    background-color: #4d7af7;
-    border-radius: 10px;
-    padding: 15px 30px;
-    outline: none;
-    font-size: 20px;
-    border: none;
-    color: #f1f1f1;
-    cursor: pointer;
+  &-button {
+    & button {
+      margin-top: 20px;
+      background-color: #4d7af7;
+      border-radius: 10px;
+      padding: 15px 30px;
+      outline: none;
+      font-size: 20px;
+      border: none;
+      color: #f1f1f1;
+      cursor: pointer;
+    }
+
+    &-spin {
+      margin-left: 10px;
+      & i {
+        background-color: $text-menu-color !important;
+      }
+    }
   }
 }

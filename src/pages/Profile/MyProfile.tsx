@@ -1,8 +1,16 @@
-import { MailOutlined, UserOutlined } from "@ant-design/icons";
-import { DatePicker, Input, Pagination, PaginationProps, Select } from "antd";
+import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  DatePicker,
+  Form,
+  Input,
+  Pagination,
+  PaginationProps,
+  Select,
+  notification,
+} from "antd";
 import TextArea from "antd/es/input/TextArea";
 import dayjs, { Dayjs } from "dayjs";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { BsPostcard } from "react-icons/bs";
 import {
   FaBell,
@@ -13,7 +21,12 @@ import {
   FaSave,
   FaUser,
 } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  validateFullname,
+  validatePassword,
+} from "../../Helper/InformationValidater";
 import { Logo } from "../../Logo";
 import { ImageUploaded } from "../../components/BasicEditor/BasicEditor";
 import NotificationFilter from "../../components/Filter/NotificationFilter/NotificationFilter";
@@ -35,9 +48,19 @@ import {
   deleteImage,
   resizeAndUploadImage,
 } from "../../services/FireBaseService";
-import "./myProfile.scss";
-import { useSelector } from "react-redux";
 import { RootState } from "../../store/configureStore";
+import "./myProfile.scss";
+import {
+  GetByToken,
+  GetDetailByToken,
+  UpdateAvatarByToken,
+  UpdateUserByToken,
+} from "../../services/AccountService";
+import { AxiosError } from "axios";
+import { convertLinkToImageUploaded } from "../../Helper/ImageHelper";
+import { setBaseInfo, updateAvatar } from "../../actions/accountAction";
+import Module from "../../enums/Module";
+import { UserUpdateByTokenModel } from "../../model/accountModel";
 
 function MyProfile() {
   const menuItems: MenuItem[] = [
@@ -97,14 +120,36 @@ function MyProfile() {
     }
   };
 
+  const userInfo = useSelector((state: RootState) => state.account.BasicInfo);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const isAuthenticated = localStorage.getItem("token") !== null;
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (!userInfo) {
+        GetByToken()
+          .then((res) => {
+            dispatch(setBaseInfo(res.data));
+          })
+          .catch((error) => {
+            localStorage.removeItem("token");
+          });
+      }
+    } else {
+      navigate("/");
+    }
+  }, []);
+
   return (
     <div className='myProfile'>
       <div className='myProfile-left'>
         <MenuLeft
           items={menuItems}
-          avartar='https://i.pinimg.com/736x/24/21/85/242185eaef43192fc3f9646932fe3b46.jpg'
-          fullName='Nguyen Thien Sua'
-          userName='NTSua1908'
+          avartar={userInfo?.avatar ?? DefaultAvatar}
+          fullName={userInfo?.fullName ?? ""}
+          userName={userInfo?.userName ?? ""}
         />
       </div>
       <div className='myProfile-right'>
@@ -122,32 +167,41 @@ export default MyProfile;
 const PersonalInfo = () => {
   const userInfo = useSelector((state: RootState) => state.account.BasicInfo);
   const [avatar, setAvatar] = useState<ImageUploaded[]>([]);
-  const [fullName, setFullName] = useState("");
-  const [username, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [dateJoined, setDateJoined] = useState<Dayjs | null>(
-    dayjs("2023-11-30")
-  );
-  const [dob, setDoB] = useState<Dayjs | null>(null);
-  const [gender, setGender] = useState(Gender.Unknown);
-  const [bio, setBio] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
-  const onFullNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFullName(e.currentTarget.value);
-  };
+  useEffect(() => {
+    if (userInfo && userInfo.avatar)
+      setAvatar([convertLinkToImageUploaded(userInfo.avatar, Module.User)]);
+  }, [userInfo]);
 
-  const onUserNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUserName(e.currentTarget.value);
-  };
+  // const [fullName, setFullName] = useState("");
+  // const [username, setUserName] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [dateJoined, setDateJoined] = useState<Dayjs | null>(
+  //   dayjs("2023-11-30")
+  // );
+  // const [dob, setDoB] = useState<Dayjs | null>(null);
+  // const [gender, setGender] = useState(Gender.Unknown);
+  // const [bio, setBio] = useState("");
 
-  const handleChange = (value: string) => {
-    setGender(Gender[value as keyof typeof Gender]);
-  };
+  // const onFullNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setFullName(e.currentTarget.value);
+  // };
 
-  const onBioChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setBio(e.currentTarget.value);
-  };
+  // const onUserNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setUserName(e.currentTarget.value);
+  // };
+
+  // const handleChange = (value: string) => {
+  //   setGender(Gender[value as keyof typeof Gender]);
+  // };
+
+  // const onBioChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  //   setBio(e.currentTarget.value);
+  // };
+
+  const dispatch = useDispatch();
 
   const onAvatarChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.currentTarget.files;
@@ -160,15 +214,129 @@ const PersonalInfo = () => {
         });
         setAvatar([]);
       }
-      await resizeAndUploadImage(files[0], null, avatar, setAvatar, 300);
+      await resizeAndUploadImage(
+        files[0],
+        null,
+        avatar,
+        setAvatar,
+        Module.User,
+        300
+      )
+        .then()
+        .catch();
       setIsUploading(false);
     }
   };
 
+  useEffect(() => {
+    if (avatar.length > 0 && avatar[0].link != userInfo?.avatar) {
+      UpdateAvatarByToken(avatar[0].link)
+        .then((res) => {
+          openNotificationSuccess("Profile picture updated successfully.");
+        })
+        .catch((error: AxiosError) => {
+          const errors = (error.response?.data as any).errors;
+          if (errors) {
+            const errorMessage = errors.join("\n") as string;
+            openNotificationFailure(errorMessage);
+          }
+        });
+      dispatch(updateAvatar(avatar[0].link));
+    }
+  }, [avatar]);
+
+  const [form] = Form.useForm();
+  const isAuthenticated = localStorage.getItem("token") !== null;
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setLoading(true);
+      GetDetailByToken()
+        .then((res) => {
+          console.log(res.data);
+          form.setFieldsValue({
+            fullName: res.data.fullName,
+            userName: res.data.userName,
+            email: res.data.email,
+            dob: res.data.dob ? dayjs(res.data.dob) : null,
+            dateJoined: dayjs(res.data.dateJoined),
+            bio: res.data.bio,
+            gender: Gender[res.data.gender],
+          });
+        })
+        .catch((error: AxiosError) => {
+          const errors = (error.response?.data as any).errors;
+
+          if (errors) {
+            const errorMessage = errors.join("\n") as string;
+            openNotificationFailure(errorMessage);
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [form]);
+
+  const [api, contextHolder] = notification.useNotification();
+  const openNotificationSuccess = (message: string) => {
+    api.info({
+      message: `Notification`,
+      description: message,
+      placement: "topRight",
+    });
+  };
+
+  const openNotificationFailure = (message: string) => {
+    api.error({
+      message: `Notification`,
+      description: message,
+      placement: "topRight",
+      type: "error",
+    });
+  };
+
+  const onFinish = async (values: any) => {
+    const updateData: UserUpdateByTokenModel = {
+      fullName: values.fullName,
+      bio: values.bio,
+      dob: values.dob ? (values.dob as Dayjs).toDate() : null,
+      gender: Gender[values.gender as keyof typeof Gender],
+      password: values.password,
+      confirmPassword: values.confirmPassword,
+    };
+    await UpdateUserByToken(updateData)
+      .then((res) => {
+        openNotificationSuccess("Updated successfully");
+        GetByToken()
+          .then((res) => {
+            dispatch(setBaseInfo(res.data));
+          })
+          .catch((error) => {
+            localStorage.removeItem("token");
+          });
+      })
+      .catch((error: AxiosError) => {
+        const errors = (error.response?.data as any).errors;
+        if (errors) {
+          const errorMessage = errors.join("\n") as string;
+          openNotificationFailure(errorMessage);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const handleSave = () => {
+    form.submit();
+  };
+
   return (
     <div className='myProfile-right-container'>
+      {contextHolder}
       <div className='myProfile-right-header'>Personal Information</div>
-      <div className='myProfile-right-content'>
+      <div className='myProfile-right-content info'>
         <div className='myProfile-right-content-left'>
           <div className='myProfile-right-content-left-avatar'>
             <img src={avatar[0]?.link ?? DefaultAvatar} alt='' />
@@ -187,116 +355,193 @@ const PersonalInfo = () => {
               style={{ display: "none" }}
             />
           </div>
-          <div className='myProfile-right-content-left-button'>
+          <div
+            className='myProfile-right-content-left-button'
+            onClick={handleSave}
+          >
             <span style={{ marginRight: "5px" }}>Save</span> <FaSave />
           </div>
           {isUploading && (
-            <div style={{ textAlign: "center" }}>Uploading...</div>
+            <div style={{ textAlign: "center", marginTop: "10px" }}>
+              Uploading...
+            </div>
           )}
         </div>
         <div className='myProfile-right-content-right'>
-          <div className='myProfile-right-content-container'>
-            <div className='myProfile-right-content-container-right'>
-              <label
-                className='myProfile-right-content-label'
-                htmlFor='fullname'
-              >
-                Full name
-              </label>
-              <Input
-                name='fullname'
-                className='myProfile-right-content-input'
-                prefix={<UserOutlined />}
-                placeholder='Full name'
-                value={fullName}
-                onChange={onFullNameChange}
-              />
-              <label
-                className='myProfile-right-content-label'
-                htmlFor='username'
-              >
-                Username
-              </label>
-              <Input
-                name='username'
-                className='myProfile-right-content-input'
-                prefix={<UserOutlined />}
-                placeholder='Username'
-                value={username}
-                onChange={onUserNameChange}
-              />
+          <Form
+            form={form}
+            className='update-form'
+            name='update'
+            onFinish={onFinish}
+          >
+            <div className='myProfile-right-content-container'>
+              <div className='myProfile-right-content-container-right'>
+                <label
+                  className='myProfile-right-content-label'
+                  htmlFor='fullname'
+                >
+                  Full name
+                </label>
+                <Form.Item
+                  name='fullName'
+                  rules={[
+                    { required: true, message: "Please input your full name!" },
+                    { validator: validateFullname },
+                  ]}
+                  hasFeedback
+                >
+                  <Input
+                    name='fullname'
+                    className='myProfile-right-content-input'
+                    prefix={<UserOutlined />}
+                    placeholder='Full name'
+                    // value={fullName}
+                    // onChange={onFullNameChange}
+                  />
+                </Form.Item>
+                <label
+                  className='myProfile-right-content-label'
+                  htmlFor='username'
+                >
+                  Username
+                </label>
+                <Form.Item name='userName'>
+                  <Input
+                    name='username'
+                    className='myProfile-right-content-input'
+                    prefix={<UserOutlined />}
+                    placeholder='Username'
+                    // value={username}
+                    // onChange={onUserNameChange}
+                    disabled
+                  />
+                </Form.Item>
+              </div>
             </div>
-          </div>
-          <div className='myProfile-right-content-container evenly'>
-            <div className='myProfile-right-content-container-left'>
-              <label className='myProfile-right-content-label' htmlFor='email'>
-                Email
-              </label>
-              <Input
-                name='email'
-                className='myProfile-right-content-input'
-                prefix={<MailOutlined />}
-                placeholder='Email'
-                disabled
-                value={email}
-              />
+            <div className='myProfile-right-content-container evenly'>
+              <div className='myProfile-right-content-container-left'>
+                <label
+                  className='myProfile-right-content-label'
+                  htmlFor='email'
+                >
+                  Email
+                </label>
+                <Form.Item name='email'>
+                  <Input
+                    name='email'
+                    className='myProfile-right-content-input'
+                    prefix={<MailOutlined />}
+                    // placeholder='Email'
+                    // value={email}
+                    disabled
+                  />
+                </Form.Item>
+              </div>
+              <div className='myProfile-right-content-container-right'>
+                <label
+                  className='myProfile-right-content-label'
+                  htmlFor='datejoined'
+                >
+                  Date joined
+                </label>
+                <Form.Item name='dateJoined'>
+                  <DatePicker
+                    name='datejoined'
+                    className='myProfile-right-content-input'
+                    placeholder='Date joined'
+                    // value={dateJoined}
+                    disabled
+                  />
+                </Form.Item>
+              </div>
             </div>
-            <div className='myProfile-right-content-container-right'>
-              <label
-                className='myProfile-right-content-label'
-                htmlFor='datejoined'
-              >
-                Date joined
-              </label>
-              <DatePicker
-                name='datejoined'
-                className='myProfile-right-content-input'
-                placeholder='Date joined'
-                value={dateJoined}
-                disabled
-              />
-            </div>
-          </div>
-          <div className='myProfile-right-content-container evenly'>
-            <div className='myProfile-right-content-container-left'>
-              <label className='myProfile-right-content-label' htmlFor='dob'>
-                Date of birth
-              </label>
-              <DatePicker
-                name='dob'
-                className='myProfile-right-content-input'
-                placeholder='Date of birth'
-                value={dob}
-                onChange={setDoB}
-              />
-            </div>
+            <div className='myProfile-right-content-container evenly'>
+              <div className='myProfile-right-content-container-left'>
+                <label className='myProfile-right-content-label' htmlFor='dob'>
+                  Date of birth
+                </label>
+                <Form.Item name='dob'>
+                  <DatePicker
+                    name='dob'
+                    className='myProfile-right-content-input'
+                    placeholder='Date of birth'
+                    // value={dob}
+                    // onChange={setDoB}
+                  />
+                </Form.Item>
+              </div>
 
-            <div className='myProfile-right-content-container-right'>
-              <label className='myProfile-right-content-label'>Gender</label>
-              <Select
-                className='myProfile-right-content-input'
-                defaultValue={Gender[gender]}
-                style={{ width: 120 }}
-                onChange={handleChange}
-                options={[
-                  { value: Gender[0], label: Gender[0] },
-                  { value: Gender[1], label: Gender[1] },
-                  { value: Gender[2], label: Gender[2] },
-                ]}
-              />
+              <div className='myProfile-right-content-container-right'>
+                <label className='myProfile-right-content-label'>Gender</label>
+                <Form.Item name='gender'>
+                  <Select
+                    className='myProfile-right-content-input'
+                    // defaultValue={Gender[gender]}
+                    style={{ width: 120 }}
+                    // onChange={handleChange}
+                    options={[
+                      { value: Gender[0], label: Gender[0] },
+                      { value: Gender[1], label: Gender[1] },
+                      { value: Gender[2], label: Gender[2] },
+                    ]}
+                  />
+                </Form.Item>
+              </div>
             </div>
-          </div>
-          <div className='myProfile-right-content-container-bio'>
-            <label className='myProfile-right-content-label' htmlFor='bio'>
-              Bio
+            <div className='myProfile-right-content-container-bio'>
+              <label className='myProfile-right-content-label' htmlFor='bio'>
+                Bio
+              </label>
+              <Form.Item name='bio'>
+                <TextArea name='bio' placeholder='Bio' />
+              </Form.Item>
+            </div>
+            <label className='myProfile-right-content-label' htmlFor='password'>
+              Password
             </label>
-            <TextArea
-              name='bio'
-              placeholder='Bio'
-              value={bio}
-              onChange={onBioChange}
-            />
-          </div>
+            <Form.Item
+              name='password'
+              rules={[{ validator: validatePassword }]}
+              hasFeedback
+            >
+              <Input.Password
+                className='register-form-input'
+                prefix={<LockOutlined />}
+                placeholder='Password'
+              />
+            </Form.Item>
+            <label
+              className='myProfile-right-content-label'
+              htmlFor='confirmPassword'
+            >
+              Confirm Password
+            </label>
+            <Form.Item
+              name='confirmPassword'
+              dependencies={["password"]}
+              hasFeedback
+              rules={[
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error(
+                        "The new password that you entered do not match!"
+                      )
+                    );
+                  },
+                }),
+              ]}
+            >
+              <Input.Password
+                className='register-form-input'
+                prefix={<LockOutlined />}
+                placeholder='Confirm password'
+              />
+            </Form.Item>
+          </Form>
         </div>
       </div>
     </div>

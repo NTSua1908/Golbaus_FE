@@ -6,6 +6,7 @@ import { FaAlignCenter, FaAlignRight, FaUnderline } from "react-icons/fa6";
 import storage from "../../FirebaseInit";
 import { ImageUploaded } from "./BasicEditor";
 import { resizeAndUploadImage } from "../../services/FireBaseService";
+import Module from "../../enums/Module";
 
 export const createUploadImageCommand = (
   images: ImageUploaded[],
@@ -17,14 +18,14 @@ export const createUploadImageCommand = (
     icon: <FaImage />,
     children: (handle: any) => {
       return (
-        <div className="editor-select-image">
+        <div className='editor-select-image'>
           <input
-            type="file"
-            id="imageInput"
-            accept="image/*"
+            type='file'
+            id='imageInput'
+            accept='image/*'
             onChange={handle.execute}
           />
-          <label htmlFor="imageInput" id="imageLabel">
+          <label htmlFor='imageInput' id='imageLabel'>
             Select Image
           </label>
         </div>
@@ -36,7 +37,13 @@ export const createUploadImageCommand = (
       );
       const selectedImage = imageInput?.files?.[0];
       if (selectedImage) {
-        await resizeAndUploadImage(selectedImage, api, images, setImages);
+        await resizeAndUploadImage(
+          selectedImage,
+          api,
+          images,
+          setImages,
+          Module.Post
+        );
         //console.log('Done');
         if (imageInput) {
           imageInput.value = "";

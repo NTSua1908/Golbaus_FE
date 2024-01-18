@@ -34,6 +34,8 @@ import { GetDetail, Update } from "../../services/PostService";
 import { AxiosError } from "axios";
 import NotFound from "../../images/not_found.png";
 import { PostCreateModel } from "../../model/postModel";
+import { convertLinkToImageUploaded } from "../../Helper/ImageHelper";
+import Module from "../../enums/Module";
 
 const EditPost: React.FC = () => {
   const [publishType, setPublishType] = useState<PublishType>(
@@ -155,7 +157,14 @@ const EditPost: React.FC = () => {
         });
         setThumbnail([]);
       }
-      await resizeAndUploadImage(files[0], null, thumbnail, setThumbnail, 1024);
+      await resizeAndUploadImage(
+        files[0],
+        null,
+        thumbnail,
+        setThumbnail,
+        Module.Post,
+        1024
+      );
       setIsUploading(false);
     }
   };
@@ -164,15 +173,6 @@ const EditPost: React.FC = () => {
   const isNotFound = useSelector((state: RootState) => state.post.isNotFound);
   const dispatch = useDispatch();
   let { postId } = useParams();
-
-  const getImageUpload = (link: string) => {
-    return {
-      link: link,
-      path:
-        "images/post/" +
-        link.substring(link.lastIndexOf("%2F") + 3, link.indexOf("?")),
-    };
-  };
 
   useEffect(() => {
     if (!isLoading && postId) {
@@ -183,7 +183,9 @@ const EditPost: React.FC = () => {
           setExcerpt(res.data.excerpt);
           setValue(res.data.content);
           setTags(res.data.tags);
-          setThumbnail([getImageUpload(res.data.thumbnail)]);
+          setThumbnail([
+            convertLinkToImageUploaded(res.data.thumbnail, Module.Post),
+          ]);
           dispatch(setPostContent(res.data));
         })
         .catch((error: AxiosError) => {

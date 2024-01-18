@@ -1,33 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import EmailPNG from "../../images/email.png";
 import "./confirmEmail.scss";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { VerifyEmail } from "../../services/AuthService";
 import { validateEmail } from "../../Helper/InformationValidater";
 import { AxiosError } from "axios";
-import { notification } from "antd";
+import { Spin, notification } from "antd";
 
 function ConfirmEmail() {
   const { email } = useParams();
   const { token } = useParams();
 
   const isValid = email && validateEmail(email) && token && token.length > 0;
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleVerifyEmail = async () => {
+  const handleVerifyEmail = () => {
     if (isValid) {
-      await VerifyEmail(email, token)
+      setLoading(true);
+      VerifyEmail(email, token)
         .then((res) => {
           openNotificationSuccess("Email verification successful");
           setTimeout(() => {
-            navigate("/");
+            navigate("/login");
           }, 2000);
         })
         .catch((error: AxiosError) => {
           const errors = (error.response?.data as any).errors;
           const errorMessage = errors.join("\n") as string;
           openNotificationFailure(errorMessage);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   };
@@ -72,7 +77,10 @@ function ConfirmEmail() {
                 </p>
               </div>
               <div className='confirmEmail-button'>
-                <button onClick={handleVerifyEmail}>Verify your email</button>
+                <button onClick={handleVerifyEmail}>
+                  Verify your email{" "}
+                  {loading && <Spin className='confirmEmail-button-spin' />}
+                </button>
               </div>
             </>
           )}

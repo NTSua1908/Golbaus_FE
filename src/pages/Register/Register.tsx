@@ -3,7 +3,11 @@ import { Form, Input, Spin, message, notification } from "antd";
 import React, { useState } from "react";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { validatePassword } from "../../Helper/InformationValidater";
+import {
+  validateFullname,
+  validatePassword,
+  validateUsername,
+} from "../../Helper/InformationValidater";
 import { Logo } from "../../Logo";
 import "./register.scss";
 import { RegisterAccount } from "../../services/AccountService";
@@ -29,7 +33,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
       <label htmlFor='fullName'>Full name</label>
       <Form.Item
         name='fullName'
-        rules={[{ required: true, message: "Please input your fullname!" }]}
+        rules={[
+          { required: true, message: "Please input your fullname!" },
+          { validator: validateFullname },
+        ]}
         hasFeedback
       >
         <Input
@@ -41,7 +48,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
       <label htmlFor='userName'>User name</label>
       <Form.Item
         name='userName'
-        rules={[{ required: true, message: "Please input your user name!" }]}
+        rules={[
+          { required: true, message: "Please input your user name!" },
+          { validator: validateUsername },
+        ]}
         hasFeedback
       >
         <Input
@@ -122,7 +132,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           </Link>
         </div>
         <button className='register-form-submit' type='submit'>
-          Register {loading && <Spin className='login-form-submit-spin' />}
+          Register {loading && <Spin className='register-form-submit-spin' />}
         </button>
       </Form.Item>
     </Form>

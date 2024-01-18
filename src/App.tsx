@@ -56,7 +56,10 @@ const App = () => {
               <Route path='/user/:userId' element={<UserProfile />} />
               <Route path='*' element={<NotFound />} />
               <Route path='/login' element={<Login />} />
-              <Route path='/reset-password' element={<ResetPassword />} />
+              <Route
+                path='/ResetPassword/:token/:email'
+                element={<ResetPassword />}
+              />
               <Route path='/forgot-password' element={<ForgotPassword />} />
               <Route path='/register' element={<Register />} />
               <Route path='/checkEmail' element={<RegisterSuccess />} />

@@ -85,16 +85,18 @@
       cursor: pointer;
       position: relative;
       min-width: 100%;
+      z-index: 1;
 
       &.active {
         background-color: $body-background;
         color: $background-color;
         border-radius: 60px 0px 0px 60px;
+        z-index: 0;
         @include for-size(phone, min) {
           border-radius: 60px;
         }
 
-        &::after {
+        &::before {
           content: "";
           position: absolute;
           width: 50px;
@@ -109,7 +111,7 @@
           }
         }
 
-        &::before {
+        &::after {
           content: "";
           position: absolute;
           width: 50px;

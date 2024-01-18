@@ -6,12 +6,14 @@ import {
 } from "firebase/storage";
 import { ImageUploaded } from "../components/BasicEditor/BasicEditor";
 import storage from "../FirebaseInit";
+import Module from "../enums/Module";
 
 export function resizeAndUploadImage(
   file: File,
   api: any,
   images: ImageUploaded[],
   setImages: React.Dispatch<React.SetStateAction<ImageUploaded[]>>,
+  module: Module,
   size = 500
 ) {
   return new Promise((resolve, reject) => {
@@ -49,7 +51,7 @@ export function resizeAndUploadImage(
             lastModified: Date.now(),
           });
 
-          await UploadImage(resizedFile, api, images, setImages);
+          await UploadImage(resizedFile, api, images, setImages, module);
           resolve(true);
         }, file.type);
       };
@@ -86,27 +88,28 @@ async function UploadImage(
   image: File,
   api: any,
   images: ImageUploaded[],
-  setImages: React.Dispatch<React.SetStateAction<ImageUploaded[]>>
+  setImages: React.Dispatch<React.SetStateAction<ImageUploaded[]>>,
+  module: Module
 ) {
   let imageName = createFileNameWithTimestamp(image.name);
-  const storageRef = ref(storage, "images/post/" + imageName);
+  const storageRef = ref(storage, "images/" + Module[module] + "/" + imageName);
 
   await uploadBytes(storageRef, image).then(async (snapshot) => {
-    await getDownloadURL(ref(storage, "images/post/" + imageName)).then(
-      (url) => {
-        let modifyText = `![](${url})\n`;
-        if (api) {
-          api.replaceSelection(modifyText);
-        }
-        setImages((prev) => [
-          ...prev,
-          {
-            link: url,
-            path: "images/post/" + imageName,
-          },
-        ]);
+    await getDownloadURL(
+      ref(storage, "images/" + Module[module] + "/" + imageName)
+    ).then((url) => {
+      let modifyText = `![](${url})\n`;
+      if (api) {
+        api.replaceSelection(modifyText);
       }
-    );
+      setImages((prev) => [
+        ...prev,
+        {
+          link: url,
+          path: "images/" + Module[module] + "/" + imageName,
+        },
+      ]);
+    });
   });
 }
 

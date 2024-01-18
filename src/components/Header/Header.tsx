@@ -164,9 +164,7 @@ function Header() {
     if (isAuthenticated && !userInfo) {
       GetByToken()
         .then((res) => {
-          // debugger;
           dispatch(setBaseInfo(res.data));
-          console.log("Get by token");
         })
         .catch((error) => {
           localStorage.removeItem("token");
@@ -337,7 +335,7 @@ function Header() {
                         {/* <Link to={"/profile"} style={{ display: "block" }}> */}
                         <div className='header-menu-right-profile-menu-first-left'>
                           <img
-                            src='https://i.pinimg.com/564x/94/9b/8d/949b8d8d9229693ba9d53b054b738e2a.jpg'
+                            src={userInfo?.avatar ?? DefaultAvatar}
                             alt='Your profile'
                           />
                         </div>

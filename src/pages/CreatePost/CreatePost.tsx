@@ -28,6 +28,7 @@ import "./createPost.scss";
 import { Logo } from "../../Logo";
 import { useNavigate } from "react-router-dom";
 import { PostCreateModel } from "../../model/postModel";
+import Module from "../../enums/Module";
 
 const CreatePost: React.FC = () => {
   const [publishType, setPublishType] = useState<PublishType>(
@@ -149,7 +150,14 @@ const CreatePost: React.FC = () => {
         });
         setThumbnail([]);
       }
-      await resizeAndUploadImage(files[0], null, thumbnail, setThumbnail, 1024);
+      await resizeAndUploadImage(
+        files[0],
+        null,
+        thumbnail,
+        setThumbnail,
+        Module.Post,
+        1024
+      );
       setIsUploading(false);
     }
   };

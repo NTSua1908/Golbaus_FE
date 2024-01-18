@@ -26,3 +26,12 @@ export interface RegisterModel {
   Password: string;
   ConfirmPassword: string;
 }
+
+export interface UserUpdateByTokenModel {
+  fullName: string;
+  gender: Gender;
+  dob: Date | null;
+  bio: string | null;
+  password: string;
+  confirmPassword: string;
+}

@@ -1,5 +1,10 @@
-import { REMOVE_BASE_INFO, SET_BASE_INFO } from '../actions/accountAction';
-import { UserGetByToken } from '../model/accountModel';
+import { setBaseInfo } from "./../actions/accountAction";
+import {
+  REMOVE_BASE_INFO,
+  SET_BASE_INFO,
+  UPDATE_AVATAR,
+} from "../actions/accountAction";
+import { UserGetByToken } from "../model/accountModel";
 
 interface AccountState {
   BasicInfo: UserGetByToken | null;
@@ -25,6 +30,14 @@ const accountReducer = (state = initGetByTokenState, action: AccountAction) => {
       return {
         ...state,
         BasicInfo: null,
+      };
+    case UPDATE_AVATAR:
+      return {
+        ...state,
+        BasicInfo: {
+          ...state.BasicInfo,
+          avatar: action.payload?.avatar,
+        },
       };
     default:
       return state;

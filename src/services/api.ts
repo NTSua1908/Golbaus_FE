@@ -3,7 +3,7 @@ import axios, { AxiosInstance, AxiosResponse, AxiosError } from "axios";
 // Create an Axios instance with a base URL
 const api: AxiosInstance = axios.create({
   baseURL: "https://localhost:7032/api/",
-  timeout: 5000,
+  timeout: 30000,
   withCredentials: true,
 });
 
