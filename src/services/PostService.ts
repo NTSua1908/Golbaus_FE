@@ -1,3 +1,5 @@
+import OrderBy from "../enums/OrderBy";
+import OrderType from "../enums/OrderType";
 import { PostCreateModel } from "../model/postModel";
 import api from "./api";
 
@@ -29,4 +31,52 @@ export function Delete(id: string) {
 
 export function IncreateView(id: string) {
   return api.put(BASE_URL_POST + "IncreaseView/" + id);
+}
+
+export function GetAllByToken(
+  searchText: string | null,
+  tags: string[],
+  orderBy: OrderBy | null,
+  orderType: OrderType | null,
+  publishDateFrom: Date | null,
+  publishDateTo: Date | null,
+  page: number,
+  amount: number
+) {
+  return api.get(BASE_URL_POST + "GetAllByToken", {
+    params: {
+      searchText,
+      tags: tags.join(","),
+      orderBy,
+      orderType,
+      publishDateFrom,
+      publishDateTo,
+      page,
+      amount,
+    },
+  });
+}
+
+export function GetAllPost(
+  searchText: string | null,
+  tags: string[],
+  orderBy: OrderBy | null,
+  orderType: OrderType | null,
+  publishDateFrom: Date | null,
+  publishDateTo: Date | null,
+  page: number,
+  amount: number
+) {
+  return api.get(BASE_URL_POST + "GetAll", {
+    params: {
+      searchText,
+      tags: tags.join(","),
+      orderBy,
+      orderType,
+      publishDateFrom,
+      publishDateTo,
+      page,
+      amount,
+    },
+  });
 }

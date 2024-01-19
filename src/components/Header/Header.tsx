@@ -186,6 +186,12 @@ function Header() {
     navigate("/login");
   };
 
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const searchText = queryParams.get("searchText") ?? "";
+    setSearchText(searchText);
+  }, [location.search]);
+
   return (
     <div className='header'>
       <div className='header-container'>
@@ -368,31 +374,28 @@ function Header() {
                         <IoPerson className='padding-icon' />
                         Personal page
                       </li>
-                      <li>
-                        <IoNewspaperOutline
-                          className='padding-icon'
-                          onClick={() => {
-                            navigate("/profile#post");
-                          }}
-                        />
+                      <li
+                        onClick={() => {
+                          navigate("/profile#post");
+                        }}
+                      >
+                        <IoNewspaperOutline className='padding-icon' />
                         Posts management
                       </li>
-                      <li>
-                        <FaQuestionCircle
-                          className='padding-icon'
-                          onClick={() => {
-                            navigate("/profile#question");
-                          }}
-                        />
+                      <li
+                        onClick={() => {
+                          navigate("/profile#question");
+                        }}
+                      >
+                        <FaQuestionCircle className='padding-icon' />
                         Questions management
                       </li>
-                      <li>
-                        <FaBookmark
-                          className='padding-icon'
-                          onClick={() => {
-                            navigate("/profile#bookmarked");
-                          }}
-                        />
+                      <li
+                        onClick={() => {
+                          navigate("/profile#bookmarked");
+                        }}
+                      >
+                        <FaBookmark className='padding-icon' />
                         Bookmarked
                       </li>
                       <li onClick={handleLogout}>

@@ -19,8 +19,8 @@ const contents: PostList[] = [
     thumbnail:
       "https://tintuc-divineshop.cdn.vccloud.vn/wp-content/uploads/2020/08/782784.jpg",
     title: "Stardev Valley 123",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -34,8 +34,8 @@ const contents: PostList[] = [
     id: "1231231",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -49,8 +49,8 @@ const contents: PostList[] = [
     id: "1231231",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley 456",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -64,8 +64,8 @@ const contents: PostList[] = [
     id: "1231231",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -79,8 +79,8 @@ const contents: PostList[] = [
     id: "1231231",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -94,8 +94,8 @@ const contents: PostList[] = [
     id: "1231231",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -109,8 +109,8 @@ const contents: PostList[] = [
     id: "1231231",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -124,8 +124,8 @@ const contents: PostList[] = [
     id: "1231231",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -140,8 +140,8 @@ const contents: PostList[] = [
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title:
       "New mod for Stardev Valley, New mod for Stardev Valley, New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -177,20 +177,20 @@ const posts: PostBlock[] = [
 
 function Post() {
   return (
-    <div className="post">
+    <div className='post'>
       <Header />
-      <img className="post-banner" src={Banner} alt="" />
-      <div className="post-container">
-        <h1 className="post-title">NEW POSTS</h1>
-        <div className="post-trending-swipper">
+      <img className='post-banner' src={Banner} alt='' />
+      <div className='post-container'>
+        <h1 className='post-title'>NEW POSTS</h1>
+        <div className='post-trending-swipper'>
           <SwipperContent contents={contents} />
         </div>
-        <div className="post-content">
-          <div className="post-content-featured">
-            <h3 className="post-content-title">Featured Posts</h3>
-            <div className="post-content-line">
-              <div className="post-content-line-left"></div>
-              <div className="post-content-line-right"></div>
+        <div className='post-content'>
+          <div className='post-content-featured'>
+            <h3 className='post-content-title'>Featured Posts</h3>
+            <div className='post-content-line'>
+              <div className='post-content-line-left'></div>
+              <div className='post-content-line-right'></div>
             </div>
             <FeaturedPost
               postMedium={post}
@@ -205,13 +205,13 @@ function Post() {
               postSmall3={post}
             />
           </div>
-          <div className="post-content-trending">
-            <h3 className="post-content-title">Trending</h3>
-            <div className="post-content-line">
-              <div className="post-content-line-left"></div>
-              <div className="post-content-line-right"></div>
+          <div className='post-content-trending'>
+            <h3 className='post-content-title'>Trending</h3>
+            <div className='post-content-line'>
+              <div className='post-content-line-left'></div>
+              <div className='post-content-line-right'></div>
             </div>
-            <div className="post-content-trending-container">
+            <div className='post-content-trending-container'>
               {contents.map((post, index) => (
                 <TrendingPost
                   index={index + 1}
@@ -224,8 +224,8 @@ function Post() {
 
         <ViewMoreButton onClick={() => {}} />
 
-        <h2 className="post-content-title">Followed Users' Activity</h2>
-        <div className="post-content-followed">
+        <h2 className='post-content-title'>Followed Users' Activity</h2>
+        <div className='post-content-followed'>
           {contents.map((post, index) => (
             <PostBlockList key={index} post={post} />
           ))}

@@ -1,5 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { ParsePostTrendingToPostBlock } from "../../Helper/ObjectParser";
+import {
+  ParsePostTrendingToPostBlock,
+  ParsePostTrendingToSwiperCardContent,
+} from "../../Helper/ObjectParser";
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
 import FeaturedPost from "../../components/PostBlock/FeaturedPost/FeaturedPost";
@@ -20,8 +23,8 @@ const contents: PostList[] = [
     thumbnail:
       "https://tintuc-divineshop.cdn.vccloud.vn/wp-content/uploads/2020/08/782784.jpg",
     title: "Stardew Valley 1",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -35,8 +38,8 @@ const contents: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardew Valley 2",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -50,8 +53,8 @@ const contents: PostList[] = [
     id: "08dc0c4a-13aa-4cc7-856e-09f0ac174146",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardew Valley 3",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -65,8 +68,8 @@ const contents: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -80,8 +83,8 @@ const contents: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -95,8 +98,8 @@ const contents: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -110,8 +113,8 @@ const contents: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -125,8 +128,8 @@ const contents: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -141,8 +144,8 @@ const contents: PostList[] = [
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title:
       "New mod for Stardev Valley, New mod for Stardev Valley, New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -247,11 +250,11 @@ function Home() {
   return (
     <div>
       <Header />
-      <div className="home">
-        <img className="home-banner" src={Banner} alt="" />
-        <div className="home-container">
-          <h1 className="home-name">GOLBAUS</h1>
-          <p className="home-introduce">
+      <div className='home'>
+        <img className='home-banner' src={Banner} alt='' />
+        <div className='home-container'>
+          <h1 className='home-name'>GOLBAUS</h1>
+          <p className='home-introduce'>
             Welcome to Golbaus, a vibrant and inclusive community where
             knowledge meets collaboration, and experiences are shared to empower
             one another. In this digital haven, we believe that every individual
@@ -261,16 +264,20 @@ function Home() {
             come together to celebrate the diversity of ideas and foster a
             spirit of mutual growth.
           </p>
-          <h1 className="home-title">NEW POSTS</h1>
-          <div className="home-trending-swipper">
-            <SwipperContent contents={contents} />
+          <h1 className='home-title'>NEW POSTS</h1>
+          <div className='home-trending-swipper'>
+            <SwipperContent
+              contents={contents.map((x) =>
+                ParsePostTrendingToSwiperCardContent(x)
+              )}
+            />
           </div>
-          <div className="home-content">
-            <div className="home-content-featured">
-              <h3 className="home-content-title">Featured Posts</h3>
-              <div className="home-content-line">
-                <div className="home-content-line-left"></div>
-                <div className="home-content-line-right"></div>
+          <div className='home-content'>
+            <div className='home-content-featured'>
+              <h3 className='home-content-title'>Featured Posts</h3>
+              <div className='home-content-line'>
+                <div className='home-content-line-left'></div>
+                <div className='home-content-line-right'></div>
               </div>
               <FeaturedPost
                 postMedium={post}
@@ -285,13 +292,13 @@ function Home() {
                 postSmall3={post}
               />
             </div>
-            <div className="home-content-trending">
-              <h3 className="home-content-title">Trending</h3>
-              <div className="home-content-line">
-                <div className="home-content-line-left"></div>
-                <div className="home-content-line-right"></div>
+            <div className='home-content-trending'>
+              <h3 className='home-content-title'>Trending</h3>
+              <div className='home-content-line'>
+                <div className='home-content-line-left'></div>
+                <div className='home-content-line-right'></div>
               </div>
-              <div className="home-content-trending-container">
+              <div className='home-content-trending-container'>
                 {contents.map((post, index) => (
                   <TrendingPost
                     key={index}
@@ -303,14 +310,14 @@ function Home() {
             </div>
           </div>
 
-          <div className="home-content-special-post">
+          <div className='home-content-special-post'>
             <PostBlockLarge post={post} />
           </div>
 
           <ViewMoreButton onClick={gotoPosts} />
 
-          <h1 className="home-title">NEW QUESTIONS</h1>
-          <div className="home-content-question">
+          <h1 className='home-title'>NEW QUESTIONS</h1>
+          <div className='home-content-question'>
             {questions.map((question, index) => (
               <QuestionBlock key={index} question={question} />
             ))}

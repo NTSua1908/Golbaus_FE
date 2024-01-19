@@ -428,8 +428,8 @@ const postData: PostList[] = [
     thumbnail:
       "https://tintuc-divineshop.cdn.vccloud.vn/wp-content/uploads/2020/08/782784.jpg",
     title: "Stardew Valley 1",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -443,8 +443,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardew Valley 2",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -458,8 +458,8 @@ const postData: PostList[] = [
     id: "08dc0c4a-13aa-4cc7-856e-09f0ac174146",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardew Valley 3",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -473,8 +473,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -488,8 +488,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -503,8 +503,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -518,8 +518,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -533,8 +533,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -549,8 +549,8 @@ const postData: PostList[] = [
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title:
       "New mod for Stardev Valley, New mod for Stardev Valley, New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:

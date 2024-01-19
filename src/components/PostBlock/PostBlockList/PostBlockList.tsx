@@ -9,62 +9,64 @@ import { FaRegEye, FaRocketchat } from "react-icons/fa";
 
 interface PostBlockListProps {
   post: PostList;
+  newTab?: boolean;
 }
 
-function PostBlockList({ post }: PostBlockListProps) {
+function PostBlockList({ post, newTab }: PostBlockListProps) {
   return (
     <Link
-      to={`/post/${post.id}}`}
+      to={`/post/${post.id}`}
       state={{ id: post.id }}
-      className="post-block-list"
+      className='post-block-list'
+      target={newTab ? "_blank" : undefined}
     >
-      <div className="post-block-list-left">
+      <div className='post-block-list-left'>
         <img
           src={post.thumbnail}
           alt={post.title}
-          className="post-block-list-left-img"
+          className='post-block-list-left-img'
         />
       </div>
-      <div className="post-block-list-right">
-        <div className="post-block-list-right-content">
-          <h3 className="post-block-list-right-content-title">{post.title}</h3>
-          <p className="post-block-list-right-content-excerpt">
+      <div className='post-block-list-right'>
+        <div className='post-block-list-right-content'>
+          <h3 className='post-block-list-right-content-title'>{post.title}</h3>
+          <p className='post-block-list-right-content-excerpt'>
             {post.excerpt}
           </p>
         </div>
 
-        <div className="post-block-list-right-info">
-          <p className="post-block-list-right-info-detail">
+        <div className='post-block-list-right-info'>
+          <p className='post-block-list-right-info-detail'>
             <i>By</i>{" "}
-            <span className="post-block-list-right-info-detail-auth">
+            <span className='post-block-list-right-info-detail-auth'>
               {post.authorName}
             </span>{" "}
             <br />
-            <span className="post-block-list-right-info-detail-date">
+            <span className='post-block-list-right-info-detail-date'>
               {formatDateToString(post.date)}
             </span>
           </p>
-          <div className="post-block-list-right-info-stats">
-            <div className="post-block-list-right-info-stats-detail up">
-              <span className="post-block-list-right-info-stats-detail-icon">
+          <div className='post-block-list-right-info-stats'>
+            <div className='post-block-list-right-info-stats-detail up'>
+              <span className='post-block-list-right-info-stats-detail-icon'>
                 <TiArrowSortedUp />
               </span>
-              {post.upvote}
+              {post.upVote}
             </div>
-            <div className="post-block-list-right-info-stats-detail down">
-              <span className="post-block-list-right-info-stats-detail-icon">
+            <div className='post-block-list-right-info-stats-detail down'>
+              <span className='post-block-list-right-info-stats-detail-icon'>
                 <TiArrowSortedDown />
               </span>
-              {post.downvote}
+              {post.downVote}
             </div>
-            <div className="post-block-list-right-info-stats-detail view">
-              <span className="post-block-list-right-info-stats-detail-icon">
+            <div className='post-block-list-right-info-stats-detail view'>
+              <span className='post-block-list-right-info-stats-detail-icon'>
                 <FaRegEye />
               </span>
               {post.viewCount}
             </div>
-            <div className="post-block-list-right-info-stats-detail comments">
-              <span className="post-block-list-right-info-stats-detail-icon">
+            <div className='post-block-list-right-info-stats-detail comments'>
+              <span className='post-block-list-right-info-stats-detail-icon'>
                 <FaRocketchat />
               </span>
               {post.commentCount}

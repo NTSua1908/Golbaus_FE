@@ -14,8 +14,8 @@ export function ParsePostTrendingToSwiperCardContent(
     excerpt: PostTrending.excerpt,
     commentCount: PostTrending.commentCount,
     viewCount: PostTrending.viewCount,
-    upvote: PostTrending.upvote,
-    downvote: PostTrending.downvote,
+    upVote: PostTrending.upVote,
+    downVote: PostTrending.downVote,
   };
 }
 

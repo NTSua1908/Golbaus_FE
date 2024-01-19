@@ -13,8 +13,12 @@
 
   &-right {
     flex: 1;
-    height: 100%;
+    min-height: 100vh;
     position: relative;
+
+    &-container {
+      height: 100%;
+    }
 
     &-logo {
       position: absolute;
@@ -44,6 +48,7 @@
       display: flex;
       max-width: 1500px;
       margin: 0 auto;
+      // height: 100%;
 
       &.info {
         max-width: 1000px;
@@ -111,6 +116,19 @@
         flex: 7;
         &-container {
           padding: 20px 10px 20px 0px;
+
+          &.fullHeight {
+            height: 80%;
+          }
+
+          &-nocontent {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            font-weight: 600;
+          }
         }
         &-pagination {
           display: flex;
@@ -127,7 +145,6 @@
         border-left: 1px solid #ccc;
         margin-top: 20px;
         padding: 0px 0px 20px 20px;
-        height: 100%;
 
         @include for-size(desktop, min) {
           position: absolute;

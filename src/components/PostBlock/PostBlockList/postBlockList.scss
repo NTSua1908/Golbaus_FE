@@ -37,6 +37,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    @include for-size(600px, max) {
+      max-width: 250px;
+      overflow: hidden;
+    }
+
     &-img {
       height: 100%;
       object-fit: cover;

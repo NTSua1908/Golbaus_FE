@@ -85,8 +85,8 @@ const Comment = React.memo(
       Math.ceil(replies.length / amoutPerPage)
     );
     const handleLoadMoreReplies = () => {
-      setLoadingReply(true);
       if (!isLoadingReply) {
+        setLoadingReply(true);
         GetPostCommentReply(postId, comment.id, currentPage, amoutPerPage)
           .then((res) => {
             setCurrentPage(currentPage + 1);
@@ -457,14 +457,16 @@ const Comment = React.memo(
                 <Spin />
               </div>
             )}
-            {currentPage <= Math.ceil(totalCommentCount / amoutPerPage) - 1 && (
-              <div
-                className='comment-content-replies-more'
-                onClick={handleLoadMoreReplies}
-              >
-                Show more comments...
-              </div>
-            )}
+            {!isLoadingReply &&
+              currentPage <=
+                Math.ceil(totalCommentCount / amoutPerPage) - 1 && (
+                <div
+                  className='comment-content-replies-more'
+                  onClick={handleLoadMoreReplies}
+                >
+                  Show more comments...
+                </div>
+              )}
           </div>
         </div>
       </div>

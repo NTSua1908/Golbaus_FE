@@ -1,6 +1,6 @@
-import { Pagination, PaginationProps } from "antd";
-import { useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Pagination, PaginationProps, Spin } from "antd";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import QuestionBlock from "../../components/QuestionBlock/QuestionBlock";
 import { PostFilter as FilterProps, PostList } from "../../model/postModel";
 import { QuestionListModel } from "../../model/questionModel";
@@ -11,27 +11,35 @@ import PostBlockList from "../../components/PostBlock/PostBlockList/PostBlockLis
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
 import InputSearch from "../../components/InputSearch/InputSearch";
+import { GetAllPost } from "../../services/PostService";
 
 function Search() {
   const location = useLocation();
-  const requestText = new URLSearchParams(location.search).get("searchText");
+  const queryParams = new URLSearchParams(location.search);
+  const [requestText, setRequestText] = useState("");
+  const requestTag = queryParams.get("tag");
   const [activeIndex, setActiveIndex] = useState(0);
 
   const [questions, setQuestion] = useState(questionData);
   const [currentQuestionPage, setCurrentQuestionPage] = useState(1);
   const [questionTotalPage, setQuestionTotalPage] = useState(100);
+  const [pageSize, setPageSize] = useState(10);
 
-  const [posts, setPosts] = useState(postData);
+  const [posts, setPosts] = useState<PostList[]>([]);
   const [currentPostPage, setCurrentPostPage] = useState(1);
   const [postTotalPage, setPostTotalPage] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [reload, setReload] = useState(false);
 
   const [showFilter, setShowFilter] = useState(false);
   const [searchText, setSearchText] = useState(requestText ?? "");
 
+  const navigate = useNavigate();
+
   //filter state
   const [filter, setFilter] = useState<FilterProps>({
-    title: "",
-    tags: [],
+    title: queryParams.get("searchText") ?? "",
+    tags: requestTag ? [requestTag] : [],
     dateFrom: null,
     dateTo: null,
     orderBy: null,
@@ -52,17 +60,73 @@ function Search() {
     setShowFilter(false);
   };
 
-  const onFilter = () => {};
+  const handlePageSizeChange = (current: number, pageSize: number) => {
+    setPageSize(pageSize);
+    setCurrentPostPage(1);
+    if (currentPostPage == 1) {
+      getData();
+    }
+  };
+
+  const getData = () => {
+    if (!loading) {
+      setLoading(true);
+      GetAllPost(
+        filter.title,
+        filter.tags,
+        filter.orderBy,
+        filter.orderType,
+        filter.dateFrom ? filter.dateFrom.toDate() : null,
+        filter.dateTo ? filter.dateTo.toDate() : null,
+        currentPostPage - 1,
+        pageSize
+      )
+        .then((res) => {
+          setPosts(res.data.data);
+          setPostTotalPage(res.data.totalCount);
+        })
+        .catch()
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  };
+
+  const onFilter = () => {
+    setCurrentPostPage(1);
+    setRequestText(filter.title);
+    setSearchText(filter.title);
+    if (currentPostPage == 1) {
+      getData();
+    }
+    navigate("/Search?searchText=" + filter.title);
+  };
+
+  useEffect(() => {
+    getData();
+  }, [pageSize, currentPostPage, reload]);
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const searchText = queryParams.get("searchText") ?? "";
+    setRequestText(searchText);
+    setFilter({ ...filter, title: searchText });
+    setCurrentPostPage(1);
+    setReload(!reload);
+    setSearchText(searchText);
+  }, [location.search]);
 
   return (
     <div className='search'>
       <Header />
+      <h1 className='search-title'>Search posts and questions</h1>
+      {loading && <Spin fullscreen />}
       <div className='search-container'>
         <div className='search-input'>
           <InputSearch value={searchText} setValue={setSearchText} />
         </div>
         {requestText && requestText.length != 0 && (
-          <div className='search-title'>
+          <div className='search-for'>
             <h2>Search results for:</h2> <h3>"{requestText}"</h3>
           </div>
         )}
@@ -90,15 +154,18 @@ function Search() {
               <div className='search-result-content-filterLeft'>
                 <div className='search-result-content-filterLeft-container'>
                   {posts.map((post, index) => (
-                    <PostBlockList key={index} post={post} />
+                    <PostBlockList key={index} post={post} newTab />
                   ))}
                 </div>
                 <div className='search-result-content-filterLeft-pagination'>
                   <Pagination
                     showQuickJumper
                     current={currentPostPage}
+                    pageSize={pageSize}
                     total={postTotalPage}
                     onChange={onChange}
+                    onShowSizeChange={handlePageSizeChange}
+                    hideOnSinglePage
                   />
                 </div>
               </div>
@@ -303,8 +370,8 @@ const postData: PostList[] = [
     thumbnail:
       "https://tintuc-divineshop.cdn.vccloud.vn/wp-content/uploads/2020/08/782784.jpg",
     title: "Stardew Valley 1",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -318,8 +385,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardew Valley 2",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -333,8 +400,8 @@ const postData: PostList[] = [
     id: "08dc0c4a-13aa-4cc7-856e-09f0ac174146",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardew Valley 3",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -348,8 +415,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -363,8 +430,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -378,8 +445,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -393,8 +460,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -408,8 +475,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -424,8 +491,8 @@ const postData: PostList[] = [
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title:
       "New mod for Stardev Valley, New mod for Stardev Valley, New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:

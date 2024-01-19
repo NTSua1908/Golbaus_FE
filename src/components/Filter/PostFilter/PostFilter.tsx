@@ -111,7 +111,6 @@ function PostFilter({ filter, setFilter, onFilter, onClose }: PostFilterProps) {
               { value: OrderBy[0], label: OrderBy[0] },
               { value: OrderBy[1], label: OrderBy[1] },
               { value: OrderBy[2], label: OrderBy[2] },
-              { value: OrderBy[3], label: OrderBy[3] },
             ]}
           />
         </div>
@@ -120,15 +119,17 @@ function PostFilter({ filter, setFilter, onFilter, onClose }: PostFilterProps) {
           <Select
             className='filterPost-input'
             defaultValue={
-              filter.orderType === null ? "None" : OrderType[filter.orderType]
+              filter.orderType === null
+                ? OrderType[0]
+                : OrderType[filter.orderType]
             }
             style={{ width: 120 }}
             onChange={handleOrderTypeChange}
             options={[
-              { value: null, label: "Default" },
               { value: OrderType[0], label: OrderType[0] },
               { value: OrderType[1], label: OrderType[1] },
             ]}
+            disabled={filter.orderBy == null}
           />
         </div>
         <div className='filterPost-item function'>

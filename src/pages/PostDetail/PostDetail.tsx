@@ -282,8 +282,8 @@ const contents: SwiperCardContent[] = [
     thumbnail:
       "https://tintuc-divineshop.cdn.vccloud.vn/wp-content/uploads/2020/08/782784.jpg",
     title: "Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -297,8 +297,8 @@ const contents: SwiperCardContent[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -312,8 +312,8 @@ const contents: SwiperCardContent[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -327,8 +327,8 @@ const contents: SwiperCardContent[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -342,8 +342,8 @@ const contents: SwiperCardContent[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -357,8 +357,8 @@ const contents: SwiperCardContent[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -372,8 +372,8 @@ const contents: SwiperCardContent[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -387,8 +387,8 @@ const contents: SwiperCardContent[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -403,8 +403,8 @@ const contents: SwiperCardContent[] = [
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title:
       "New mod for Stardev Valley, New mod for Stardev Valley, New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -427,8 +427,8 @@ const relatedPost: SwiperContentProps = {
 //     fullName: "Alex",
 //     date: "2023-12-05  13:34 PM",
 //     text: "This is the first comment.",
-//     upvotes: 10,
-//     downvotes: 2,
+//     upVotes: 10,
+//     downVotes: 2,
 //     replyFor: "Haley",
 //     totalReplyCount: 30,
 //     vote: VoteType.Down,
@@ -440,8 +440,8 @@ const relatedPost: SwiperContentProps = {
 //         fullName: "Amily",
 //         date: "2023-12-06  13:34 PM",
 //         text: "Reply to the first comment. Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus sunt commodi possimus odio, officia accusantium nemo nobis eaque odit beatae aperiam dolore doloribus ullam quisquam omnis numquam ratione libero in.",
-//         upvotes: 5,
-//         downvotes: 1,
+//         upVotes: 5,
+//         downVotes: 1,
 //         replyFor: "alex",
 //         totalReplyCount: 0,
 //         vote: VoteType.Up,
@@ -456,8 +456,8 @@ const relatedPost: SwiperContentProps = {
 //         fullName: "Robin",
 //         date: "2023-12-07  13:34 PM",
 //         text: "This is the second comment.",
-//         upvotes: 8,
-//         downvotes: 0,
+//         upVotes: 8,
+//         downVotes: 0,
 //         replyFor: "alex",
 //         totalReplyCount: 0,
 //         vote: VoteType.Unvote,
@@ -471,8 +471,8 @@ const relatedPost: SwiperContentProps = {
 //         date: "2023-12-06  13:34 PM",
 //         text: "Reply to the first comment.",
 //         replyFor: "robin",
-//         upvotes: 5,
-//         downvotes: 1,
+//         upVotes: 5,
+//         downVotes: 1,
 //         totalReplyCount: 0,
 //         vote: VoteType.Unvote,
 //         replies: [],
@@ -487,8 +487,8 @@ const relatedPost: SwiperContentProps = {
 //     fullName: "Lewis",
 //     date: "2023-12-07 13:34 PM",
 //     text: "This is the second comment.",
-//     upvotes: 8,
-//     replyFor: "alex",
+//     upVotes: 8,
+//     replVFor: "alex",
 //     downvotes: 0,
 //     totalReplyCount: 0,
 //     vote: VoteType.Up,
@@ -672,19 +672,17 @@ function PostDetail() {
             <h2 className='postDetail-comment-title'>Comments</h2>
             {isCommentLoading && (
               <div className='postDetail-comment-loading'>
-                <Spin />
+                <Spin fullscreen />
               </div>
             )}
-            {!isCommentLoading && (
-              <CommentsTree
-                postId={post.id}
-                userName={post.userName}
-                data={comments != undefined ? comments : []}
-                amount={amount ? amount : 10}
-                page={page ? page : 0}
-                totalCount={totalCount ? totalCount : 0}
-              />
-            )}
+            <CommentsTree
+              postId={post.id}
+              userName={post.userName}
+              data={comments != undefined ? comments : []}
+              amount={amount ? amount : 10}
+              page={page ? page : 0}
+              totalCount={totalCount ? totalCount : 0}
+            />
           </div>
         </div>
       )}

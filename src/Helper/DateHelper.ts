@@ -1,4 +1,5 @@
 export function formatDateToString(date: Date): string {
+  if (!date) return "";
   const dateObject = typeof date === "string" ? new Date(date) : date;
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",

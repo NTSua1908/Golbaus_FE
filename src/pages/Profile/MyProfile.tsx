@@ -6,6 +6,7 @@ import {
   Pagination,
   PaginationProps,
   Select,
+  Spin,
   notification,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -61,6 +62,7 @@ import { convertLinkToImageUploaded } from "../../Helper/ImageHelper";
 import { setBaseInfo, updateAvatar } from "../../actions/accountAction";
 import Module from "../../enums/Module";
 import { UserUpdateByTokenModel } from "../../model/accountModel";
+import { GetAllByToken } from "../../services/PostService";
 
 function MyProfile() {
   const menuItems: MenuItem[] = [
@@ -542,10 +544,12 @@ const PersonalInfo = () => {
 };
 
 const PersonalPost = () => {
-  const [posts, setPosts] = useState(postData);
+  const [posts, setPosts] = useState<PostList[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilter, setShowFilter] = useState(false);
-  const totalPage = 100;
+  const [loading, setLoading] = useState(false);
+  const [totalPage, setTotalPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
   //filter state
   const [filter, setFilter] = useState<FilterProps>({
@@ -571,7 +575,48 @@ const PersonalPost = () => {
     setShowFilter(false);
   };
 
-  const onFilter = () => {};
+  const handlePageSizeChange = (current: number, pageSize: number) => {
+    setPageSize(pageSize);
+    setCurrentPage(0);
+    if (currentPage == 1) {
+      getData();
+    }
+  };
+
+  const onFilter = () => {
+    setCurrentPage(1);
+    if (currentPage == 1) {
+      getData();
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [pageSize, currentPage]);
+
+  const getData = () => {
+    if (!loading) {
+      setLoading(true);
+      GetAllByToken(
+        filter.title,
+        filter.tags,
+        filter.orderBy,
+        filter.orderType,
+        filter.dateFrom ? filter.dateFrom.toDate() : null,
+        filter.dateTo ? filter.dateTo.toDate() : null,
+        currentPage - 1,
+        pageSize
+      )
+        .then((res) => {
+          setPosts(res.data.data);
+          setTotalPage(res.data.totalCount);
+        })
+        .catch()
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  };
 
   return (
     <div className='myProfile-right-container'>
@@ -579,17 +624,31 @@ const PersonalPost = () => {
       <div className='myProfile-right-content'>
         <div className='myProfile-right-content-filterLeft'>
           <h2 className='myProfile-right-content-title'>Questions</h2>
-          <div className='myProfile-right-content-filterLeft-container'>
-            {posts.map((post, index) => (
-              <PostBlockList key={index} post={post} />
-            ))}
+          <div
+            className={`myProfile-right-content-filterLeft-container ${
+              posts.length == 0 && "fullHeight"
+            }`}
+          >
+            {posts.length > 0 &&
+              posts.map((post, index) => (
+                <PostBlockList key={index} post={post} newTab />
+              ))}
+            {posts.length == 0 && (
+              <div className='myProfile-right-content-filterLeft-container-nocontent'>
+                <p>There are no posts</p>
+              </div>
+            )}
+            {loading && <Spin fullscreen />}
           </div>
           <div className='myProfile-right-content-filterLeft-pagination'>
             <Pagination
               showQuickJumper
               current={currentPage}
+              pageSize={pageSize}
               total={totalPage}
               onChange={onChange}
+              onShowSizeChange={handlePageSizeChange}
+              hideOnSinglePage
             />
           </div>
         </div>
@@ -990,8 +1049,8 @@ const postData: PostList[] = [
     thumbnail:
       "https://tintuc-divineshop.cdn.vccloud.vn/wp-content/uploads/2020/08/782784.jpg",
     title: "Stardew Valley 1",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -1005,8 +1064,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardew Valley 2",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -1020,8 +1079,8 @@ const postData: PostList[] = [
     id: "08dc0c4a-13aa-4cc7-856e-09f0ac174146",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardew Valley 3",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -1035,8 +1094,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -1050,8 +1109,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -1065,8 +1124,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -1080,8 +1139,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -1095,8 +1154,8 @@ const postData: PostList[] = [
     id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title: "New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -1111,8 +1170,8 @@ const postData: PostList[] = [
     thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
     title:
       "New mod for Stardev Valley, New mod for Stardev Valley, New mod for Stardev Valley",
-    upvote: 10,
-    downvote: 1,
+    upVote: 10,
+    downVote: 1,
     viewCount: 432,
     authorName: "Lewis",
     authorAvatar:
@@ -1129,7 +1188,7 @@ const notificationData: NotificationModel[] = [
     user: "@Halley",
     userId: "#",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
-    content: "upvoted your post",
+    content: "upVoted your post",
     date: new Date(2023, 12, 12, 12, 45, 12),
     link: "#",
     isRead: false,

@@ -17,8 +17,8 @@ export interface PostList {
   thumbnail: string;
   title: string;
   excerpt: string;
-  upvote: number;
-  downvote: number;
+  upVote: number;
+  downVote: number;
   viewCount: number;
   authorName: string;
   authorAvatar: string;

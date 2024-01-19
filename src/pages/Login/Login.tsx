@@ -124,9 +124,11 @@ const Login: React.FC = () => {
           }, 2000);
         })
         .catch((error) => {
-          const errors = (error.response?.data as any).errors;
-          const errorMessage = errors.join("\n") as string;
-          openNotificationFailure(errorMessage);
+          const errors = (error.response?.data as any)?.errors ?? undefined;
+          if (errors) {
+            const errorMessage = errors.join("\n") as string;
+            openNotificationFailure(errorMessage);
+          }
           dispatch(loginFailure());
         });
     }
