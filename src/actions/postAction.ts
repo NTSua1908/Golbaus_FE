@@ -1,4 +1,3 @@
-import { CommentDetailModel } from "../model/commentModel";
 import { PostDetailModel } from "../model/postModel";
 
 export const SET_POST_CONTENT = "SET_POST_CONTENT";

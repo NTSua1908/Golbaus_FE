@@ -23,6 +23,7 @@ export interface CommentDetailModel {
   updatedDate: Date;
   isMyComment: boolean;
   replies: CommentDetailModel[];
+  userId: string;
 }
 
 export interface CommentUpdateModel {

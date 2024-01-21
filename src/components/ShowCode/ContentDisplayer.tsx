@@ -12,7 +12,7 @@ import "./style.css";
 
 interface ContentDisplayerProps {
   content: string;
-  setTableOfContents: React.Dispatch<
+  setTableOfContents?: React.Dispatch<
     React.SetStateAction<TableOfContentsData[]>
   >;
 }
@@ -57,37 +57,39 @@ export const ContentDisplayer: React.FC<ContentDisplayerProps> = ({
 
   //Create table of contents data
   useEffect(() => {
-    const headers = postMarkdownRef.current?.querySelectorAll(
-      "h1, h2, h3, h4, h5, h6"
-    );
-
-    if (headers) {
-      const headings: TableOfContentsData[] = Array.from(headers).map(
-        (header) => ({
-          title: header.textContent ?? "",
-          id: header.id,
-          childrens: [],
-          parent: undefined,
-          level: parseInt(header.nodeName.substr(1), 10),
-        })
+    if (setTableOfContents) {
+      const headers = postMarkdownRef.current?.querySelectorAll(
+        "h1, h2, h3, h4, h5, h6"
       );
-      // console.log('heading', headings);
 
-      if (headings.length > 0) {
-        const tableOfContentData: TableOfContentsData[] = [];
-        tableOfContentData.push(headings.at(0)!);
-        let lastHeading = headings.at(0)!;
+      if (headers) {
+        const headings: TableOfContentsData[] = Array.from(headers).map(
+          (header) => ({
+            title: header.textContent ?? "",
+            id: header.id,
+            childrens: [],
+            parent: undefined,
+            level: parseInt(header.nodeName.substr(1), 10),
+          })
+        );
+        // console.log('heading', headings);
 
-        for (let i = 1; i < headings.length; i++) {
-          const heading = addHeadingData(lastHeading, headings.at(i)!);
-          // console.log('result', heading);
-          if (heading == null) {
-            tableOfContentData.push(headings.at(i)!);
+        if (headings.length > 0) {
+          const tableOfContentData: TableOfContentsData[] = [];
+          tableOfContentData.push(headings.at(0)!);
+          let lastHeading = headings.at(0)!;
+
+          for (let i = 1; i < headings.length; i++) {
+            const heading = addHeadingData(lastHeading, headings.at(i)!);
+            // console.log('result', heading);
+            if (heading == null) {
+              tableOfContentData.push(headings.at(i)!);
+            }
+            lastHeading = headings.at(i)!;
           }
-          lastHeading = headings.at(i)!;
+          // console.log('content', tableOfContentData);
+          setTableOfContents(tableOfContentData);
         }
-        // console.log('content', tableOfContentData);
-        setTableOfContents(tableOfContentData);
       }
     }
   }, [content]);
@@ -123,9 +125,9 @@ export const ContentDisplayer: React.FC<ContentDisplayerProps> = ({
 
   const createPreComponent = ({ children }: PreProps): JSX.Element => {
     const Pre: JSX.Element = (
-      <pre className="blog-pre">
+      <pre className='blog-pre' style={{ maxWidth: "100%" }}>
         <CodeCopyBtn>{children}</CodeCopyBtn>
-        <div className="blog-pre-container">{children}</div>
+        <div className='blog-pre-container'>{children}</div>
       </pre>
     );
 
@@ -133,70 +135,70 @@ export const ContentDisplayer: React.FC<ContentDisplayerProps> = ({
   };
 
   return (
-    <div className="displayer">
-      <div className="displayer-container" ref={postMarkdownRef}>
+    <div className='displayer'>
+      <div className='displayer-container' ref={postMarkdownRef}>
         <Markdown
-          className="post-markdown"
+          className='post-markdown'
           rehypePlugins={[rehypeRaw, rehypeSlug]}
           remarkPlugins={[remarkGfm]}
           components={{
             p: ({ node, children }) => (
-              <p className="custom-paragraph">{children}</p>
+              <p className='custom-paragraph'>{children}</p>
             ),
             img: ({ node, src, alt }) => (
-              <img className="custom-image" src={src} alt={alt} />
+              <img className='custom-image' src={src} alt={alt} />
             ),
             a: ({ node, href, children }) => (
-              <a className="custom-link" href={href}>
+              <a className='custom-link' href={href}>
                 {children}
               </a>
             ),
             h1: ({ node, children }) => (
-              <h1 className="custom-heading1" id={getHeadingId(children)}>
+              <h1 className='custom-heading1' id={getHeadingId(children)}>
                 {children}
               </h1>
             ),
             h2: ({ node, children }) => (
-              <h2 className="custom-heading2" id={getHeadingId(children)}>
+              <h2 className='custom-heading2' id={getHeadingId(children)}>
                 {children}
               </h2>
             ),
             h3: ({ node, children }) => (
-              <h3 className="custom-heading3" id={getHeadingId(children)}>
+              <h3 className='custom-heading3' id={getHeadingId(children)}>
                 {children}
               </h3>
             ),
             h4: ({ node, children }) => (
-              <h4 className="custom-heading4" id={getHeadingId(children)}>
+              <h4 className='custom-heading4' id={getHeadingId(children)}>
                 {children}
               </h4>
             ),
             h5: ({ node, children }) => (
-              <h5 className="custom-heading5" id={getHeadingId(children)}>
+              <h5 className='custom-heading5' id={getHeadingId(children)}>
                 {children}
               </h5>
             ),
             h6: ({ node, children }) => (
-              <h6 className="custom-heading6" id={getHeadingId(children)}>
+              <h6 className='custom-heading6' id={getHeadingId(children)}>
                 {children}
               </h6>
             ),
             table: ({ node, children }) => (
-              <table className="custom-table">{children}</table>
+              <table className='custom-table'>{children}</table>
             ),
             ul: ({ node, children }) => (
-              <ul className="custom-list-u">{children}</ul>
+              <ul className='custom-list-u'>{children}</ul>
             ),
             ol: ({ node, children }) => (
-              <ol className="custom-list-o">{children}</ol>
+              <ol className='custom-list-o'>{children}</ol>
             ),
             li: ({ node, children }) => (
-              <li className="custom-list-item">{children}</li>
+              <li className='custom-list-item'>{children}</li>
             ),
             blockquote: ({ node, children }) => (
-              <blockquote className="custom-blockquote">{children}</blockquote>
+              <blockquote className='custom-blockquote'>{children}</blockquote>
             ),
-            hr: ({ node }) => <hr className="custom-hr" />,
+            hr: ({ node }) => <hr className='custom-hr' />,
             pre: createPreComponent,
             code({ node, className = "blog-code", children, style, ...props }) {
               const match = /language-(\w+)/.exec(className || "");
@@ -204,7 +206,7 @@ export const ContentDisplayer: React.FC<ContentDisplayerProps> = ({
                 <SyntaxHighlighter
                   language={match[1]}
                   style={dracula}
-                  PreTag="div"
+                  PreTag='div'
                 >
                   {String(children).replace(/\n$/, "")}
                 </SyntaxHighlighter>

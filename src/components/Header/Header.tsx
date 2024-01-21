@@ -205,7 +205,7 @@ function Header() {
                 <Link to={"/Post"}>Posts</Link>
               </li>
               <li className='pointer'>
-                <Link to={"/QuestionAndAnswer"}>Questions and Answers</Link>
+                <Link to={"/Question"}>Questions and Answers</Link>
               </li>
             </ul>
           </div>
@@ -217,7 +217,7 @@ function Header() {
               className='header-menu-right-searchbutton pointer'
               title='Search'
               onClick={() => {
-                navigate("/search");
+                navigate("/Search");
               }}
             >
               <FaSearch />

@@ -1,5 +1,5 @@
-@import '../../variable.scss';
-@import '../../breakPoint.scss';
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
 
 .question-block {
   display: block;
@@ -58,6 +58,11 @@
 
       &-stats {
         display: flex;
+        @include for-size(phone-sm, min) {
+          display: block;
+          margin-left: 10px;
+        }
+
         &-detail {
           display: flex;
           align-items: center;

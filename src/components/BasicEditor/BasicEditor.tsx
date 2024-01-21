@@ -29,6 +29,7 @@ export interface ImageUploaded {
 export interface EditorProps {
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
+  uploadImage?: boolean;
 }
 
 export interface EditorRef {
@@ -36,7 +37,7 @@ export interface EditorRef {
 }
 
 const BasicEditor = forwardRef<EditorRef, EditorProps>(
-  ({ value, setValue }, ref) => {
+  ({ value, setValue, uploadImage }, ref) => {
     const [history, setHistory] = useState<string[]>([value]);
     const [historyIndex, setHistoryIndex] = useState(0);
     const typingTimeoutRef = useRef<number>();
@@ -99,54 +100,61 @@ const BasicEditor = forwardRef<EditorRef, EditorProps>(
       }
     };
 
+    const [command, setCommand] = useState([
+      commands.bold,
+      commands.italic,
+      textUnderlineCommand,
+      commands.strikethrough,
+      commands.hr,
+      commands.group(
+        [
+          commands.title1,
+          commands.title2,
+          commands.title3,
+          commands.title4,
+          commands.title5,
+          commands.title6,
+        ],
+        {
+          name: "title",
+          groupName: "title",
+          buttonProps: { "aria-label": "Insert title" },
+        }
+      ),
+      commands.divider,
+      commands.link,
+      commands.quote,
+      commands.codeBlock,
+      commands.comment,
+      commands.divider,
+      textAlignLeftCommand,
+      textAlignCenterCommand,
+      textAlignRightCommand,
+      commands.divider,
+      commands.table,
+      commands.checkedListCommand,
+      commands.orderedListCommand,
+      commands.unorderedListCommand,
+      commands.divider,
+      undoCommand,
+      redoCommand,
+      commands.divider,
+      commands.help,
+    ]);
+
+    useEffect(() => {
+      if (uploadImage) {
+        setCommand([...command, uploadImageCommand]);
+      }
+    }, []);
+
     return (
-      <div className="BasicEditor">
+      <div className='BasicEditor' data-color-mode='light'>
         <MDEditor
-          height={800}
+          height={"100%"}
           value={value}
           onChange={handleEditorChange}
-          commands={[
-            commands.bold,
-            commands.italic,
-            textUnderlineCommand,
-            commands.strikethrough,
-            commands.hr,
-            commands.group(
-              [
-                commands.title1,
-                commands.title2,
-                commands.title3,
-                commands.title4,
-                commands.title5,
-                commands.title6,
-              ],
-              {
-                name: "title",
-                groupName: "title",
-                buttonProps: { "aria-label": "Insert title" },
-              }
-            ),
-            commands.divider,
-            commands.link,
-            commands.quote,
-            commands.codeBlock,
-            commands.comment,
-            commands.divider,
-            textAlignLeftCommand,
-            textAlignCenterCommand,
-            textAlignRightCommand,
-            commands.divider,
-            commands.table,
-            commands.checkedListCommand,
-            commands.orderedListCommand,
-            commands.unorderedListCommand,
-            uploadImageCommand,
-            commands.divider,
-            undoCommand,
-            redoCommand,
-            commands.divider,
-            commands.help,
-          ]}
+          commands={command}
         />
       </div>
     );

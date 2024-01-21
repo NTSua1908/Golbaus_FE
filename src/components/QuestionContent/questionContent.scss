@@ -1,13 +1,7 @@
 @import "../../variable.scss";
 @import "../../breakPoint.scss";
 
-.postContent {
-  width: 90%;
-  max-width: 1400px;
-  min-width: 350px;
-  margin: 0 auto;
-  margin-top: 20px;
-
+.questionContent {
   @include for-size(desktop, min) {
     width: 98%;
   }
@@ -119,11 +113,10 @@
       }
     }
     &-middle {
-      // flex-grow: 1;
       padding: 10px;
-      padding-right: 30px;
-      border-right: 1px solid $text-menu-color;
-      flex: 3;
+      // padding-right: 30px;
+      // border-right: 1px solid $text-menu-color;
+      flex: 1;
       @include for-size(tablet, min) {
         border-right: none;
         max-width: 100%;
@@ -148,7 +141,7 @@
             display: block;
           }
 
-          & .post-user-info {
+          & .question-user-info {
             display: flex;
             align-items: center;
             &-avatar {
@@ -164,7 +157,7 @@
                 align-items: center;
                 margin-bottom: 5px;
 
-                @include for-size(phone, min) {
+                @include for-size(phone-sm, min) {
                   display: block;
                 }
 
@@ -172,7 +165,7 @@
                   font-size: 18px;
                   color: $background-color;
                   margin-right: 5px;
-                  @include for-size(phone, min) {
+                  @include for-size(phone-sm, min) {
                     padding-top: 8px;
                   }
                 }
@@ -180,7 +173,7 @@
                   color: #666;
                   font-weight: 600;
                   font-size: 12px;
-                  @include for-size(phone, min) {
+                  @include for-size(phone-sm, min) {
                     padding-top: 8px;
                   }
                 }
@@ -199,8 +192,8 @@
                     top: 5px;
                     left: 50px;
                   }
-                  @include for-size(phone, min) {
-                    padding-top: 8px;
+                  @include for-size(phone-sm, min) {
+                    margin-top: 8px;
                     width: fit-content;
                   }
                 }
@@ -212,7 +205,7 @@
                 font-weight: 600;
                 color: #666;
                 text-align: center;
-                &-post,
+                &-question,
                 &-follow {
                   margin-right: 15px;
                   & span {
@@ -222,7 +215,7 @@
               }
             }
           }
-          & .post-info {
+          & .question-info {
             display: flex;
             align-items: center;
             margin-left: 10px;
@@ -258,8 +251,8 @@
               &-menu {
                 display: none;
                 position: absolute;
-                top: -5px;
-                left: 25px;
+                top: 20px;
+                left: -87px;
                 width: 100px;
                 border: 1px solid $text-menu-color;
                 border-radius: 5px;
@@ -310,22 +303,6 @@
         &-tags {
           margin-top: 30px;
         }
-      }
-    }
-    &-right {
-      // width: 100%;
-      position: sticky;
-      top: calc($header-height + 10px);
-      height: 100%;
-      padding: 10px;
-      padding-left: 20px;
-      flex: 1;
-      // min-width: 220px;
-      // @include for-size(desktop, min) {
-      //   min-width: 30%;
-      // }
-      @include for-size(tablet, min) {
-        display: none;
       }
     }
   }

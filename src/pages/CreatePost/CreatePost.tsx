@@ -257,7 +257,14 @@ const CreatePost: React.FC = () => {
             </Popover>
           </div>
         </div>
-        <BasicEditor ref={editorRef} value={value} setValue={setValue} />
+        <div className='create-post-text'>
+          <BasicEditor
+            ref={editorRef}
+            value={value}
+            setValue={setValue}
+            uploadImage
+          />
+        </div>
       </div>
       {/* <Footer /> */}
     </div>

@@ -1,0 +1,121 @@
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
+
+.questionDetail {
+  padding-bottom: calc($footer-height + 20px);
+  @include for-size(tablet, min) {
+    padding-bottom: calc($footer-height-res + 20px);
+  }
+
+  &-container {
+    display: flex;
+    width: 90%;
+    max-width: 1400px;
+    min-width: 350px;
+    margin: 0 auto;
+    margin-top: 20px;
+
+    @include for-size(desktop, min) {
+      display: block;
+    }
+  }
+
+  &-left {
+    flex: 75;
+    overflow: hidden;
+  }
+
+  &-right {
+    flex: 25;
+    margin-left: 30px;
+
+    @include for-size(desktop, min) {
+      margin-left: 0px;
+    }
+
+    &-more {
+      margin-bottom: 10px;
+
+      &-title {
+        color: $background-color;
+        margin: 20px 0px;
+      }
+      &-block {
+        display: none;
+        @include for-size(desktop, min) {
+          display: block;
+        }
+      }
+      &-list {
+        display: block;
+        @include for-size(desktop, min) {
+          display: none;
+        }
+
+        &-item {
+          margin-bottom: 20px;
+          & a {
+            color: #1f75cb;
+            text-decoration: none;
+            line-height: 25px;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &-notFound {
+    color: $background-color;
+    text-align: center;
+    font-size: 30px;
+    text-shadow: 1px 1px $text-menu-color;
+    font-weight: 800;
+    height: calc(100vh - $header-height);
+    padding-bottom: calc($footer-height + 20px);
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    & img {
+      max-width: 100%;
+      height: 100%;
+      @include for-size(tablet, min) {
+        width: 100%;
+        height: auto;
+      }
+    }
+    @include for-size(tablet, min) {
+      height: 120vh;
+      padding-bottom: calc($footer-height-res + 20px);
+    }
+    &-icon {
+      padding-bottom: 30px;
+      margin: 0 auto;
+      font-size: 115px;
+    }
+  }
+
+  &-comment {
+    // width: 90%;
+    // max-width: 1400px;
+    // min-width: 350px;
+    // margin: 0 auto;
+    @include for-size(desktop, min) {
+      width: 98%;
+    }
+
+    &-title {
+      color: $background-color;
+      margin: 20px 0px;
+    }
+
+    &-loading {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}

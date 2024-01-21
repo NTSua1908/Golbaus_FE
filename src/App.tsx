@@ -19,6 +19,10 @@ import UserProfile from "./pages/UserProfile/UserProfile";
 import ConfirmEmail from "./pages/ConfirmEmail/ConfirmEmail";
 import RegisterSuccess from "./pages/RegisterSuccess/RegisterSuccess";
 import Search from "./pages/Search/Search";
+import QuestionDetail from "./pages/QuestionDetail/QuestionDetail";
+import Question from "./pages/Question/Question";
+import CreateQuestion from "./pages/CreateQuestion/CreateQuestion";
+import EditQuestion from "./pages/EditQuestion/EditQuestion";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -49,9 +53,19 @@ const App = () => {
             <Routes>
               <Route path='/post' element={<Post />} />
               <Route path='/post/:postId' element={<PostDetail />} />
+              <Route path='/Question' element={<Question />} />
+              <Route
+                path='/question/:questionId'
+                element={<QuestionDetail />}
+              />
               <Route path='/' element={<Home />} />
               <Route path='/create-post' element={<CreatePost />} />
               <Route path='/edit-post/:postId' element={<EditPost />} />
+              <Route path='/create-question' element={<CreateQuestion />} />
+              <Route
+                path='/edit-question/:questionId'
+                element={<EditQuestion />}
+              />
               <Route path='/profile' element={<MyProfile />} />
               <Route path='/user/:userId' element={<UserProfile />} />
               <Route path='*' element={<NotFound />} />

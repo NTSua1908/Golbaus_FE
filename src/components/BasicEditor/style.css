@@ -27,3 +27,7 @@
 .w-md-editor-text-input {
   font-family: inherit !important;
 }
+
+.BasicEditor {
+  height: 100%;
+}

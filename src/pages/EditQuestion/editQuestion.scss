@@ -1,0 +1,59 @@
+@import "../../variable.scss";
+@import "../../breakPoint.scss";
+
+.create-question {
+  &-container {
+    padding: 10px;
+  }
+
+  &-logo {
+    height: 110px;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+  }
+  &-title {
+    text-align: center;
+    color: $background-color;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.2;
+    display: block;
+    padding-top: 20px;
+  }
+
+  &-label {
+    padding: 6px 0px 6px 5px;
+    font-size: 16px;
+    display: inline-block;
+  }
+
+  &-describe {
+    font-size: 14px;
+    color: #333;
+  }
+
+  &-function {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    &-tag {
+      flex: 8.5;
+      padding: 5px;
+      border: solid 1px #ccc;
+      border-radius: 8px;
+    }
+    &-publish {
+      padding: 10px 15px;
+      color: #333;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  }
+  &-text {
+    height: 800px;
+  }
+}

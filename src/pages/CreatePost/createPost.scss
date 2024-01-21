@@ -2,11 +2,6 @@
 @import "../../breakPoint.scss";
 
 .create-post {
-  padding: 0px 0px calc($footer-height + 20px) 0px;
-  @include for-size(tablet, min) {
-    padding-bottom: calc($footer-height-res + 20px);
-  }
-
   &-container {
     padding: 10px;
   }
@@ -112,5 +107,8 @@
       align-items: center;
       margin-left: 10px;
     }
+  }
+  &-text {
+    height: 800px;
   }
 }

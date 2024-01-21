@@ -180,56 +180,61 @@ const posts: PostBlock[] = [
 ];
 const questions: QuestionListModel[] = [
   {
+    id: "123",
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
     date: new Date(2023, 11, 22, 15, 43, 22),
     fullName: "Gus",
-    reputation: 23,
+    followCount: 23,
     viewCount: 123,
     commentCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
   {
+    id: "123",
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
     date: new Date(2023, 11, 22, 15, 43, 22),
     fullName: "Gus",
-    reputation: 23,
+    followCount: 23,
     viewCount: 123,
     commentCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
   {
+    id: "123",
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
     date: new Date(2023, 11, 22, 15, 43, 22),
     fullName: "Gus",
-    reputation: 23,
+    followCount: 23,
     viewCount: 123,
     commentCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
   {
+    id: "123",
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
     date: new Date(2023, 11, 22, 15, 43, 22),
     fullName: "Gus",
-    reputation: 23,
+    followCount: 23,
     viewCount: 123,
     commentCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
   {
+    id: "123",
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
     date: new Date(2023, 11, 22, 15, 43, 22),
     fullName: "Gus",
-    reputation: 23,
+    followCount: 23,
     viewCount: 123,
     commentCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
@@ -240,11 +245,11 @@ function Home() {
   const navigate = useNavigate();
 
   const gotoPosts = () => {
-    navigate("/post");
+    navigate("/Post");
   };
 
   const gotoQA = () => {
-    navigate("/QuestionAndAnswer");
+    navigate("/Question");
   };
 
   return (
