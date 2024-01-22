@@ -20,10 +20,10 @@ function QuestionBlock({ question }: QuestionBlockProps) {
             <img
               className='question-block-info-left-avatar'
               src={question.avatar}
-              alt={question.fullName}
+              alt={question.userName}
             />
             <span className='question-block-info-left-fullname'>
-              {question.fullName}
+              {question.userName}
             </span>
             <span className='question-block-info-left-reputation'>
               {question.followCount}
@@ -40,12 +40,13 @@ function QuestionBlock({ question }: QuestionBlockProps) {
               <span className='question-block-info-left-stats-detail-icon'>
                 <FaRocketchat />
               </span>
-              {question.commentCount}
+              {question.answerCount}
             </div>
           </div>
         </div>
         <div className='question-block-info-right'>
-          {formatDayAgo(question.date)}
+          {!question.updatedDate && formatDayAgo(question.createdDate)}
+          {question.updatedDate && formatDayAgo(question.updatedDate)}
         </div>
       </div>
       <div className='question-block-tags'>

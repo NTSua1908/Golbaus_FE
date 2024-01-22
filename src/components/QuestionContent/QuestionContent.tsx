@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { formatDayAgo } from "../../Helper/DateHelper";
 import VotePost from "../../enums/VoteType";
 import { QuestionDetailModel } from "../../model/questionModel";
-import { Delete, DownVote, UpVote } from "../../services/PostService";
+import { Delete, DownVote, UpVote } from "../../services/QuestionService";
 import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 import DisplayTags from "../DisplayTag/DisplayTags";
 import ContentDisplayer from "../ShowCode/ContentDisplayer";
@@ -111,7 +111,7 @@ function QuestionContent({
   };
 
   const gotoEditPage = () => {
-    navigate("/edit-post/" + id);
+    navigate("/edit-question/" + id);
   };
 
   const handleShowDeletePostConfirm = () => {
@@ -253,7 +253,10 @@ function QuestionContent({
                 <div className='question-info'>
                   <div className='question-info-container'>
                     <div className='question-info-date'>
-                      Posted at {formatDayAgo(question.date)}
+                      {!question.updatedDate &&
+                        "Posted at " + formatDayAgo(question.createdDate)}
+                      {question.updatedDate &&
+                        "Updated at " + formatDayAgo(question.updatedDate)}
                     </div>
                     <div className='question-info-more'>
                       <div className='question-info-more-view'>
@@ -268,7 +271,7 @@ function QuestionContent({
                       <div className='question-info-more-comment'>
                         <FaRocketchat />
                         <span className='question-info-more-comment-count'>
-                          {question.commentCount}
+                          {question.answerCount}
                         </span>
                         <span className='question-info-more-comment-label'>
                           Comments
@@ -333,8 +336,8 @@ function QuestionContent({
           setShowDeleteConfirm(false);
         }}
         onConfirm={onDeletePost}
-        title='You are about to delete this post'
-        message='Do you really want to delete this post? This action cannot be undone. Are you sure you want to proceed?'
+        title='You are about to delete this question'
+        message='Do you really want to delete this question? This action cannot be undone. Are you sure you want to proceed?'
         show={showDeleteConfirm}
       />
     </div>

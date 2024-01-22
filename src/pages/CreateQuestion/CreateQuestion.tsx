@@ -1,4 +1,4 @@
-import { Input, notification } from "antd";
+import { Input, Spin, notification } from "antd";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Logo } from "../../Logo";
@@ -7,6 +7,9 @@ import BasicEditor, {
 } from "../../components/BasicEditor/BasicEditor";
 import AddTag from "../../components/Tags/AddTag";
 import "./createQuestion.scss";
+import { QuestionCreateUpdateModel } from "../../model/questionModel";
+import { Create } from "../../services/QuestionService";
+import { AxiosError } from "axios";
 
 const CreateQuestion: React.FC = () => {
   const [title, setTitle] = useState("");
@@ -14,6 +17,7 @@ const CreateQuestion: React.FC = () => {
   const editorRef = useRef<EditorRef>(null);
   const [tags, setTags] = useState<string[]>([]);
   const [api, contextHolder] = notification.useNotification();
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -32,6 +36,38 @@ const CreateQuestion: React.FC = () => {
       placement: "topRight",
       type: "error",
     });
+  };
+
+  const onPublish = () => {
+    if (!loading) {
+      const question: QuestionCreateUpdateModel = {
+        title: title,
+        content: value,
+        tags: tags,
+      };
+      setLoading(true);
+      Create(question)
+        .then((res) => {
+          openNotificationSuccess();
+          setTimeout(() => {
+            navigate("/question/" + res.data);
+          }, 2000);
+        })
+        .catch((error: AxiosError) => {
+          const errors = (error.response?.data as any).errors;
+          if (errors) {
+            const errorMessage = errors.join("\n") as string;
+            openNotificationFailure(errorMessage);
+          } else {
+            openNotificationFailure("Something went wrong");
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+
+      console.log("Created");
+    }
   };
 
   useEffect(() => {
@@ -54,6 +90,7 @@ const CreateQuestion: React.FC = () => {
   return (
     <div className='create-question'>
       {contextHolder}
+      {loading && <Spin fullscreen />}
       <div className='create-question-logo'>
         <Logo />
       </div>
@@ -67,7 +104,18 @@ const CreateQuestion: React.FC = () => {
           <div className='create-question-function-tag'>
             <AddTag tags={tags} setTags={setTags} />
           </div>
-          <div className='create-question-function-publish'>Publish</div>
+          <button
+            className='create-question-function-publish'
+            onClick={onPublish}
+            disabled={
+              title.length < 10 ||
+              value.length < 20 ||
+              loading ||
+              tags.length === 0
+            }
+          >
+            Publish
+          </button>
         </div>
         <div className='create-question-text'>
           <BasicEditor ref={editorRef} value={value} setValue={setValue} />

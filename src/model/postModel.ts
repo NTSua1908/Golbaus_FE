@@ -44,8 +44,8 @@ export interface PostDetailModel {
   thumbnail: string;
   content: string;
   countVote: number;
-  publishDate?: Date;
-  updatedDate?: Date;
+  publishDate: Date | null;
+  updatedDate: Date | null;
   fullName: string;
   userName: string;
   avatar: string;
@@ -57,7 +57,7 @@ export interface PostDetailModel {
   viewCount: number;
   vote: VoteType;
   publishType: PublishType;
-  willBePublishedOn: Date;
+  willBePublishedOn: Date | null;
   tags: string[];
 }
 

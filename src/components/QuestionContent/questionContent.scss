@@ -48,14 +48,14 @@
     &-left {
       position: sticky;
       height: 100%;
-      top: calc(50vh);
-      margin-top: 200px;
+      top: 40vh;
+      // margin-top: 200px;
       margin-right: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       color: #666;
-      transform: translateY(-141px);
+      // transform: translateY(-141px);
 
       @include for-size(tablet, min) {
         display: none;
@@ -116,6 +116,7 @@
       padding: 10px;
       // padding-right: 30px;
       // border-right: 1px solid $text-menu-color;
+      overflow: hidden;
       flex: 1;
       @include for-size(tablet, min) {
         border-right: none;
@@ -219,9 +220,11 @@
             display: flex;
             align-items: center;
             margin-left: 10px;
+            margin-right: 20px;
             @include for-size(820px, min) {
               justify-content: right;
               margin-top: 20px;
+              margin-right: 0px;
             }
             &-container {
               margin-right: 10px;

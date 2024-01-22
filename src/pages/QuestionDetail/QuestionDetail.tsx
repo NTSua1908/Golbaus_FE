@@ -1,31 +1,40 @@
-import React, { useRef, useState } from "react";
-import PropTypes from "prop-types";
+import { Spin } from "antd";
+import { AxiosError } from "axios";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useParams } from "react-router-dom";
+import {
+  quesionNotFound,
+  removeQuestion,
+  setQuestionContent,
+} from "../../actions/commentAction";
+import AnswerTree from "../../components/AnswerTree/AnswerTree";
+import Footer from "../../components/Footer/Footer";
+import Header from "../../components/Header/Header";
+import QuestionBlock from "../../components/QuestionBlock/QuestionBlock";
+import QuestionContent from "../../components/QuestionContent/QuestionContent";
+import RequiredLogin from "../../components/RequiredLogin/RequiredLogin";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
+import VoteType from "../../enums/VoteType";
+import NotFound from "../../images/not_found.png";
+import { CommentDetailModel } from "../../model/commentModel";
 import {
   QuestionDetailModel,
   QuestionListModel,
 } from "../../model/questionModel";
-import VoteType from "../../enums/VoteType";
-import QuestionContent from "../../components/QuestionContent/QuestionContent";
-import { Link, useParams } from "react-router-dom";
-import RequiredLogin from "../../components/RequiredLogin/RequiredLogin";
-import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
-import Footer from "../../components/Footer/Footer";
-import Header from "../../components/Header/Header";
-import { Spin } from "antd";
+import { GetQuestionComment } from "../../services/CommentService";
+import { GetDetail, IncreateView } from "../../services/QuestionService";
 import { RootState } from "../../store/configureStore";
-import { useSelector } from "react-redux";
-import NotFound from "../../images/not_found.png";
-import AnswerTree from "../../components/AnswerTree/AnswerTree";
-import { CommentDetailModel } from "../../model/commentModel";
 import "./questionDetail.scss";
-import QuestionBlock from "../../components/QuestionBlock/QuestionBlock";
 
 const amount = 10;
 function QuestionDetail() {
   let { questionId } = useParams();
-  const question =
-    useSelector((state: RootState) => state.question.question) ?? questionData;
-  const isNotFound = useSelector((state: RootState) => state.post.isNotFound);
+  let { state } = useLocation();
+  const question = useSelector((state: RootState) => state.question.question);
+  const isNotFound = useSelector(
+    (state: RootState) => state.question.isNotFound
+  );
   const [isRequiredLogin, setRequiredLogin] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [loading, setLoading] = useState(false);
@@ -37,16 +46,96 @@ function QuestionDetail() {
 
   const [relatedQuestions, setRelatedQuestions] = useState(questionListData);
   const [newQuestions, setNewQuestions] = useState(questionListData);
+  const [firstTime, setFirstTime] = useState(true);
+
+  const dispatch = useDispatch();
 
   const handleCloseRequiredLogin = () => {
     setRequiredLogin(false);
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    if (
+      !loading &&
+      questionId &&
+      (!question || question.id != questionId || (state && state.isReload))
+    ) {
+      if (question) {
+        dispatch(removeQuestion());
+      }
+      if (state && state.isReload) {
+        state.isReload = false;
+      }
+      setLoading(true);
+      GetDetail(questionId)
+        .then((res) => {
+          dispatch(setQuestionContent(res.data));
+        })
+        .catch((error: AxiosError) => {
+          if (error.request.status === 400) {
+            dispatch(quesionNotFound());
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+    if (!answerLoading && questionId) {
+      setAnswerLoading(true);
+      GetQuestionComment(questionId)
+        .then((res) => {
+          setAnswers(res.data.data);
+          setTotalCount(res.data.totalCount);
+          setFirstTime(false);
+        })
+        .catch((error: AxiosError) => {
+          console.log(error);
+        })
+        .finally(() => {
+          setAnswerLoading(false);
+        });
+    }
+  }, [questionId]);
+
+  useEffect(() => {
+    if (!answerLoading && questionId && !firstTime) {
+      setAnswerLoading(true);
+      GetQuestionComment(questionId, page - 1, 10)
+        .then((res) => {
+          setAnswers(res.data.data);
+          setTotalCount(res.data.totalCount);
+        })
+        .catch((error: AxiosError) => {
+          console.log(error);
+        })
+        .finally(() => {
+          setAnswerLoading(false);
+        });
+    }
+  }, [page]);
+
+  useEffect(() => {
+    timeoutRef.current = setTimeout(async () => {
+      if (questionId) {
+        await IncreateView(questionId)
+          .then()
+          .catch((err) => {});
+      }
+    }, 15000);
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div className='questionDetail'>
       <Header />
       {isNotFound && (
-        <div className='postDetail-notFound'>
+        <div className='questionDetail-notFound'>
           <img src={NotFound} alt='Not Found' />
         </div>
       )}
@@ -55,7 +144,7 @@ function QuestionDetail() {
           <Spin fullscreen size='large' />
         </div>
       )}
-      {questionId && (
+      {question && question.id == questionId && (
         <div className='questionDetail-container'>
           <div className='questionDetail-left'>
             <QuestionContent
@@ -75,7 +164,7 @@ function QuestionDetail() {
                 userName={question.userName}
                 data={answer != undefined ? answer : []}
                 amount={amount ? amount : 10}
-                page={page ? page : 0}
+                page={page ? page : 1}
                 totalCount={totalCount ? totalCount : 0}
                 setPage={setPage}
               />
@@ -134,6 +223,7 @@ function QuestionDetail() {
 export default QuestionDetail;
 
 const questionData: QuestionDetailModel = {
+  id: "123",
   title:
     "Use of malloc function instead of fgets for a file and an array[100000]",
   avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
@@ -164,17 +254,19 @@ test.. test... test..... test?..... test!....
 
 __This is bold text__
 `,
-  date: new Date(2023, 11, 22, 15, 43, 22),
+  createdDate: new Date(2023, 11, 22, 15, 43, 22),
+  updatedDate: new Date(2023, 11, 22, 15, 43, 22),
   fullName: "Nguyen Thien Sua",
   followCount: 23,
   viewCount: 123,
-  commentCount: 12,
+  answerCount: 12,
   tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   isMyQuestion: true,
   questionCount: 12,
   userName: "NTSua1908",
   vote: VoteType.Unvote,
   voteCount: 235,
+  isFollowed: true,
 };
 
 const answerData: CommentDetailModel[] = [
@@ -282,11 +374,12 @@ const questionListData: QuestionListModel[] = [
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    date: new Date(2023, 11, 22, 15, 43, 22),
-    fullName: "Gus",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: null,
+    userName: "Gus",
     followCount: 23,
     viewCount: 123,
-    commentCount: 12,
+    answerCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
   {
@@ -294,11 +387,12 @@ const questionListData: QuestionListModel[] = [
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    date: new Date(2023, 11, 22, 15, 43, 22),
-    fullName: "Gus",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
+    userName: "Gus",
     followCount: 23,
     viewCount: 123,
-    commentCount: 12,
+    answerCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
   {
@@ -306,11 +400,12 @@ const questionListData: QuestionListModel[] = [
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    date: new Date(2023, 11, 22, 15, 43, 22),
-    fullName: "Gus",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: null,
+    userName: "Gus",
     followCount: 23,
     viewCount: 123,
-    commentCount: 12,
+    answerCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
   {
@@ -318,11 +413,12 @@ const questionListData: QuestionListModel[] = [
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    date: new Date(2023, 11, 22, 15, 43, 22),
-    fullName: "Gus",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
+    userName: "Gus",
     followCount: 23,
     viewCount: 123,
-    commentCount: 12,
+    answerCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
   {
@@ -330,11 +426,12 @@ const questionListData: QuestionListModel[] = [
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    date: new Date(2023, 11, 22, 15, 43, 22),
-    fullName: "Gus",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
+    userName: "Gus",
     followCount: 23,
     viewCount: 123,
-    commentCount: 12,
+    answerCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
   {
@@ -342,11 +439,12 @@ const questionListData: QuestionListModel[] = [
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    date: new Date(2023, 11, 22, 15, 43, 22),
-    fullName: "Gus",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
+    userName: "Gus",
     followCount: 23,
     viewCount: 123,
-    commentCount: 12,
+    answerCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
   {
@@ -354,11 +452,12 @@ const questionListData: QuestionListModel[] = [
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    date: new Date(2023, 11, 22, 15, 43, 22),
-    fullName: "Gus",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
+    userName: "Gus",
     followCount: 23,
     viewCount: 123,
-    commentCount: 12,
+    answerCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
   {
@@ -366,11 +465,12 @@ const questionListData: QuestionListModel[] = [
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    date: new Date(2023, 11, 22, 15, 43, 22),
-    fullName: "Gus",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
+    userName: "Gus",
     followCount: 23,
     viewCount: 123,
-    commentCount: 12,
+    answerCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
   {
@@ -378,11 +478,12 @@ const questionListData: QuestionListModel[] = [
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    date: new Date(2023, 11, 22, 15, 43, 22),
-    fullName: "Gus",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
+    userName: "Gus",
     followCount: 23,
     viewCount: 123,
-    commentCount: 12,
+    answerCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
   {
@@ -390,11 +491,12 @@ const questionListData: QuestionListModel[] = [
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    date: new Date(2023, 11, 22, 15, 43, 22),
-    fullName: "Gus",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
+    userName: "Gus",
     followCount: 23,
     viewCount: 123,
-    commentCount: 12,
+    answerCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
 ];

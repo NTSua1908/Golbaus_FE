@@ -19,7 +19,7 @@ import "./home.scss";
 
 const contents: PostList[] = [
   {
-    id: "18dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
+    id: "28dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
     thumbnail:
       "https://tintuc-divineshop.cdn.vccloud.vn/wp-content/uploads/2020/08/782784.jpg",
     title: "Stardew Valley 1",
@@ -180,15 +180,29 @@ const posts: PostBlock[] = [
 ];
 const questions: QuestionListModel[] = [
   {
-    id: "123",
+    id: "08dc1b05-a2ed-4451-8f69-1661997bf283",
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    date: new Date(2023, 11, 22, 15, 43, 22),
-    fullName: "Gus",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: null,
+    userName: "Gus",
     followCount: 23,
     viewCount: 123,
-    commentCount: 12,
+    answerCount: 12,
+    tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
+  },
+  {
+    id: "08dc1b2f-a77c-4483-8dd8-728b1a2bd28a",
+    title:
+      "Use of malloc function instead of fgets for a file and an array[100000]",
+    avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
+    userName: "Gus",
+    followCount: 23,
+    viewCount: 123,
+    answerCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
   {
@@ -196,11 +210,12 @@ const questions: QuestionListModel[] = [
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    date: new Date(2023, 11, 22, 15, 43, 22),
-    fullName: "Gus",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: null,
+    userName: "Gus",
     followCount: 23,
     viewCount: 123,
-    commentCount: 12,
+    answerCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
   {
@@ -208,11 +223,12 @@ const questions: QuestionListModel[] = [
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    date: new Date(2023, 11, 22, 15, 43, 22),
-    fullName: "Gus",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
+    userName: "Gus",
     followCount: 23,
     viewCount: 123,
-    commentCount: 12,
+    answerCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
   {
@@ -220,11 +236,12 @@ const questions: QuestionListModel[] = [
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    date: new Date(2023, 11, 22, 15, 43, 22),
-    fullName: "Gus",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
+    userName: "Gus",
     followCount: 23,
     viewCount: 123,
-    commentCount: 12,
+    answerCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
   {
@@ -232,11 +249,64 @@ const questions: QuestionListModel[] = [
     title:
       "Use of malloc function instead of fgets for a file and an array[100000]",
     avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    date: new Date(2023, 11, 22, 15, 43, 22),
-    fullName: "Gus",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
+    userName: "Gus",
     followCount: 23,
     viewCount: 123,
-    commentCount: 12,
+    answerCount: 12,
+    tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
+  },
+  {
+    id: "123",
+    title:
+      "Use of malloc function instead of fgets for a file and an array[100000]",
+    avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
+    userName: "Gus",
+    followCount: 23,
+    viewCount: 123,
+    answerCount: 12,
+    tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
+  },
+  {
+    id: "123",
+    title:
+      "Use of malloc function instead of fgets for a file and an array[100000]",
+    avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
+    userName: "Gus",
+    followCount: 23,
+    viewCount: 123,
+    answerCount: 12,
+    tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
+  },
+  {
+    id: "123",
+    title:
+      "Use of malloc function instead of fgets for a file and an array[100000]",
+    avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
+    userName: "Gus",
+    followCount: 23,
+    viewCount: 123,
+    answerCount: 12,
+    tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
+  },
+  {
+    id: "123",
+    title:
+      "Use of malloc function instead of fgets for a file and an array[100000]",
+    avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
+    createdDate: new Date(2023, 11, 22, 15, 43, 22),
+    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
+    userName: "Gus",
+    followCount: 23,
+    viewCount: 123,
+    answerCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
   },
 ];

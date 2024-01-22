@@ -636,11 +636,8 @@ function PostDetail() {
               avatar={post.avatar}
               fullname={post.fullName}
               username={post.userName}
-              date={
-                post.publishDate != null
-                  ? formatDateToString(post.publishDate)
-                  : "Unpublished"
-              }
+              updatedDate={post.updatedDate}
+              publishDate={post.publishDate}
               viewCount={post.viewCount}
               postCount={post.postCount}
               commentCount={post.commentCount}
@@ -649,11 +646,7 @@ function PostDetail() {
               isMyPost={post.isMyPost}
               vote={post.vote}
               publishType={post.publishType}
-              willBePublishedOn={
-                post.willBePublishedOn != null
-                  ? formatDateToString(post.willBePublishedOn)
-                  : "Published"
-              }
+              willBePublishedOn={post.willBePublishedOn}
               tags={post.tags}
               handleOpenModal={setRequiredLogin}
             />

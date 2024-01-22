@@ -22,12 +22,12 @@
 
   &-left {
     flex: 75;
-    overflow: hidden;
+    // overflow: hidden;
   }
 
   &-right {
     flex: 25;
-    margin-left: 30px;
+    margin-left: 40px;
 
     @include for-size(desktop, min) {
       margin-left: 0px;
@@ -54,6 +54,7 @@
 
         &-item {
           margin-bottom: 20px;
+          font-size: 15px;
           & a {
             color: #1f75cb;
             text-decoration: none;

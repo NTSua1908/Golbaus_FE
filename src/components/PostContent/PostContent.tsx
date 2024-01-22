@@ -19,6 +19,7 @@ import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 import { AxiosError } from "axios";
 import { notification } from "antd";
 import PublishType from "../../enums/PublishType";
+import { formatDateToString, formatDayAgo } from "../../Helper/DateHelper";
 
 interface PostContentProps {
   id: string;
@@ -29,7 +30,8 @@ interface PostContentProps {
   avatar: string;
   fullname: string;
   username: string;
-  date: string;
+  updatedDate: Date | null;
+  publishDate: Date | null;
   viewCount: number;
   postCount: number;
   commentCount: number;
@@ -38,7 +40,7 @@ interface PostContentProps {
   isMyPost: boolean;
   vote: VotePost;
   publishType: PublishType;
-  willBePublishedOn: string;
+  willBePublishedOn: Date | null;
   tags: string[];
   handleOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -52,7 +54,8 @@ function PostContent({
   avatar,
   fullname,
   username,
-  date,
+  updatedDate,
+  publishDate,
   viewCount,
   postCount,
   commentCount,
@@ -291,11 +294,23 @@ function PostContent({
                 <div className='post-info'>
                   <div className='post-info-container'>
                     <div className='post-info-date'>
-                      {publishType == PublishType.Public && `Posted at ${date}`}
+                      {publishType == PublishType.Public &&
+                        publishDate &&
+                        !updatedDate &&
+                        `Posted at ${formatDayAgo(publishDate)}`}
+                      {publishType == PublishType.Public &&
+                        updatedDate &&
+                        `Updated at ${formatDayAgo(updatedDate)}`}
                       {publishType == PublishType.Private &&
-                        `Privated Post - Posted at ${date}`}
+                        publishDate &&
+                        `Privated Post - Posted at ${formatDayAgo(
+                          publishDate
+                        )}`}
                       {publishType == PublishType.Schedule &&
-                        `Scheduled to be published on ${willBePublishedOn}`}
+                        willBePublishedOn &&
+                        `Scheduled to be published on ${formatDateToString(
+                          willBePublishedOn
+                        )}`}
                     </div>
                     <div className='post-info-more'>
                       <div className='post-info-more-view'>

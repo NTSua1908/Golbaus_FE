@@ -20,12 +20,12 @@ import {
   CommentUpdateModel,
 } from "../../model/commentModel";
 import {
-  AddPostComment,
-  DeletePostComment,
-  DownVotePostComment,
-  GetPostCommentReply,
-  UpVotePostComment,
-  UpdatePostComment,
+  AddQuestionComment,
+  DeleteQuestionComment,
+  DownVoteQuestionComment,
+  GetQuestionCommentReply,
+  UpVoteQuestionComment,
+  UpdateQuestionComment,
 } from "../../services/CommentService";
 import { RootState } from "../../store/configureStore";
 import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
@@ -89,7 +89,12 @@ const Answer = React.memo(
     const handleLoadMoreReplies = () => {
       if (!isLoadingReply) {
         setLoadingReply(true);
-        GetPostCommentReply(questionId, comment.id, currentPage, amoutPerPage)
+        GetQuestionCommentReply(
+          questionId,
+          comment.id,
+          currentPage,
+          amoutPerPage
+        )
           .then((res) => {
             setCurrentPage(currentPage + 1);
             setReplies([...replies, ...res.data.data]);
@@ -112,7 +117,7 @@ const Answer = React.memo(
         postId: questionId,
       };
 
-      await AddPostComment(commentReply).then((res) => {
+      await AddQuestionComment(commentReply).then((res) => {
         console.log(res.data);
         if (addParentComment) {
           addParentComment(res.data);
@@ -143,7 +148,7 @@ const Answer = React.memo(
       setShowComment(!showComment);
       if (replies.length == 0) {
         setLoadingReply(true);
-        GetPostCommentReply(questionId, comment.id, 0, amoutPerPage)
+        GetQuestionCommentReply(questionId, comment.id, 0, amoutPerPage)
           .then((res) => {
             setCurrentPage(currentPage + 1);
             setReplies([...replies, ...res.data.data]);
@@ -180,7 +185,7 @@ const Answer = React.memo(
       const comment: CommentUpdateModel = {
         content: editContent,
       };
-      UpdatePostComment(id, comment)
+      UpdateQuestionComment(id, comment)
         .then((res) => {
           setContent(editContent);
           setEdit(false);
@@ -216,7 +221,7 @@ const Answer = React.memo(
         setVote(VoteType.Up);
       }
 
-      UpVotePostComment(comment.id).then().catch();
+      UpVoteQuestionComment(comment.id).then().catch();
     };
 
     const handleDownvote = () => {
@@ -237,7 +242,7 @@ const Answer = React.memo(
         setVote(VoteType.Down);
       }
 
-      DownVotePostComment(comment.id).then().catch();
+      DownVoteQuestionComment(comment.id).then().catch();
     };
 
     const AddItsReply = (comment: CommentDetailModel) => {
@@ -245,7 +250,7 @@ const Answer = React.memo(
     };
 
     const handleDeleteComment = (id: string) => {
-      DeletePostComment(id)
+      DeleteQuestionComment(id)
         .then((res) => {
           setReplies(replies.filter((x) => x.id != id));
           openNotificationSuccess("Deleted successfully");
@@ -600,7 +605,7 @@ const AnswerTree = ({
       postId: questionId,
     };
 
-    await AddPostComment(comment)
+    await AddQuestionComment(comment)
       .then((res) => {
         console.log(res.data);
         setAnswers([res.data, ...answers]);
@@ -610,7 +615,7 @@ const AnswerTree = ({
   };
 
   const handleDeleteComment = (id: string) => {
-    DeletePostComment(id)
+    DeleteQuestionComment(id)
       .then((res) => {
         setAnswers(answers.filter((x) => x.id != id));
         openNotificationSuccess("Deleted successfully");
@@ -700,7 +705,7 @@ const AnswerTree = ({
           <div className='answers-tree-list-pagination'>
             <Pagination
               simple
-              defaultCurrent={page + 1}
+              defaultCurrent={page}
               pageSize={amount}
               total={totalCount}
               onChange={onChangePage}
