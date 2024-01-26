@@ -109,6 +109,7 @@ export const createUndoCommand = (
     groupName: "undo",
     icon: <FaUndo />,
     execute: (state, api) => {
+      console.log("History: ", historyIndex, history);
       if (historyIndex > 0) {
         setHistoryIndex(historyIndex - 1);
         setValue(history[historyIndex - 1]);

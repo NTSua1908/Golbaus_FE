@@ -8,11 +8,16 @@ import { FaRegEye, FaRocketchat } from "react-icons/fa";
 
 interface QuestionBlockProps {
   question: QuestionListModel;
+  newTab?: boolean;
 }
 
-function QuestionBlock({ question }: QuestionBlockProps) {
+function QuestionBlock({ question, newTab }: QuestionBlockProps) {
   return (
-    <Link to={"/question/" + question.id} className='question-block'>
+    <Link
+      to={"/question/" + question.id}
+      className='question-block'
+      target={newTab ? "_blank" : undefined}
+    >
       <h3 className='question-block-title'>{question.title}</h3>
       <div className='question-block-info'>
         <div className='question-block-info-left'>

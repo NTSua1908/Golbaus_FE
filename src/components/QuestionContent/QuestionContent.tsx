@@ -1,8 +1,10 @@
-import { notification } from "antd";
+import { Spin, notification } from "antd";
 import { AxiosError } from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { CiBookmark, CiEdit, CiFlag1 } from "react-icons/ci";
 import {
+  FaBookmark,
+  FaCheck,
   FaFacebook,
   FaQuestionCircle,
   FaRegEye,
@@ -17,11 +19,17 @@ import { useNavigate } from "react-router-dom";
 import { formatDayAgo } from "../../Helper/DateHelper";
 import VotePost from "../../enums/VoteType";
 import { QuestionDetailModel } from "../../model/questionModel";
-import { Delete, DownVote, UpVote } from "../../services/QuestionService";
+import {
+  Delete,
+  DownVote,
+  ToggleAddBookmark,
+  UpVote,
+} from "../../services/QuestionService";
 import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 import DisplayTags from "../DisplayTag/DisplayTags";
 import ContentDisplayer from "../ShowCode/ContentDisplayer";
 import "./questionContent.scss";
+import { ToggleFollow } from "../../services/AccountService";
 
 interface QuestionContentProps {
   id: string;
@@ -43,6 +51,11 @@ function QuestionContent({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
+
+  const [marked, setMarked] = useState(question.isMarked);
+  const [markLoading, setMarkLoading] = useState(false);
+  const [follow, setFollow] = useState(question.isFollowing);
+  const [followLoading, setFollowLoading] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -150,6 +163,51 @@ function QuestionContent({
     });
   };
 
+  const handleFollowUser = () => {
+    if (!isAuthenticated) {
+      handleOpenModal(true);
+      return;
+    }
+
+    if (!followLoading) {
+      setFollowLoading(true);
+      ToggleFollow(question.userId)
+        .then(() => {
+          setFollow((prev) => !prev);
+        })
+        .catch((error: AxiosError) => {})
+        .finally(() => {
+          setFollowLoading(false);
+        });
+    }
+  };
+
+  const handleBookmark = () => {
+    if (!isAuthenticated) {
+      handleOpenModal(true);
+      return;
+    }
+
+    if (!markLoading) {
+      setMarkLoading(true);
+      ToggleAddBookmark(id)
+        .then(() => {
+          setMarked((prev) => !prev);
+          if (!marked) {
+            openNotificationSuccess("Marked successfully");
+          } else {
+            openNotificationSuccess("Unmarked successfully");
+          }
+        })
+        .catch((error: AxiosError) => {
+          openNotificationFailure("Something went wrong");
+        })
+        .finally(() => {
+          setMarkLoading(false);
+        });
+    }
+  };
+
   return (
     <div className='questionContent'>
       {contextHolder}
@@ -222,10 +280,34 @@ function QuestionContent({
                   />
                   <div className='question-user-info-details'>
                     <div className='question-user-info-details-name'>
-                      <h2 className='fullname'>{question.fullName}</h2>
-                      <p className='username'>@{question.userName}</p>
-                      <div className='question-user-info-details-name-btnfollow'>
-                        Follow <GoPlus />
+                      <h2
+                        className='fullname'
+                        onClick={() => {
+                          navigate("/user/" + question.userId);
+                        }}
+                      >
+                        {question.fullName}
+                      </h2>
+                      <p
+                        className='username'
+                        onClick={() => {
+                          navigate("/user/" + question.userId);
+                        }}
+                      >
+                        @{question.userName}
+                      </p>
+                      <div
+                        className='question-user-info-details-name-btnfollow'
+                        onClick={handleFollowUser}
+                      >
+                        Follow{" "}
+                        {followLoading ? (
+                          <Spin className='question-user-info-details-name-btnfollow-spin' />
+                        ) : !follow ? (
+                          <GoPlus />
+                        ) : (
+                          <FaCheck />
+                        )}
                       </div>
                     </div>
                     <div className='question-user-info-details-more'>
@@ -291,8 +373,21 @@ function QuestionContent({
                       }`}
                     >
                       <ul>
-                        <li className='question-info-option-menu-item'>
-                          <CiBookmark /> <span>Mark</span>
+                        <li
+                          className='question-info-option-menu-item'
+                          onClick={handleBookmark}
+                        >
+                          {!marked && (
+                            <>
+                              <CiBookmark /> <span>Mark</span>
+                            </>
+                          )}
+                          {marked && (
+                            <>
+                              <FaBookmark style={{ color: "violet" }} />{" "}
+                              <span>Marked</span>
+                            </>
+                          )}
                         </li>
                         <li className='question-info-option-menu-item'>
                           <CiFlag1 /> <span>Report</span>

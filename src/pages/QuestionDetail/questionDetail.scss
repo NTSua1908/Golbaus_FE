@@ -21,8 +21,14 @@
   }
 
   &-left {
-    flex: 75;
+    // flex: 75;
+    width: 75%;
     // overflow: hidden;
+    // min-height: 0;
+
+    @include for-size(desktop, min) {
+      width: auto;
+    }
   }
 
   &-right {
@@ -92,11 +98,6 @@
     @include for-size(tablet, min) {
       height: 120vh;
       padding-bottom: calc($footer-height-res + 20px);
-    }
-    &-icon {
-      padding-bottom: 30px;
-      margin: 0 auto;
-      font-size: 115px;
     }
   }
 

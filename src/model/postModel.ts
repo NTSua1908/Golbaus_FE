@@ -46,10 +46,11 @@ export interface PostDetailModel {
   countVote: number;
   publishDate: Date | null;
   updatedDate: Date | null;
+  userId: string;
   fullName: string;
   userName: string;
   avatar: string;
-  isFollowed: string;
+  isFollowing: boolean;
   isMyPost: boolean;
   postCount: number;
   followCount: number;
@@ -59,6 +60,7 @@ export interface PostDetailModel {
   publishType: PublishType;
   willBePublishedOn: Date | null;
   tags: string[];
+  isMarked: boolean;
 }
 
 export interface PostFilter {

@@ -222,53 +222,6 @@ function QuestionDetail() {
 
 export default QuestionDetail;
 
-const questionData: QuestionDetailModel = {
-  id: "123",
-  title:
-    "Use of malloc function instead of fgets for a file and an array[100000]",
-  avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-  content: `## Horizontal Rules
-___
-
----
-
-***
-
-
-## Typographic replacements
-
-Enable typographer option to see result.
-
-(c) (C) (r) (R) (tm) (TM) (p) (P) +-
-
-test.. test... test..... test?..... test!....
-
-!!!!!! ???? ,,  -- ---
-
-"Smartypants, double quotes" and 'single quotes'
-
-
-## Emphasis
-
-**This is bold text**
-
-__This is bold text__
-`,
-  createdDate: new Date(2023, 11, 22, 15, 43, 22),
-  updatedDate: new Date(2023, 11, 22, 15, 43, 22),
-  fullName: "Nguyen Thien Sua",
-  followCount: 23,
-  viewCount: 123,
-  answerCount: 12,
-  tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
-  isMyQuestion: true,
-  questionCount: 12,
-  userName: "NTSua1908",
-  vote: VoteType.Unvote,
-  voteCount: 235,
-  isFollowed: true,
-};
-
 const answerData: CommentDetailModel[] = [
   {
     id: "1",

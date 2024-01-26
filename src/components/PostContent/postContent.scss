@@ -142,7 +142,7 @@
           display: flex;
           align-items: center;
           justify-content: space-between;
-          margin: 20px 0;
+          margin: 30px 0 20px 0;
 
           @include for-size(820px, min) {
             display: block;
@@ -172,6 +172,7 @@
                   font-size: 18px;
                   color: $background-color;
                   margin-right: 5px;
+                  cursor: pointer;
                   @include for-size(phone, min) {
                     padding-top: 8px;
                   }
@@ -180,6 +181,7 @@
                   color: #666;
                   font-weight: 600;
                   font-size: 12px;
+                  cursor: pointer;
                   @include for-size(phone, min) {
                     padding-top: 8px;
                   }
@@ -202,6 +204,20 @@
                   @include for-size(phone, min) {
                     padding-top: 8px;
                     width: fit-content;
+                  }
+
+                  &-spin {
+                    margin-left: 15px;
+                    & span {
+                      width: auto !important;
+                      height: auto !important;
+                      font-size: 10px !important;
+                    }
+                    & i {
+                      background-color: $text-menu-color !important;
+                      width: 7px !important;
+                      height: 7px !important;
+                    }
                   }
                 }
               }

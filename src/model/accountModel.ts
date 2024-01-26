@@ -19,6 +19,8 @@ export interface UserProfileModel {
   bio: string | null;
   followCount: number;
   postCount: number;
+  questionCount: number;
+  isFollowing: boolean;
 }
 
 export interface RegisterModel {

@@ -80,3 +80,32 @@ export function GetAllPost(
     },
   });
 }
+
+export function GetAllPostByUser(
+  userId: string,
+  searchText: string | null,
+  tags: string[],
+  orderBy: OrderBy | null,
+  orderType: OrderType | null,
+  publishDateFrom: Date | null,
+  publishDateTo: Date | null,
+  page: number,
+  amount: number
+) {
+  return api.get(BASE_URL_POST + "GetAllByUser/" + userId, {
+    params: {
+      searchText,
+      tags: tags.join(","),
+      orderBy,
+      orderType,
+      publishDateFrom,
+      publishDateTo,
+      page,
+      amount,
+    },
+  });
+}
+
+export function ToggleAddBookmark(id: string) {
+  return api.put(BASE_URL_POST + "ToggleAddBookmark/" + id);
+}

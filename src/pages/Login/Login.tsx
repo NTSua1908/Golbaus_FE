@@ -19,6 +19,7 @@ import { NotificationPlacement } from "antd/es/notification/interface";
 import { notification } from "antd";
 import { useNavigate } from "react-router-dom";
 import { removePost } from "../../actions/postAction";
+import { FetchingErrorHandler } from "../../Helper/FetchingErrorHandler";
 
 interface LoginFormProps {
   onLogin: (values: any) => void;
@@ -124,11 +125,7 @@ const Login: React.FC = () => {
           }, 2000);
         })
         .catch((error) => {
-          const errors = (error.response?.data as any)?.errors ?? undefined;
-          if (errors) {
-            const errorMessage = errors.join("\n") as string;
-            openNotificationFailure(errorMessage);
-          }
+          FetchingErrorHandler(error, openNotificationFailure);
           dispatch(loginFailure());
         });
     }

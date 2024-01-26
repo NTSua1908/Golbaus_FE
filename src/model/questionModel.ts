@@ -24,6 +24,7 @@ export interface QuestionDetailModel {
   title: string;
   content: string;
   tags: string[];
+  userId: string;
   avatar: string;
   fullName: string;
   userName: string;
@@ -34,7 +35,8 @@ export interface QuestionDetailModel {
   questionCount: number;
   voteCount: number;
   isMyQuestion: boolean;
-  isFollowed: boolean;
+  isFollowing: boolean;
   updatedDate: Date | null;
   createdDate: Date;
+  isMarked: boolean;
 }

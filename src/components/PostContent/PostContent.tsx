@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CiBookmark, CiEdit, CiFlag1 } from "react-icons/ci";
-import { FaFacebook, FaRegEye, FaRocketchat } from "react-icons/fa";
+import {
+  FaBookmark,
+  FaCheck,
+  FaFacebook,
+  FaRegEye,
+  FaRocketchat,
+} from "react-icons/fa";
 import { FaRedditAlien, FaSquareXTwitter } from "react-icons/fa6";
 import { GoPlus } from "react-icons/go";
 import { MdDeleteOutline } from "react-icons/md";
@@ -8,7 +14,12 @@ import { SlOptionsVertical, SlPencil, SlUserFollow } from "react-icons/sl";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { useNavigate } from "react-router-dom";
 import VotePost from "../../enums/VoteType";
-import { Delete, DownVote, UpVote } from "../../services/PostService";
+import {
+  Delete,
+  DownVote,
+  ToggleAddBookmark,
+  UpVote,
+} from "../../services/PostService";
 import DisplayTags from "../DisplayTag/DisplayTags";
 import ContentDisplayer from "../ShowCode/ContentDisplayer";
 import TableOfContents, {
@@ -17,9 +28,10 @@ import TableOfContents, {
 import "./postContent.scss";
 import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 import { AxiosError } from "axios";
-import { notification } from "antd";
+import { Spin, notification } from "antd";
 import PublishType from "../../enums/PublishType";
 import { formatDateToString, formatDayAgo } from "../../Helper/DateHelper";
+import { ToggleFollow } from "../../services/AccountService";
 
 interface PostContentProps {
   id: string;
@@ -28,6 +40,7 @@ interface PostContentProps {
   thumbnail: string;
   excerpt: string;
   avatar: string;
+  userId: string;
   fullname: string;
   username: string;
   updatedDate: Date | null;
@@ -42,6 +55,8 @@ interface PostContentProps {
   publishType: PublishType;
   willBePublishedOn: Date | null;
   tags: string[];
+  isFollowing: boolean;
+  isMarked: boolean;
   handleOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -52,6 +67,7 @@ function PostContent({
   thumbnail,
   excerpt,
   avatar,
+  userId,
   fullname,
   username,
   updatedDate,
@@ -66,6 +82,8 @@ function PostContent({
   publishType,
   willBePublishedOn,
   tags,
+  isFollowing,
+  isMarked,
   handleOpenModal,
 }: PostContentProps) {
   const [tableOfContents, setTableOfContents] = useState<TableOfContentsData[]>(
@@ -81,6 +99,11 @@ function PostContent({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
+
+  const [marked, setMarked] = useState(isMarked);
+  const [markLoading, setMarkLoading] = useState(false);
+  const [follow, setFollow] = useState(isFollowing);
+  const [followLoading, setFollowLoading] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -188,6 +211,49 @@ function PostContent({
     });
   };
 
+  const handleFollowUser = () => {
+    if (!isAuthenticated) {
+      handleOpenModal(true);
+      return;
+    }
+    if (!followLoading) {
+      setFollowLoading(true);
+      ToggleFollow(userId)
+        .then(() => {
+          setFollow((prev) => !prev);
+        })
+        .catch((error: AxiosError) => {})
+        .finally(() => {
+          setFollowLoading(false);
+        });
+    }
+  };
+
+  const handleBookmark = () => {
+    if (!isAuthenticated) {
+      handleOpenModal(true);
+      return;
+    }
+    if (!markLoading) {
+      setMarkLoading(true);
+      ToggleAddBookmark(id)
+        .then(() => {
+          setMarked((prev) => !prev);
+          if (!marked) {
+            openNotificationSuccess("Marked successfully");
+          } else {
+            openNotificationSuccess("Unmarked successfully");
+          }
+        })
+        .catch((error: AxiosError) => {
+          openNotificationFailure("Something went wrong");
+        })
+        .finally(() => {
+          setMarkLoading(false);
+        });
+    }
+  };
+
   return (
     <div className='postContent'>
       {contextHolder}
@@ -263,10 +329,35 @@ function PostContent({
                   />
                   <div className='post-user-info-details'>
                     <div className='post-user-info-details-name'>
-                      <h2 className='fullname'>{fullname}</h2>
-                      <p className='username'>@{username}</p>
-                      <div className='post-user-info-details-name-btnfollow'>
-                        Follow <GoPlus />
+                      <h2
+                        className='fullname'
+                        onClick={() => {
+                          navigate("/user/" + userId);
+                        }}
+                      >
+                        {fullname}
+                      </h2>
+                      <p
+                        className='username'
+                        onClick={() => {
+                          navigate("/user/" + userId);
+                        }}
+                      >
+                        @{username}
+                      </p>
+
+                      <div
+                        className='post-user-info-details-name-btnfollow'
+                        onClick={handleFollowUser}
+                      >
+                        Follow{" "}
+                        {followLoading ? (
+                          <Spin className='post-user-info-details-name-btnfollow-spin' />
+                        ) : !follow ? (
+                          <GoPlus />
+                        ) : (
+                          <FaCheck />
+                        )}
                       </div>
                     </div>
                     <div className='post-user-info-details-more'>
@@ -343,8 +434,21 @@ function PostContent({
                       }`}
                     >
                       <ul>
-                        <li className='post-info-option-menu-item'>
-                          <CiBookmark /> <span>Mark</span>
+                        <li
+                          className='post-info-option-menu-item'
+                          onClick={handleBookmark}
+                        >
+                          {!marked && (
+                            <>
+                              <CiBookmark /> <span>Mark</span>
+                            </>
+                          )}
+                          {marked && (
+                            <>
+                              <FaBookmark style={{ color: "violet" }} />{" "}
+                              <span>Marked</span>
+                            </>
+                          )}
                         </li>
                         <li className='post-info-option-menu-item'>
                           <CiFlag1 /> <span>Report</span>

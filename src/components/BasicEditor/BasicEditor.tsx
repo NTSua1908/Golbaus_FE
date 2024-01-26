@@ -64,6 +64,7 @@ const BasicEditor = forwardRef<EditorRef, EditorProps>(
     const updateHistory = (newValue: string) => {
       setHistory([...history.slice(0, historyIndex + 1), newValue]);
       setHistoryIndex(historyIndex + 1);
+      console.log(historyIndex);
     };
 
     const undoCommand = createUndoCommand(
@@ -91,7 +92,6 @@ const BasicEditor = forwardRef<EditorRef, EditorProps>(
         if (typingTimeoutRef.current !== null) {
           clearTimeout(typingTimeoutRef.current);
         }
-
         setValue(nextValue!);
 
         typingTimeoutRef.current = window.setTimeout(() => {
@@ -100,61 +100,98 @@ const BasicEditor = forwardRef<EditorRef, EditorProps>(
       }
     };
 
-    const [command, setCommand] = useState([
-      commands.bold,
-      commands.italic,
-      textUnderlineCommand,
-      commands.strikethrough,
-      commands.hr,
-      commands.group(
-        [
-          commands.title1,
-          commands.title2,
-          commands.title3,
-          commands.title4,
-          commands.title5,
-          commands.title6,
-        ],
-        {
-          name: "title",
-          groupName: "title",
-          buttonProps: { "aria-label": "Insert title" },
-        }
-      ),
-      commands.divider,
-      commands.link,
-      commands.quote,
-      commands.codeBlock,
-      commands.comment,
-      commands.divider,
-      textAlignLeftCommand,
-      textAlignCenterCommand,
-      textAlignRightCommand,
-      commands.divider,
-      commands.table,
-      commands.checkedListCommand,
-      commands.orderedListCommand,
-      commands.unorderedListCommand,
-      commands.divider,
-      undoCommand,
-      redoCommand,
-      commands.divider,
-      commands.help,
-    ]);
-
-    useEffect(() => {
-      if (uploadImage) {
-        setCommand([...command, uploadImageCommand]);
-      }
-    }, []);
-
     return (
       <div className='BasicEditor' data-color-mode='light'>
         <MDEditor
           height={"100%"}
           value={value}
           onChange={handleEditorChange}
-          commands={command}
+          commands={
+            uploadImage
+              ? [
+                  commands.bold,
+                  commands.italic,
+                  textUnderlineCommand,
+                  commands.strikethrough,
+                  commands.hr,
+                  commands.group(
+                    [
+                      commands.title1,
+                      commands.title2,
+                      commands.title3,
+                      commands.title4,
+                      commands.title5,
+                      commands.title6,
+                    ],
+                    {
+                      name: "title",
+                      groupName: "title",
+                      buttonProps: { "aria-label": "Insert title" },
+                    }
+                  ),
+                  commands.divider,
+                  commands.link,
+                  commands.quote,
+                  commands.codeBlock,
+                  commands.comment,
+                  commands.divider,
+                  textAlignLeftCommand,
+                  textAlignCenterCommand,
+                  textAlignRightCommand,
+                  commands.divider,
+                  commands.table,
+                  commands.checkedListCommand,
+                  commands.orderedListCommand,
+                  commands.unorderedListCommand,
+                  commands.divider,
+                  undoCommand,
+                  redoCommand,
+                  commands.divider,
+                  commands.help,
+                  uploadImageCommand,
+                ]
+              : [
+                  commands.bold,
+                  commands.italic,
+                  textUnderlineCommand,
+                  commands.strikethrough,
+                  commands.hr,
+                  commands.group(
+                    [
+                      commands.title1,
+                      commands.title2,
+                      commands.title3,
+                      commands.title4,
+                      commands.title5,
+                      commands.title6,
+                    ],
+                    {
+                      name: "title",
+                      groupName: "title",
+                      buttonProps: { "aria-label": "Insert title" },
+                    }
+                  ),
+                  commands.divider,
+                  commands.link,
+                  commands.quote,
+                  commands.codeBlock,
+                  commands.comment,
+                  commands.divider,
+                  textAlignLeftCommand,
+                  textAlignCenterCommand,
+                  textAlignRightCommand,
+                  commands.divider,
+                  commands.table,
+                  commands.checkedListCommand,
+                  commands.orderedListCommand,
+                  commands.unorderedListCommand,
+                  commands.divider,
+                  undoCommand,
+                  redoCommand,
+                  commands.divider,
+                  commands.help,
+                ]
+          }
         />
       </div>
     );

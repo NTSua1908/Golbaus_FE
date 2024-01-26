@@ -23,7 +23,12 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useNavigationType,
+} from "react-router-dom";
 import {
   validateFullname,
   validatePassword,
@@ -62,7 +67,8 @@ import { convertLinkToImageUploaded } from "../../Helper/ImageHelper";
 import { setBaseInfo, updateAvatar } from "../../actions/accountAction";
 import Module from "../../enums/Module";
 import { UserUpdateByTokenModel } from "../../model/accountModel";
-import { GetAllByToken } from "../../services/PostService";
+import { GetAllByToken as GetAllPostByToken } from "../../services/PostService";
+import { GetAllByToken as GetAllQuestionByToken } from "../../services/QuestionService";
 
 function MyProfile() {
   const menuItems: MenuItem[] = [
@@ -594,10 +600,15 @@ const PersonalPost = () => {
     getData();
   }, [pageSize, currentPage]);
 
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate("#post");
+  }, []);
+
   const getData = () => {
     if (!loading) {
       setLoading(true);
-      GetAllByToken(
+      GetAllPostByToken(
         filter.title,
         filter.tags,
         filter.orderBy,
@@ -684,10 +695,12 @@ const PersonalPost = () => {
 };
 
 const PersonalQuestion = () => {
-  const [questions, setQuestion] = useState(questionData);
+  const [questions, setQuestion] = useState<QuestionListModel[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilter, setShowFilter] = useState(false);
-  const totalPage = 100;
+  const [totalPage, setTotalPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(false);
 
   //filter state
   const [filter, setFilter] = useState<FilterProps>({
@@ -713,7 +726,53 @@ const PersonalQuestion = () => {
     setShowFilter(false);
   };
 
-  const onFilter = () => {};
+  const handlePageSizeChange = (current: number, pageSize: number) => {
+    setPageSize(pageSize);
+    setCurrentPage(0);
+    if (currentPage == 1) {
+      getData();
+    }
+  };
+
+  const onFilter = () => {
+    setCurrentPage(1);
+    if (currentPage == 1) {
+      getData();
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [pageSize, currentPage]);
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate("#question");
+  }, []);
+
+  const getData = () => {
+    if (!loading) {
+      setLoading(true);
+      GetAllQuestionByToken(
+        filter.title,
+        filter.tags,
+        filter.orderBy,
+        filter.orderType,
+        filter.dateFrom ? filter.dateFrom.toDate() : null,
+        filter.dateTo ? filter.dateTo.toDate() : null,
+        currentPage - 1,
+        pageSize
+      )
+        .then((res) => {
+          setQuestion(res.data.data);
+          setTotalPage(res.data.totalCount);
+        })
+        .catch()
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  };
 
   return (
     <div className='myProfile-right-container'>
@@ -723,15 +782,18 @@ const PersonalQuestion = () => {
           <h2 className='myProfile-right-content-title'>Questions</h2>
           <div className='myProfile-right-content-filterLeft-container'>
             {questions.map((question, index) => (
-              <QuestionBlock key={index} question={question} />
+              <QuestionBlock key={index} question={question} newTab />
             ))}
           </div>
           <div className='myProfile-right-content-filterLeft-pagination'>
             <Pagination
               showQuickJumper
               current={currentPage}
+              pageSize={pageSize}
               total={totalPage}
               onChange={onChange}
+              onShowSizeChange={handlePageSizeChange}
+              hideOnSinglePage
             />
           </div>
         </div>
@@ -797,6 +859,11 @@ const PersonalBookmarked = () => {
   };
 
   const onFilter = () => {};
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate("#bookmarked");
+  }, []);
 
   return (
     <div className='myProfile-right-container'>
@@ -878,6 +945,11 @@ const PersonalNotification = () => {
   };
 
   const onFilter = () => {};
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate("#notification");
+  }, []);
 
   return (
     <div className='myProfile-right-container'>

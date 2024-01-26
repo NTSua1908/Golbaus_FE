@@ -57,7 +57,7 @@ export function GetAllByToken(
   });
 }
 
-export function GetAllPost(
+export function GetAllQuestion(
   searchText: string | null,
   tags: string[],
   orderBy: OrderBy | null,
@@ -79,4 +79,33 @@ export function GetAllPost(
       amount,
     },
   });
+}
+
+export function GetAllByQuestionUser(
+  userId: string,
+  searchText: string | null,
+  tags: string[],
+  orderBy: OrderBy | null,
+  orderType: OrderType | null,
+  publishDateFrom: Date | null,
+  publishDateTo: Date | null,
+  page: number,
+  amount: number
+) {
+  return api.get(BASE_URL_QUESTION + "GetAllByUser/" + userId, {
+    params: {
+      searchText,
+      tags: tags.join(","),
+      orderBy,
+      orderType,
+      publishDateFrom,
+      publishDateTo,
+      page,
+      amount,
+    },
+  });
+}
+
+export function ToggleAddBookmark(id: string) {
+  return api.put(BASE_URL_QUESTION + "ToggleAddBookmark/" + id);
 }

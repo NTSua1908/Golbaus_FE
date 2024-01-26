@@ -15,6 +15,10 @@ export function GetDetailByToken() {
   return api.get(BASE_URL_ACCOUNT + "GetDetailByToken");
 }
 
+export function GetDetailById(userId: string) {
+  return api.get(BASE_URL_ACCOUNT + "GetDetailById/" + userId);
+}
+
 export function RegisterAccount(model: RegisterModel) {
   return api.post(BASE_URL_ACCOUNT + "CreateUser", model);
 }
@@ -25,4 +29,8 @@ export function UpdateUserByToken(model: UserUpdateByTokenModel) {
 
 export function UpdateAvatarByToken(avatar: string) {
   return api.put(BASE_URL_ACCOUNT + "UpdateAvatarByToken", { avatar });
+}
+
+export function ToggleFollow(userId: string) {
+  return api.put(BASE_URL_ACCOUNT + "ToggleFollow/" + userId);
 }

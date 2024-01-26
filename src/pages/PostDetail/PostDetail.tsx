@@ -2,7 +2,7 @@ import { Spin } from "antd";
 import { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { formatDateToString } from "../../Helper/DateHelper";
 import {
   postLoading,
@@ -634,6 +634,7 @@ function PostDetail() {
               thumbnail={post.thumbnail}
               excerpt={post.excerpt}
               avatar={post.avatar}
+              userId={post.userId}
               fullname={post.fullName}
               username={post.userName}
               updatedDate={post.updatedDate}
@@ -649,6 +650,8 @@ function PostDetail() {
               willBePublishedOn={post.willBePublishedOn}
               tags={post.tags}
               handleOpenModal={setRequiredLogin}
+              isFollowing={post.isFollowing}
+              isMarked={post.isMarked}
             />
           </div>
           <div className='postDetail-more'>

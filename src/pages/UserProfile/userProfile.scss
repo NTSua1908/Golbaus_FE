@@ -88,6 +88,7 @@
             display: flex;
             align-items: center;
             margin-bottom: 5px;
+
             &-fullname {
               font-size: 20px;
               color: $text-menu-color;
@@ -119,6 +120,11 @@
             &-post,
             &-follow {
               margin-right: 15px;
+
+              @include for-size(phone-sm, min) {
+                margin-right: 6px;
+              }
+
               & span {
                 margin-left: 5px;
               }
@@ -132,7 +138,7 @@
           margin-left: 10px;
           border: 1px solid $text-menu-color;
           color: #ffc562;
-          padding: 10px 25px 10px 14px;
+          padding: 10px 10px 10px 14px;
           border-radius: 5px;
           line-height: 10px;
           position: relative;
@@ -140,6 +146,7 @@
           cursor: pointer;
           font-weight: 600;
           width: fit-content;
+          width: 92px;
 
           @include for-size(phone, min) {
             margin-top: 30px;
@@ -149,6 +156,20 @@
             position: absolute;
             top: 8px;
             right: 8px;
+          }
+
+          &-spin {
+            margin-left: 15px;
+            & span {
+              width: auto !important;
+              height: auto !important;
+              font-size: 10px !important;
+            }
+            & i {
+              background-color: $text-menu-color !important;
+              width: 7px !important;
+              height: 7px !important;
+            }
           }
         }
       }
@@ -202,6 +223,37 @@
           background-color: #e6e6e6;
         }
       }
+    }
+  }
+
+  &-notFound {
+    color: $background-color;
+    text-align: center;
+    font-size: 30px;
+    text-shadow: 1px 1px $text-menu-color;
+    font-weight: 800;
+    height: calc(100vh - $header-height);
+    padding-bottom: calc($footer-height + 20px);
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    & img {
+      max-width: 100%;
+      height: 100%;
+      @include for-size(tablet, min) {
+        width: 100%;
+        height: auto;
+      }
+    }
+    @include for-size(tablet, min) {
+      height: 120vh;
+      padding-bottom: calc($footer-height-res + 20px);
+    }
+    &-icon {
+      padding-bottom: 30px;
+      margin: 0 auto;
+      font-size: 115px;
     }
   }
 }

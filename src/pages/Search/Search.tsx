@@ -12,6 +12,7 @@ import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
 import InputSearch from "../../components/InputSearch/InputSearch";
 import { GetAllPost } from "../../services/PostService";
+import { GetAllQuestion } from "../../services/QuestionService";
 
 function Search() {
   const location = useLocation();
@@ -20,7 +21,7 @@ function Search() {
   const requestTag = queryParams.get("tag");
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const [questions, setQuestion] = useState(questionData);
+  const [questions, setQuestion] = useState<QuestionListModel[]>([]);
   const [currentQuestionPage, setCurrentQuestionPage] = useState(1);
   const [questionTotalPage, setQuestionTotalPage] = useState(100);
   const [pageSize, setPageSize] = useState(10);
@@ -47,9 +48,12 @@ function Search() {
     user: "", //Not used
   });
 
-  const onChange: PaginationProps["onChange"] = (pageNumber) => {
-    console.log("Page: ", pageNumber);
+  const onPostPageChange: PaginationProps["onChange"] = (pageNumber) => {
     setCurrentPostPage(pageNumber);
+  };
+
+  const onQuestionPageChange: PaginationProps["onChange"] = (pageNumber) => {
+    setCurrentQuestionPage(pageNumber);
   };
 
   const handleShowFilter = () => {
@@ -64,11 +68,11 @@ function Search() {
     setPageSize(pageSize);
     setCurrentPostPage(1);
     if (currentPostPage == 1) {
-      getData();
+      getDataPosts();
     }
   };
 
-  const getData = () => {
+  const getDataPosts = () => {
     if (!loading) {
       setLoading(true);
       GetAllPost(
@@ -92,19 +96,54 @@ function Search() {
     }
   };
 
-  const onFilter = () => {
+  const getDataQuestions = () => {
+    if (!loading) {
+      setLoading(true);
+      GetAllQuestion(
+        filter.title,
+        filter.tags,
+        filter.orderBy,
+        filter.orderType,
+        filter.dateFrom ? filter.dateFrom.toDate() : null,
+        filter.dateTo ? filter.dateTo.toDate() : null,
+        currentPostPage - 1,
+        pageSize
+      )
+        .then((res) => {
+          setQuestion(res.data.data);
+          setQuestionTotalPage(res.data.totalCount);
+        })
+        .catch()
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  };
+
+  const onFilterPosts = () => {
     setCurrentPostPage(1);
     setRequestText(filter.title);
     setSearchText(filter.title);
     if (currentPostPage == 1) {
-      getData();
+      getDataPosts();
+    }
+    navigate("/Search?searchText=" + filter.title);
+  };
+
+  const onFilterQuestions = () => {
+    setCurrentQuestionPage(1);
+    setRequestText(filter.title);
+    setSearchText(filter.title);
+    if (currentPostPage == 1) {
+      getDataQuestions();
     }
     navigate("/Search?searchText=" + filter.title);
   };
 
   useEffect(() => {
-    getData();
-  }, [pageSize, currentPostPage, reload]);
+    if (activeIndex == 0) getDataPosts();
+    else if (activeIndex == 1) getDataQuestions();
+  }, [pageSize, currentPostPage, reload, currentQuestionPage, activeIndex]);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -143,6 +182,10 @@ function Search() {
             className={`search-menu-item ${activeIndex == 1 && "active"}`}
             onClick={() => {
               setActiveIndex(1);
+              // if (firstTime) {
+              // onFilterQuestions();
+              // setFirstTime(false);
+              // }
             }}
           >
             Questions
@@ -163,7 +206,7 @@ function Search() {
                     current={currentPostPage}
                     pageSize={pageSize}
                     total={postTotalPage}
-                    onChange={onChange}
+                    onChange={onPostPageChange}
                     onShowSizeChange={handlePageSizeChange}
                     hideOnSinglePage
                   />
@@ -183,7 +226,7 @@ function Search() {
                     <PostFilter
                       filter={filter}
                       setFilter={setFilter}
-                      onFilter={onFilter}
+                      onFilter={onFilterPosts}
                       onClose={handleCloseFilter}
                     />
                   </div>
@@ -210,7 +253,9 @@ function Search() {
                     showQuickJumper
                     current={currentQuestionPage}
                     total={questionTotalPage}
-                    onChange={onChange}
+                    onChange={onQuestionPageChange}
+                    onShowSizeChange={handlePageSizeChange}
+                    hideOnSinglePage
                   />
                 </div>
               </div>
@@ -228,7 +273,7 @@ function Search() {
                     <PostFilter
                       filter={filter}
                       setFilter={setFilter}
-                      onFilter={onFilter}
+                      onFilter={onFilterQuestions}
                       onClose={handleCloseFilter}
                     />
                   </div>
