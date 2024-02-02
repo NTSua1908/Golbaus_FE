@@ -34,6 +34,7 @@ import "./answerTree.scss";
 import { setPostCommentPage } from "../../actions/postAction";
 import BasicEditor from "../BasicEditor/BasicEditor";
 import ContentDisplayer from "../ShowCode/ContentDisplayer";
+import { FetchingErrorHandler } from "../../Helper/FetchingErrorHandler";
 
 const amoutPerPage = 5;
 
@@ -192,9 +193,7 @@ const Answer = React.memo(
           openNotificationSuccess("Updated successfully");
         })
         .catch((error: AxiosError) => {
-          const errors = (error.response?.data as any).errors;
-          const errorMessage = errors.join("\n") as string;
-          openNotificationFailure(errorMessage);
+          FetchingErrorHandler(error, openNotificationFailure);
         });
     };
 
@@ -256,9 +255,7 @@ const Answer = React.memo(
           openNotificationSuccess("Deleted successfully");
         })
         .catch((error: AxiosError) => {
-          const errors = (error.response?.data as any).errors;
-          const errorMessage = errors.join("\n") as string;
-          openNotificationFailure(errorMessage);
+          FetchingErrorHandler(error, openNotificationFailure);
         });
     };
 
@@ -323,7 +320,7 @@ const Answer = React.memo(
                 >
                   <SlOptionsVertical />
                   <div
-                    className={`comment-content-option-menu ${
+                    className={`answer-content-option-menu ${
                       isShowOption && "show"
                     }`}
                   >
@@ -373,14 +370,14 @@ const Answer = React.memo(
                 <ContentDisplayer
                   content={
                     `[@${comment.replyFor}](${`/user/${comment.userId}`}) ` +
-                    content
+                    (content.startsWith(`\``) ? "\n" + content : content)
                   }
                 />
               </div>
               <div className='answer-content-function'>
                 <div className='answer-content-function-votes'>
                   <div
-                    className={`comment-content-function-votes-up ${
+                    className={`answer-content-function-votes-up ${
                       vote == VoteType.Up && "selected"
                     }`}
                     onClick={handleUpvote}
@@ -389,7 +386,7 @@ const Answer = React.memo(
                     <span>{upvote}</span>
                   </div>
                   <div
-                    className={`comment-content-function-votes-down ${
+                    className={`answer-content-function-votes-down ${
                       vote == VoteType.Down && "selected"
                     }`}
                     onClick={handleDownvote}
@@ -432,7 +429,7 @@ const Answer = React.memo(
               onClick={handleShowReplyClick}
             >
               <div
-                className={`comment-content-showComment-button ${
+                className={`answer-content-showComment-button ${
                   showComment && "show"
                 }`}
               >
@@ -445,7 +442,7 @@ const Answer = React.memo(
           )}
 
           <div
-            className={`comment-content-replies ${
+            className={`answer-content-replies ${
               showComment && replies && "show"
             }`}
           >
@@ -512,18 +509,23 @@ export const ReplyForm: React.FC<ReplyFormProps> = ({
   };
 
   const [api, contextHolder] = notification.useNotification();
+  const [loading, setLoading] = useState(false);
 
   const handleSavePost = async () => {
     if (isAuthenticated) {
-      await onSave()
-        .then(() => {
-          openNotificationSuccess("Post successful");
-        })
-        .catch((error: AxiosError) => {
-          const errors = (error.response?.data as any).errors;
-          const errorMessage = errors.join("\n") as string;
-          openNotificationFailure(errorMessage);
-        });
+      if (!loading) {
+        setLoading(true);
+        onSave()
+          .then(() => {
+            openNotificationSuccess("Post successful");
+          })
+          .catch((error: AxiosError) => {
+            FetchingErrorHandler(error, openNotificationFailure);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }
     } else {
       showRequireLogin();
     }
@@ -559,6 +561,7 @@ export const ReplyForm: React.FC<ReplyFormProps> = ({
           disabled={content.length === 0}
         >
           Save changes
+          {loading && <Spin className='answer-reply-form-function-save-spin' />}
         </button>
         <button
           className='answer-reply-form-function-cancel'
@@ -621,9 +624,7 @@ const AnswerTree = ({
         openNotificationSuccess("Deleted successfully");
       })
       .catch((error: AxiosError) => {
-        const errors = (error.response?.data as any).errors;
-        const errorMessage = errors.join("\n") as string;
-        openNotificationFailure(errorMessage);
+        FetchingErrorHandler(error, openNotificationFailure);
       });
   };
 
@@ -714,7 +715,7 @@ const AnswerTree = ({
         </div>
       ) : (
         <div className='answers-tree-empty'>
-          <p>This post has no comments</p>
+          <p>This question has no answers</p>
         </div>
       )}
       <ConfirmDialog

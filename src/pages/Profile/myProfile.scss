@@ -17,6 +17,22 @@
     position: relative;
     overflow: hidden;
 
+    &-menu {
+      padding: 20px 0px 0px 50px;
+      display: flex;
+      align-items: center;
+      &-item {
+        padding: 10px 20px;
+        color: $background-color;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: 600;
+        &.active {
+          border-bottom: 3px solid $background-color;
+        }
+      }
+    }
+
     &-container {
       height: 100%;
     }
@@ -63,6 +79,26 @@
 
       @include for-size(phone, max) {
         padding: 10px 40px 20px 60px;
+      }
+
+      &-changePassword {
+        position: relative;
+        padding: 20px;
+        border: 1px solid $background-color;
+        border-radius: 10px;
+        margin: 5px 0px;
+
+        &::after {
+          position: absolute;
+          content: "Change password";
+          top: -16px;
+          left: 20px;
+          color: #333;
+          font-size: 17px;
+          font-weight: 600;
+          background-color: #fff;
+          padding: 0px 5px;
+        }
       }
 
       &-left {
@@ -123,19 +159,19 @@
           &.fullHeight {
             height: 80%;
           }
-
-          &-nocontent {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 25px;
-            font-weight: 600;
-          }
         }
         &-pagination {
           display: flex;
           justify-content: center;
+        }
+        &-nocontent {
+          height: 80%;
+          min-height: 300px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 25px;
+          font-weight: 600;
         }
       }
 

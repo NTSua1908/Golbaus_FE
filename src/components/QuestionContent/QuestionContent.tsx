@@ -246,7 +246,13 @@ function QuestionContent({
               <TiArrowSortedDown />
             </div>
             <div className='questionContent-body-left-avatar'>
-              <img src={question.avatar} alt='User Avatar' />
+              <img
+                src={question.avatar}
+                alt='User Avatar'
+                onClick={() => {
+                  navigate("/user/" + question.userId);
+                }}
+              />
             </div>
             <div className='questionContent-body-left-media'>
               <div
@@ -296,19 +302,21 @@ function QuestionContent({
                       >
                         @{question.userName}
                       </p>
-                      <div
-                        className='question-user-info-details-name-btnfollow'
-                        onClick={handleFollowUser}
-                      >
-                        Follow{" "}
-                        {followLoading ? (
-                          <Spin className='question-user-info-details-name-btnfollow-spin' />
-                        ) : !follow ? (
-                          <GoPlus />
-                        ) : (
-                          <FaCheck />
-                        )}
-                      </div>
+                      {!question.isMyQuestion && (
+                        <div
+                          className='question-user-info-details-name-btnfollow'
+                          onClick={handleFollowUser}
+                        >
+                          Follow{" "}
+                          {followLoading ? (
+                            <Spin className='question-user-info-details-name-btnfollow-spin' />
+                          ) : !follow ? (
+                            <GoPlus />
+                          ) : (
+                            <FaCheck />
+                          )}
+                        </div>
+                      )}
                     </div>
                     <div className='question-user-info-details-more'>
                       <div className='question-user-info-details-more-question'>

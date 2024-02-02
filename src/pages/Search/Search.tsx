@@ -195,22 +195,31 @@ function Search() {
           {activeIndex == 0 && (
             <div className='search-result-content'>
               <div className='search-result-content-filterLeft'>
-                <div className='search-result-content-filterLeft-container'>
-                  {posts.map((post, index) => (
-                    <PostBlockList key={index} post={post} newTab />
-                  ))}
-                </div>
-                <div className='search-result-content-filterLeft-pagination'>
-                  <Pagination
-                    showQuickJumper
-                    current={currentPostPage}
-                    pageSize={pageSize}
-                    total={postTotalPage}
-                    onChange={onPostPageChange}
-                    onShowSizeChange={handlePageSizeChange}
-                    hideOnSinglePage
-                  />
-                </div>
+                {posts.length !== 0 && (
+                  <>
+                    <div className='search-result-content-filterLeft-container'>
+                      {posts.map((post, index) => (
+                        <PostBlockList key={index} post={post} newTab />
+                      ))}
+                    </div>
+                    <div className='search-result-content-filterLeft-pagination'>
+                      <Pagination
+                        showQuickJumper
+                        current={currentPostPage}
+                        pageSize={pageSize}
+                        total={postTotalPage}
+                        onChange={onPostPageChange}
+                        onShowSizeChange={handlePageSizeChange}
+                        hideOnSinglePage
+                      />
+                    </div>
+                  </>
+                )}
+                {!loading && posts.length === 0 && (
+                  <div className='search-result-content-filterLeft-nocontent'>
+                    <p>There are no results</p>
+                  </div>
+                )}
               </div>
               <div className='search-result-content-filterRight'>
                 <div
@@ -243,21 +252,30 @@ function Search() {
           {activeIndex == 1 && (
             <div className='search-result-content'>
               <div className='search-result-content-filterLeft'>
-                <div className='search-result-content-filterLeft-container'>
-                  {questions.map((question, index) => (
-                    <QuestionBlock key={index} question={question} />
-                  ))}
-                </div>
-                <div className='search-result-content-filterLeft-pagination'>
-                  <Pagination
-                    showQuickJumper
-                    current={currentQuestionPage}
-                    total={questionTotalPage}
-                    onChange={onQuestionPageChange}
-                    onShowSizeChange={handlePageSizeChange}
-                    hideOnSinglePage
-                  />
-                </div>
+                {questions.length !== 0 && (
+                  <>
+                    <div className='search-result-content-filterLeft-container'>
+                      {questions.map((question, index) => (
+                        <QuestionBlock key={index} question={question} />
+                      ))}
+                    </div>
+                    <div className='search-result-content-filterLeft-pagination'>
+                      <Pagination
+                        showQuickJumper
+                        current={currentQuestionPage}
+                        total={questionTotalPage}
+                        onChange={onQuestionPageChange}
+                        onShowSizeChange={handlePageSizeChange}
+                        hideOnSinglePage
+                      />
+                    </div>
+                  </>
+                )}
+                {!loading && questions.length === 0 && (
+                  <div className='search-result-content-filterLeft-nocontent'>
+                    <p>There are no results</p>
+                  </div>
+                )}
               </div>
               <div className='search-result-content-filterRight'>
                 <div

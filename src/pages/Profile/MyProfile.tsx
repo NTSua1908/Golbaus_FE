@@ -10,8 +10,9 @@ import {
   notification,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import { AxiosError } from "axios";
 import dayjs, { Dayjs } from "dayjs";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { BsPostcard } from "react-icons/bs";
 import {
   FaBell,
@@ -23,17 +24,15 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Link,
-  useLocation,
-  useNavigate,
-  useNavigationType,
-} from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { FetchingErrorHandler } from "../../Helper/FetchingErrorHandler";
+import { convertLinkToImageUploaded } from "../../Helper/ImageHelper";
 import {
   validateFullname,
   validatePassword,
 } from "../../Helper/InformationValidater";
 import { Logo } from "../../Logo";
+import { setBaseInfo, updateAvatar } from "../../actions/accountAction";
 import { ImageUploaded } from "../../components/BasicEditor/BasicEditor";
 import NotificationFilter from "../../components/Filter/NotificationFilter/NotificationFilter";
 import PostFilter from "../../components/Filter/PostFilter/PostFilter";
@@ -42,8 +41,10 @@ import NotificationBlock from "../../components/NotificationBlock/NotificationBl
 import PostBlockList from "../../components/PostBlock/PostBlockList/PostBlockList";
 import QuestionBlock from "../../components/QuestionBlock/QuestionBlock";
 import Gender from "../../enums/Gender";
+import Module from "../../enums/Module";
 import { ProfileMenu } from "../../enums/ProfileMenu";
 import DefaultAvatar from "../../images/default_avatar.png";
+import { UserUpdateByTokenModel } from "../../model/accountModel";
 import {
   NotificationFilter as NotificationFilterProps,
   NotificationModel,
@@ -51,24 +52,31 @@ import {
 import { PostFilter as FilterProps, PostList } from "../../model/postModel";
 import { QuestionListModel } from "../../model/questionModel";
 import {
-  deleteImage,
-  resizeAndUploadImage,
-} from "../../services/FireBaseService";
-import { RootState } from "../../store/configureStore";
-import "./myProfile.scss";
-import {
   GetByToken,
   GetDetailByToken,
   UpdateAvatarByToken,
   UpdateUserByToken,
 } from "../../services/AccountService";
-import { AxiosError } from "axios";
-import { convertLinkToImageUploaded } from "../../Helper/ImageHelper";
-import { setBaseInfo, updateAvatar } from "../../actions/accountAction";
-import Module from "../../enums/Module";
-import { UserUpdateByTokenModel } from "../../model/accountModel";
-import { GetAllByToken as GetAllPostByToken } from "../../services/PostService";
-import { GetAllByToken as GetAllQuestionByToken } from "../../services/QuestionService";
+import {
+  deleteImage,
+  resizeAndUploadImage,
+} from "../../services/FireBaseService";
+import {
+  Delete,
+  GetAllNotificationByToken,
+  MarkRead,
+  MarkUnread,
+} from "../../services/NotificationService";
+import {
+  GetAllPostBookmarkByToken,
+  GetAllByToken as GetAllPostByToken,
+} from "../../services/PostService";
+import {
+  GetAllQuestionBookmarkByToken,
+  GetAllByToken as GetAllQuestionByToken,
+} from "../../services/QuestionService";
+import { RootState } from "../../store/configureStore";
+import "./myProfile.scss";
 
 function MyProfile() {
   const menuItems: MenuItem[] = [
@@ -123,6 +131,8 @@ function MyProfile() {
         return ProfileMenu.Notification;
       case "#bookmarked":
         return ProfileMenu.Bookmarked;
+      case "#info":
+        return ProfileMenu.Profile;
       default:
         return ProfileMenu.Profile;
     }
@@ -197,6 +207,8 @@ const PersonalInfo = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (userInfo && userInfo.avatar)
       setAvatar([convertLinkToImageUploaded(userInfo.avatar, Module.User)]);
@@ -224,7 +236,9 @@ const PersonalInfo = () => {
         300
       )
         .then()
-        .catch();
+        .catch((error: AxiosError) => {
+          FetchingErrorHandler(error, openNotificationFailure);
+        });
       setIsUploading(false);
     }
   };
@@ -266,12 +280,7 @@ const PersonalInfo = () => {
           });
         })
         .catch((error: AxiosError) => {
-          const errors = (error.response?.data as any).errors;
-
-          if (errors) {
-            const errorMessage = errors.join("\n") as string;
-            openNotificationFailure(errorMessage);
-          }
+          FetchingErrorHandler(error, openNotificationFailure);
         })
         .finally(() => {
           setLoading(false);
@@ -305,6 +314,7 @@ const PersonalInfo = () => {
       gender: Gender[values.gender as keyof typeof Gender],
       password: values.password,
       confirmPassword: values.confirmPassword,
+      oldPassword: values.oldPassword,
     };
     await UpdateUserByToken(updateData)
       .then((res) => {
@@ -318,11 +328,7 @@ const PersonalInfo = () => {
           });
       })
       .catch((error: AxiosError) => {
-        const errors = (error.response?.data as any).errors;
-        if (errors) {
-          const errorMessage = errors.join("\n") as string;
-          openNotificationFailure(errorMessage);
-        }
+        FetchingErrorHandler(error, openNotificationFailure);
       })
       .finally(() => {
         setLoading(false);
@@ -333,10 +339,15 @@ const PersonalInfo = () => {
     form.submit();
   };
 
+  useEffect(() => {
+    navigate("#info");
+  }, []);
+
   return (
     <div className='myProfile-right-container'>
       {contextHolder}
       <div className='myProfile-right-header'>Personal Information</div>
+      {isLoading && <Spin fullscreen />}
       <div className='myProfile-right-content info'>
         <div className='myProfile-right-content-left'>
           <div className='myProfile-right-content-left-avatar'>
@@ -497,51 +508,73 @@ const PersonalInfo = () => {
                 <TextArea name='bio' placeholder='Bio' />
               </Form.Item>
             </div>
-            <label className='myProfile-right-content-label' htmlFor='password'>
-              Password
-            </label>
-            <Form.Item
-              name='password'
-              rules={[{ validator: validatePassword }]}
-              hasFeedback
-            >
-              <Input.Password
-                className='register-form-input'
-                prefix={<LockOutlined />}
-                placeholder='Password'
-              />
-            </Form.Item>
-            <label
-              className='myProfile-right-content-label'
-              htmlFor='confirmPassword'
-            >
-              Confirm Password
-            </label>
-            <Form.Item
-              name='confirmPassword'
-              dependencies={["password"]}
-              hasFeedback
-              rules={[
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue("password") === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(
-                      new Error(
-                        "The new password that you entered do not match!"
-                      )
-                    );
-                  },
-                }),
-              ]}
-            >
-              <Input.Password
-                className='register-form-input'
-                prefix={<LockOutlined />}
-                placeholder='Confirm password'
-              />
-            </Form.Item>
+            <div className='myProfile-right-content-changePassword'>
+              <label
+                className='myProfile-right-content-label'
+                htmlFor='password'
+              >
+                Old Password
+              </label>
+              <Form.Item
+                name='oldPassword'
+                rules={[{ validator: validatePassword }]}
+                hasFeedback
+              >
+                <Input.Password
+                  className='register-form-input'
+                  prefix={<LockOutlined />}
+                  placeholder='Password'
+                />
+              </Form.Item>
+              <label
+                className='myProfile-right-content-label'
+                htmlFor='password'
+              >
+                Password
+              </label>
+              <Form.Item
+                name='password'
+                rules={[{ validator: validatePassword }]}
+                hasFeedback
+              >
+                <Input.Password
+                  className='register-form-input'
+                  prefix={<LockOutlined />}
+                  placeholder='Password'
+                />
+              </Form.Item>
+              <label
+                className='myProfile-right-content-label'
+                htmlFor='confirmPassword'
+              >
+                Confirm Password
+              </label>
+              <Form.Item
+                name='confirmPassword'
+                dependencies={["password"]}
+                hasFeedback
+                rules={[
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue("password") === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(
+                        new Error(
+                          "The new password that you entered do not match!"
+                        )
+                      );
+                    },
+                  }),
+                ]}
+              >
+                <Input.Password
+                  className='register-form-input'
+                  prefix={<LockOutlined />}
+                  placeholder='Confirm password'
+                />
+              </Form.Item>
+            </div>
           </Form>
         </div>
       </div>
@@ -622,7 +655,7 @@ const PersonalPost = () => {
           setPosts(res.data.data);
           setTotalPage(res.data.totalCount);
         })
-        .catch()
+        .catch((error: AxiosError) => {})
         .finally(() => {
           setLoading(false);
         });
@@ -635,33 +668,37 @@ const PersonalPost = () => {
       <div className='myProfile-right-content'>
         <div className='myProfile-right-content-filterLeft'>
           <h2 className='myProfile-right-content-title'>Questions</h2>
-          <div
-            className={`myProfile-right-content-filterLeft-container ${
-              posts.length == 0 && "fullHeight"
-            }`}
-          >
-            {posts.length > 0 &&
-              posts.map((post, index) => (
-                <PostBlockList key={index} post={post} newTab />
-              ))}
-            {posts.length == 0 && (
-              <div className='myProfile-right-content-filterLeft-container-nocontent'>
-                <p>There are no posts</p>
+          {loading && <Spin fullscreen />}
+          {posts.length !== 0 && (
+            <>
+              <div
+                className={`myProfile-right-content-filterLeft-container ${
+                  posts.length == 0 && "fullHeight"
+                }`}
+              >
+                {posts.length > 0 &&
+                  posts.map((post, index) => (
+                    <PostBlockList key={index} post={post} newTab />
+                  ))}
               </div>
-            )}
-            {loading && <Spin fullscreen />}
-          </div>
-          <div className='myProfile-right-content-filterLeft-pagination'>
-            <Pagination
-              showQuickJumper
-              current={currentPage}
-              pageSize={pageSize}
-              total={totalPage}
-              onChange={onChange}
-              onShowSizeChange={handlePageSizeChange}
-              hideOnSinglePage
-            />
-          </div>
+              <div className='myProfile-right-content-filterLeft-pagination'>
+                <Pagination
+                  showQuickJumper
+                  current={currentPage}
+                  pageSize={pageSize}
+                  total={totalPage}
+                  onChange={onChange}
+                  onShowSizeChange={handlePageSizeChange}
+                  hideOnSinglePage
+                />
+              </div>
+            </>
+          )}
+          {!loading && posts.length == 0 && (
+            <div className='myProfile-right-content-filterLeft-nocontent'>
+              <p>There are no posts</p>
+            </div>
+          )}
         </div>
         <div className='myProfile-right-content-filterRight'>
           <div
@@ -767,7 +804,7 @@ const PersonalQuestion = () => {
           setQuestion(res.data.data);
           setTotalPage(res.data.totalCount);
         })
-        .catch()
+        .catch((error: AxiosError) => {})
         .finally(() => {
           setLoading(false);
         });
@@ -780,22 +817,32 @@ const PersonalQuestion = () => {
       <div className='myProfile-right-content'>
         <div className='myProfile-right-content-filterLeft'>
           <h2 className='myProfile-right-content-title'>Questions</h2>
-          <div className='myProfile-right-content-filterLeft-container'>
-            {questions.map((question, index) => (
-              <QuestionBlock key={index} question={question} newTab />
-            ))}
-          </div>
-          <div className='myProfile-right-content-filterLeft-pagination'>
-            <Pagination
-              showQuickJumper
-              current={currentPage}
-              pageSize={pageSize}
-              total={totalPage}
-              onChange={onChange}
-              onShowSizeChange={handlePageSizeChange}
-              hideOnSinglePage
-            />
-          </div>
+          {loading && <Spin fullscreen />}
+          {questions.length !== 0 && (
+            <>
+              <div className='myProfile-right-content-filterLeft-container'>
+                {questions.map((question, index) => (
+                  <QuestionBlock key={index} question={question} newTab />
+                ))}
+              </div>
+              <div className='myProfile-right-content-filterLeft-pagination'>
+                <Pagination
+                  showQuickJumper
+                  current={currentPage}
+                  pageSize={pageSize}
+                  total={totalPage}
+                  onChange={onChange}
+                  onShowSizeChange={handlePageSizeChange}
+                  hideOnSinglePage
+                />
+              </div>
+            </>
+          )}
+          {!loading && questions.length == 0 && (
+            <div className='myProfile-right-content-filterLeft-nocontent'>
+              <p>There are no questions</p>
+            </div>
+          )}
         </div>
         <div className='myProfile-right-content-filterRight'>
           <div
@@ -829,10 +876,18 @@ const PersonalQuestion = () => {
 };
 
 const PersonalBookmarked = () => {
-  const [posts, setPosts] = useState(postData);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [posts, setPosts] = useState([]);
+  const [currentPostPage, setCurrentPostPage] = useState(1);
+  const [postTotalPage, setPostTotalPage] = useState(0);
+
+  const [question, setQuestion] = useState([]);
+  const [currentQuestionPage, setCurrentQuestionPage] = useState(1);
+  const [questionTotalPage, setQuestionTotalPage] = useState(0);
+
   const [showFilter, setShowFilter] = useState(false);
-  const totalPage = 100;
+  const [menuIndex, setMenuIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(false);
 
   //filter state
   const [filter, setFilter] = useState<FilterProps>({
@@ -845,9 +900,20 @@ const PersonalBookmarked = () => {
     user: "", //Not used
   });
 
-  const onChange: PaginationProps["onChange"] = (pageNumber) => {
-    console.log("Page: ", pageNumber);
-    setCurrentPage(pageNumber);
+  const onPostPageChange: PaginationProps["onChange"] = (pageNumber) => {
+    setCurrentPostPage(pageNumber);
+  };
+
+  const onQuestionPageChange: PaginationProps["onChange"] = (pageNumber) => {
+    setCurrentQuestionPage(pageNumber);
+  };
+
+  const handlePageSizeChange = (current: number, pageSize: number) => {
+    setPageSize(pageSize);
+    setCurrentPostPage(1);
+    if (currentPostPage == 1) {
+      getDataPosts();
+    }
   };
 
   const handleShowFilter = () => {
@@ -858,33 +924,165 @@ const PersonalBookmarked = () => {
     setShowFilter(false);
   };
 
-  const onFilter = () => {};
+  const onFilter = () => {
+    if (menuIndex == 0) onFilterPosts();
+    else onFilterQuestions();
+  };
+
+  const onFilterPosts = () => {
+    setCurrentPostPage(1);
+    if (currentPostPage == 1) {
+      getDataPosts();
+    }
+  };
+
+  const onFilterQuestions = () => {
+    setCurrentQuestionPage(1);
+    if (currentPostPage == 1) {
+      getDataQuestions();
+    }
+  };
 
   const navigate = useNavigate();
   useEffect(() => {
     navigate("#bookmarked");
   }, []);
 
+  const getDataPosts = () => {
+    if (!loading) {
+      setLoading(true);
+      GetAllPostBookmarkByToken(
+        filter.title,
+        filter.tags,
+        filter.orderBy,
+        filter.orderType,
+        filter.dateFrom ? filter.dateFrom.toDate() : null,
+        filter.dateTo ? filter.dateTo.toDate() : null,
+        currentPostPage - 1,
+        pageSize
+      )
+        .then((res) => {
+          setPosts(res.data.data);
+          setPostTotalPage(res.data.totalCount);
+        })
+        .catch((error: AxiosError) => {})
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  };
+
+  const getDataQuestions = () => {
+    if (!loading) {
+      setLoading(true);
+      GetAllQuestionBookmarkByToken(
+        filter.title,
+        filter.tags,
+        filter.orderBy,
+        filter.orderType,
+        filter.dateFrom ? filter.dateFrom.toDate() : null,
+        filter.dateTo ? filter.dateTo.toDate() : null,
+        currentQuestionPage - 1,
+        pageSize
+      )
+        .then((res) => {
+          setQuestion(res.data.data);
+          setQuestionTotalPage(res.data.totalCount);
+        })
+        .catch((error: AxiosError) => {})
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  };
+
+  useEffect(() => {
+    if (menuIndex == 0) getDataPosts();
+    else if (menuIndex == 1) getDataQuestions();
+  }, [pageSize, currentPostPage, currentQuestionPage, menuIndex]);
+
   return (
     <div className='myProfile-right-container'>
       <div className='myProfile-right-header'>My Bookmarked</div>
-      <div className='myProfile-right-content'>
-        <div className='myProfile-right-content-filterLeft'>
-          <h2 className='myProfile-right-content-title'>Bookmarked</h2>
-          <div className='myProfile-right-content-filterLeft-container'>
-            {posts.map((post, index) => (
-              <PostBlockList key={index} post={post} />
-            ))}
-          </div>
-          <div className='myProfile-right-content-filterLeft-pagination'>
-            <Pagination
-              showQuickJumper
-              current={currentPage}
-              total={totalPage}
-              onChange={onChange}
-            />
-          </div>
+      <div className='myProfile-right-menu'>
+        <div
+          className={`myProfile-right-menu-item ${menuIndex == 0 && "active"}`}
+          onClick={() => {
+            setMenuIndex(0);
+          }}
+        >
+          Posts
         </div>
+        <div
+          className={`myProfile-right-menu-item ${menuIndex == 1 && "active"}`}
+          onClick={() => {
+            setMenuIndex(1);
+          }}
+        >
+          Questions
+        </div>
+      </div>
+      <div className='myProfile-right-content'>
+        {menuIndex == 0 && (
+          <div className='myProfile-right-content-filterLeft'>
+            {loading && <Spin fullscreen />}
+            {posts.length !== 0 && (
+              <>
+                <div className='myProfile-right-content-filterLeft-container'>
+                  {posts.map((post, index) => (
+                    <PostBlockList key={index} post={post} newTab />
+                  ))}
+                </div>
+                <div className='myProfile-right-content-filterLeft-pagination'>
+                  <Pagination
+                    showQuickJumper
+                    current={currentPostPage}
+                    pageSize={pageSize}
+                    total={postTotalPage}
+                    onChange={onPostPageChange}
+                    onShowSizeChange={handlePageSizeChange}
+                    hideOnSinglePage
+                  />
+                </div>
+              </>
+            )}
+            {!loading && posts.length == 0 && (
+              <div className='myProfile-right-content-filterLeft-nocontent'>
+                <p>There are no posts</p>
+              </div>
+            )}
+          </div>
+        )}
+        {menuIndex == 1 && (
+          <div className='myProfile-right-content-filterLeft'>
+            {loading && <Spin fullscreen />}
+            {posts.length !== 0 && (
+              <>
+                <div className='myProfile-right-content-filterLeft-container'>
+                  {question.map((question, index) => (
+                    <QuestionBlock key={index} question={question} newTab />
+                  ))}
+                </div>
+                <div className='myProfile-right-content-filterLeft-pagination'>
+                  <Pagination
+                    showQuickJumper
+                    current={currentQuestionPage}
+                    pageSize={pageSize}
+                    total={questionTotalPage}
+                    onChange={onQuestionPageChange}
+                    onShowSizeChange={handlePageSizeChange}
+                    hideOnSinglePage
+                  />
+                </div>
+              </>
+            )}
+            {!loading && posts.length == 0 && (
+              <div className='myProfile-right-content-filterLeft-nocontent'>
+                <p>There are no questions</p>
+              </div>
+            )}
+          </div>
+        )}
         <div className='myProfile-right-content-filterRight'>
           <div
             className={`myProfile-right-content-filterRight-container ${
@@ -917,18 +1115,20 @@ const PersonalBookmarked = () => {
 };
 
 const PersonalNotification = () => {
-  const [notifications, setNotifications] = useState(notificationData);
+  const [notifications, setNotifications] = useState<NotificationModel[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilter, setShowFilter] = useState(false);
-  const totalPage = 100;
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(false);
+  const [totalPage, setTotalPage] = useState(0);
 
   //filter state
   const [filter, setFilter] = useState<NotificationFilterProps>({
-    dateFrom: null,
-    dateTo: null,
-    notificationType: null,
+    notificationDateFrom: null,
+    notificationDateTo: null,
+    types: [],
     orderType: null,
-    isRead: null,
+    unRead: false,
   });
 
   const onChange: PaginationProps["onChange"] = (pageNumber) => {
@@ -944,12 +1144,86 @@ const PersonalNotification = () => {
     setShowFilter(false);
   };
 
-  const onFilter = () => {};
+  const onFilter = () => {
+    setCurrentPage(1);
+    if (currentPage == 1) {
+      getData();
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [pageSize, currentPage]);
+
+  const getData = () => {
+    if (!loading) {
+      setLoading(true);
+      GetAllNotificationByToken(
+        filter.unRead,
+        filter.orderType,
+        filter.notificationDateFrom
+          ? filter.notificationDateFrom.toDate()
+          : null,
+        filter.notificationDateTo ? filter.notificationDateTo.toDate() : null,
+        filter.types,
+        currentPage - 1,
+        pageSize
+      )
+        .then((res) => {
+          setNotifications(res.data.data);
+          setTotalPage(res.data.totalCount);
+        })
+        .catch((error: AxiosError) => {})
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  };
 
   const navigate = useNavigate();
   useEffect(() => {
     navigate("#notification");
   }, []);
+
+  const handleMarkRead = (id: string) => {
+    MarkRead(id)
+      .then(() => {
+        setNotifications(
+          notifications.map((x) => {
+            if (x.id != id) return x;
+            return {
+              ...x,
+              isRead: true,
+            };
+          })
+        );
+      })
+      .catch(() => {});
+  };
+
+  const handleMarkUnread = (id: string) => {
+    MarkUnread(id)
+      .then(() => {
+        setNotifications(
+          notifications.map((x) => {
+            if (x.id != id) return x;
+            return {
+              ...x,
+              isRead: false,
+            };
+          })
+        );
+      })
+      .catch(() => {});
+  };
+
+  const handleDelete = (id: string) => {
+    Delete(id)
+      .then(() => {
+        setNotifications(notifications.filter((x) => x.id != id));
+      })
+      .catch(() => {});
+  };
 
   return (
     <div className='myProfile-right-container'>
@@ -957,19 +1231,36 @@ const PersonalNotification = () => {
       <div className='myProfile-right-content'>
         <div className='myProfile-right-content-filterLeft'>
           <h2 className='myProfile-right-content-title'>Notifications</h2>
-          <div className='myProfile-right-content-filterLeft-container'>
-            {notifications.map((notification, index) => (
-              <NotificationBlock key={index} notification={notification} />
-            ))}
-          </div>
-          <div className='myProfile-right-content-filterLeft-pagination'>
-            <Pagination
-              showQuickJumper
-              current={currentPage}
-              total={totalPage}
-              onChange={onChange}
-            />
-          </div>
+          {loading && <Spin fullscreen />}
+          {notifications.length !== 0 && (
+            <>
+              <div className='myProfile-right-content-filterLeft-container'>
+                {notifications.map((notification, index) => (
+                  <NotificationBlock
+                    key={index}
+                    notification={notification}
+                    handleDelete={handleDelete}
+                    handleMarkUnread={handleMarkUnread}
+                    handleMarkRead={handleMarkRead}
+                  />
+                ))}
+              </div>
+              <div className='myProfile-right-content-filterLeft-pagination'>
+                <Pagination
+                  showQuickJumper
+                  current={currentPage}
+                  total={totalPage}
+                  onChange={onChange}
+                  hideOnSinglePage
+                />
+              </div>
+            </>
+          )}
+          {!loading && notifications.length == 0 && (
+            <div className='myProfile-right-content-filterLeft-nocontent'>
+              <p>There are no notifications</p>
+            </div>
+          )}
         </div>
         <div className='myProfile-right-content-filterRight'>
           <div
@@ -1275,68 +1566,68 @@ const postData: PostList[] = [
   },
 ];
 
-const notificationData: NotificationModel[] = [
-  {
-    user: "@Halley",
-    userId: "#",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
-    content: "upVoted your post",
-    date: new Date(2023, 12, 12, 12, 45, 12),
-    link: "#",
-    isRead: false,
-  },
-  {
-    user: "@Halley",
-    userId: "#",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
-    content: "followed you",
-    date: new Date(2023, 12, 12, 12, 45, 12),
-    link: "#",
-    isRead: false,
-  },
-  {
-    user: "@Halley",
-    userId: "#",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
-    content: "has responded to your comment",
-    date: new Date(2023, 12, 12, 12, 45, 12),
-    link: "#",
-    isRead: true,
-  },
-  {
-    user: "@Halley",
-    userId: "#",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
-    content: "commented on your post",
-    date: new Date(2023, 12, 12, 12, 45, 12),
-    link: "#",
-    isRead: false,
-  },
-  {
-    user: "@Halley",
-    userId: "#",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
-    content: "has responded to your comment",
-    date: new Date(2023, 12, 12, 12, 45, 12),
-    link: "#",
-    isRead: true,
-  },
-  {
-    user: "@Halley",
-    userId: "#",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
-    content: "commented on your post",
-    date: new Date(2023, 12, 12, 12, 45, 12),
-    link: "#",
-    isRead: false,
-  },
-  {
-    user: "@Halley",
-    userId: "#",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
-    content: "commented on your post",
-    date: new Date(2023, 12, 12, 12, 45, 12),
-    link: "#",
-    isRead: false,
-  },
-];
+// const notificationData: NotificationModel[] = [
+//   {
+//     user: "@Halley",
+//     userId: "#",
+//     avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
+//     content: "upVoted your post",
+//     date: new Date(2023, 12, 12, 12, 45, 12),
+//     link: "#",
+//     isRead: false,
+//   },
+//   {
+//     user: "@Halley",
+//     userId: "#",
+//     avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
+//     content: "followed you",
+//     date: new Date(2023, 12, 12, 12, 45, 12),
+//     link: "#",
+//     isRead: false,
+//   },
+//   {
+//     user: "@Halley",
+//     userId: "#",
+//     avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
+//     content: "has responded to your comment",
+//     date: new Date(2023, 12, 12, 12, 45, 12),
+//     link: "#",
+//     isRead: true,
+//   },
+//   {
+//     user: "@Halley",
+//     userId: "#",
+//     avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
+//     content: "commented on your post",
+//     date: new Date(2023, 12, 12, 12, 45, 12),
+//     link: "#",
+//     isRead: false,
+//   },
+//   {
+//     user: "@Halley",
+//     userId: "#",
+//     avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
+//     content: "has responded to your comment",
+//     date: new Date(2023, 12, 12, 12, 45, 12),
+//     link: "#",
+//     isRead: true,
+//   },
+//   {
+//     user: "@Halley",
+//     userId: "#",
+//     avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
+//     content: "commented on your post",
+//     date: new Date(2023, 12, 12, 12, 45, 12),
+//     link: "#",
+//     isRead: false,
+//   },
+//   {
+//     user: "@Halley",
+//     userId: "#",
+//     avatar: "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
+//     content: "commented on your post",
+//     date: new Date(2023, 12, 12, 12, 45, 12),
+//     link: "#",
+//     isRead: false,
+//   },
+// ];

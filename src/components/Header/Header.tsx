@@ -26,6 +26,15 @@ import { Logout as HandleLogout } from "../../services/AuthService";
 import { logout } from "../../actions/loginAction";
 import DefaultAvatar from "../../images/default_avatar.png";
 import InputSearch from "../InputSearch/InputSearch";
+import {
+  GetAllNotificationByToken,
+  MarkAllRead,
+} from "../../services/NotificationService";
+import { AxiosError } from "axios";
+import { NotificationModel } from "../../model/notificationModel";
+import { formatDayAgo } from "../../Helper/DateHelper";
+import { notificationLinkResolver } from "../../Helper/NotificationHelper";
+import { FetchingErrorHandler } from "../../Helper/FetchingErrorHandler";
 
 interface NotificationProps {
   user: string;
@@ -40,82 +49,15 @@ interface NotificationProps {
 function Header() {
   const [isMenuProfileOpen, setMenuProfileOpen] = useState(false);
   const [isNotificationOpen, setNotificationOpen] = useState(false);
-  const [notifications, setNotification] = useState<NotificationProps[]>([
-    {
-      user: "@Halley",
-      userUrl: "#",
-      avatarUrl:
-        "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
-      content: "upvoted your post",
-      date: "2023-12-04 10:12 PM",
-      link: "#",
-      isRead: false,
-    },
-    {
-      user: "@Halley",
-      userUrl: "#",
-      avatarUrl:
-        "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
-      content: "followed you",
-      date: "2023-12-04 10:12 PM",
-      link: "#",
-      isRead: false,
-    },
-    {
-      user: "@Halley",
-      userUrl: "#",
-      avatarUrl:
-        "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
-      content: "has responded to your comment",
-      date: "2023-12-04 10:12 PM",
-      link: "#",
-      isRead: true,
-    },
-    {
-      user: "@Halley",
-      userUrl: "#",
-      avatarUrl:
-        "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
-      content: "commented on your post",
-      date: "2023-12-04 10:12 PM",
-      link: "#",
-      isRead: false,
-    },
-    {
-      user: "@Halley",
-      userUrl: "#",
-      avatarUrl:
-        "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
-      content: "has responded to your comment",
-      date: "2023-12-04 10:12 PM",
-      link: "#",
-      isRead: true,
-    },
-    {
-      user: "@Halley",
-      userUrl: "#",
-      avatarUrl:
-        "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
-      content: "commented on your post",
-      date: "2023-12-04 10:12 PM",
-      link: "#",
-      isRead: false,
-    },
-    {
-      user: "@Halley",
-      userUrl: "#",
-      avatarUrl:
-        "https://stardewvalleywiki.com/mediawiki/images/1/1b/Haley.png",
-      content: "commented on your post",
-      date: "2023-12-04 10:12 PM",
-      link: "#",
-      isRead: false,
-    },
-  ]);
+  const [isWriteOpen, setWriteOpen] = useState(false);
+  const [notifications, setNotifications] = useState<NotificationModel[]>([]);
+  const [notificationCount, setNotificationCount] = useState(0);
   const menuProfileRef = useRef<HTMLDivElement>(null);
   const buttonProfileRef = useRef<HTMLImageElement>(null);
   const notificationRef = useRef<HTMLDivElement>(null);
   const buttonNotificationRef = useRef<HTMLDivElement>(null);
+
+  const writeRef = useRef<HTMLLIElement>(null);
 
   const location = useLocation();
   const [searchText, setSearchText] = useState(
@@ -144,6 +86,13 @@ function Header() {
       ) {
         setNotificationOpen(false);
       }
+
+      if (
+        writeRef.current &&
+        !writeRef.current.contains(event.target as Node)
+      ) {
+        setWriteOpen(false);
+      }
     };
 
     document.addEventListener("click", handleClickOutside);
@@ -161,8 +110,8 @@ function Header() {
     setNotificationOpen((prev) => !prev);
   };
 
-  const handleSearchTextChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.currentTarget.value);
+  const toggleWriteMneu = () => {
+    setWriteOpen((prev) => !prev);
   };
 
   const isAuthenticated = localStorage.getItem("token") !== null;
@@ -179,11 +128,47 @@ function Header() {
     }
   }, []);
 
+  const getNotification = async () => {
+    await GetAllNotificationByToken(false, null, null, null, [], 0, 10)
+      .then((res) => {
+        setNotifications(res.data.data);
+        setNotificationCount(
+          (res.data.data as NotificationModel[]).reduce(
+            (unreadCount, notification) =>
+              (unreadCount += notification.isRead ? 0 : 1),
+            0
+          )
+        );
+      })
+      .catch((error: AxiosError) => {});
+  };
+
+  useEffect(() => {
+    getNotification().then().catch();
+    const intervalId = setInterval(() => {
+      getNotification();
+    }, 30000);
+    return () => clearInterval(intervalId);
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     dispatch(removeBaseInfo());
     dispatch(logout());
     navigate("/login");
+  };
+
+  const handleMarkAllNotificationRead = () => {
+    MarkAllRead()
+      .then(() => {
+        setNotifications(
+          notifications.map((x) => {
+            return { ...x, isRead: true };
+          })
+        );
+        setNotificationCount(0);
+      })
+      .catch((error: AxiosError) => {});
   };
 
   useEffect(() => {
@@ -223,22 +208,43 @@ function Header() {
               <FaSearch />
             </li>
             {isAuthenticated && userInfo && (
-              <li>
-                <Link
-                  to={"/create-post"}
-                  className='header-menu-right-write pointer'
-                  title='Write post'
+              <li
+                className='header-menu-right-write'
+                ref={writeRef}
+                onClick={toggleWriteMneu}
+              >
+                <FaPen />
+                <div
+                  className={`header-menu-right-write-menu ${
+                    isWriteOpen && "show"
+                  }`}
                 >
-                  <FaPen />
-                </Link>
+                  <Link
+                    to={"/create-post"}
+                    className='header-menu-right-write-menu-item pointer'
+                    title='Write post'
+                  >
+                    <IoNewspaperOutline />
+                  </Link>
+                  <div className='header-menu-right-write-menu-divider'></div>
+                  <Link
+                    to={"/create-question"}
+                    className='header-menu-right-write-menu-item pointer'
+                    title='Write question'
+                  >
+                    <FaQuestionCircle />
+                  </Link>
+                </div>
               </li>
             )}
             {isAuthenticated && userInfo && (
               <li className='header-menu-right-notification'>
                 <div onClick={toggleNotification} ref={buttonNotificationRef}>
-                  <div className='header-menu-right-notification-count'>
-                    {notifications.length}
-                  </div>
+                  {notificationCount != 0 && (
+                    <div className='header-menu-right-notification-count'>
+                      {notificationCount}
+                    </div>
+                  )}
                   <FaBell className='pointer' />
                 </div>
                 <div
@@ -251,7 +257,10 @@ function Header() {
                     <span className='header-menu-right-notification-menu-header-title pointer'>
                       Notifications
                     </span>
-                    <span className='header-menu-right-notification-menu-header-read pointer'>
+                    <span
+                      className='header-menu-right-notification-menu-header-read pointer'
+                      onClick={handleMarkAllNotificationRead}
+                    >
                       Mark read
                     </span>
                   </div>
@@ -274,7 +283,10 @@ function Header() {
                       >
                         {notifications.map((notification, index) => (
                           <Link
-                            to={notification.link}
+                            to={notificationLinkResolver(
+                              notification.issueId,
+                              notification.type
+                            )}
                             className='notification-container'
                             key={index}
                           >
@@ -285,27 +297,26 @@ function Header() {
                               }`}
                             >
                               <Link
-                                to={notification.userUrl}
+                                to={"/user/" + notification.userId}
                                 className='user-avatar'
                               >
                                 <img
-                                  src={notification.avatarUrl}
-                                  alt={`${notification.user}'s avatar`}
+                                  src={notification.avatar}
+                                  alt={`${notification.userName}'s avatar`}
                                 />
                               </Link>
                               <div className='notification-content'>
                                 <p>
-                                  <a
-                                    href={notification.userUrl}
+                                  <Link
+                                    to={"/user/" + notification.userId}
                                     className='user-link'
                                   >
-                                    {notification.user}
-                                  </a>{" "}
+                                    {notification.userName}
+                                  </Link>{" "}
                                   {notification.content}
-                                  {"."}
                                 </p>
                                 <span className='date'>
-                                  {notification.date}
+                                  {formatDayAgo(notification.createdDate)}
                                 </span>
                               </div>
                             </div>

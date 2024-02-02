@@ -3,19 +3,21 @@ import OrderType from "../enums/OrderType";
 import NotificationType from "../enums/NotificationType";
 
 export interface NotificationModel {
-  user: string;
+  id: string;
+  content: string;
+  type: NotificationType;
+  createdDate: Date;
+  isRead: boolean;
+  issueId: string;
   userId: string;
   avatar: string;
-  content: string;
-  date: Date;
-  link: string;
-  isRead: boolean;
+  userName: string;
 }
 
 export interface NotificationFilter {
-  dateFrom: Dayjs | null;
-  dateTo: Dayjs | null;
-  notificationType: NotificationType[] | null;
+  unRead: boolean;
   orderType: OrderType | null;
-  isRead: boolean | null;
+  notificationDateFrom: Dayjs | null;
+  notificationDateTo: Dayjs | null;
+  types: NotificationType[];
 }

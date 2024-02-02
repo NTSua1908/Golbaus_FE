@@ -1,10 +1,10 @@
 enum NotificationType {
   NewPost = 0,
-  VotePost = 1,
-  CommentPost = 2,
-  AnswerQuestion = 3,
-  Reply = 4,
-  Follow = 5,
+  NewQuestion = 1,
+  Follow = 2,
+  CommentPost = 3,
+  AnswerQuestion = 4,
+  Reply = 5,
 }
 
 export default NotificationType;

@@ -298,22 +298,31 @@ function UserProfile() {
                 <div className='myProfile-right-content'>
                   <div className='myProfile-right-content-filterLeft'>
                     <h2 className='myProfile-right-content-title'>Posts</h2>
-                    <div className='myProfile-right-content-filterLeft-container'>
-                      {posts.map((post, index) => (
-                        <PostBlockList key={index} post={post} newTab />
-                      ))}
-                    </div>
-                    <div className='myProfile-right-content-filterLeft-pagination'>
-                      <Pagination
-                        showQuickJumper
-                        current={currentPostPage}
-                        pageSize={pageSize}
-                        total={postTotalPage}
-                        onChange={onPostPageChange}
-                        onShowSizeChange={handlePageSizeChange}
-                        hideOnSinglePage
-                      />
-                    </div>
+                    {posts.length !== 0 && (
+                      <>
+                        <div className='myProfile-right-content-filterLeft-container'>
+                          {posts.map((post, index) => (
+                            <PostBlockList key={index} post={post} newTab />
+                          ))}
+                        </div>
+                        <div className='myProfile-right-content-filterLeft-pagination'>
+                          <Pagination
+                            showQuickJumper
+                            current={currentPostPage}
+                            pageSize={pageSize}
+                            total={postTotalPage}
+                            onChange={onPostPageChange}
+                            onShowSizeChange={handlePageSizeChange}
+                            hideOnSinglePage
+                          />
+                        </div>
+                      </>
+                    )}
+                    {!loading && posts.length == 0 && (
+                      <div className='myProfile-right-content-filterLeft-nocontent'>
+                        <p>There are no posts</p>
+                      </div>
+                    )}
                   </div>
                   <div className='myProfile-right-content-filterRight'>
                     <div
@@ -347,19 +356,35 @@ function UserProfile() {
                 <div className='myProfile-right-content'>
                   <div className='myProfile-right-content-filterLeft'>
                     <h2 className='myProfile-right-content-title'>Questions</h2>
-                    <div className='myProfile-right-content-filterLeft-container'>
-                      {questions.map((question, index) => (
-                        <QuestionBlock key={index} question={question} newTab />
-                      ))}
-                    </div>
-                    <div className='myProfile-right-content-filterLeft-pagination'>
-                      <Pagination
-                        showQuickJumper
-                        current={currentQuestionPage}
-                        total={questionTotalPage}
-                        onChange={onQuestionPageChange}
-                      />
-                    </div>
+                    {posts.length !== 0 && (
+                      <>
+                        <div className='myProfile-right-content-filterLeft-container'>
+                          {questions.map((question, index) => (
+                            <QuestionBlock
+                              key={index}
+                              question={question}
+                              newTab
+                            />
+                          ))}
+                        </div>
+                        <div className='myProfile-right-content-filterLeft-pagination'>
+                          <Pagination
+                            showQuickJumper
+                            current={currentQuestionPage}
+                            pageSize={pageSize}
+                            total={questionTotalPage}
+                            onChange={onQuestionPageChange}
+                            onShowSizeChange={handlePageSizeChange}
+                            hideOnSinglePage
+                          />
+                        </div>
+                      </>
+                    )}
+                    {!loading && posts.length == 0 && (
+                      <div className='myProfile-right-content-filterLeft-nocontent'>
+                        <p>There are no questions</p>
+                      </div>
+                    )}
                   </div>
                   <div className='myProfile-right-content-filterRight'>
                     <div

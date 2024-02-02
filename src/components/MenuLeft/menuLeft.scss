@@ -9,6 +9,7 @@
   // background-color: $menu-left-background;
   color: #f1f1f1;
   transition: width ease-in-out 0.2s, left ease-in-out 0.5s;
+  color: $text-menu-color;
 
   @include for-size(phone, min) {
     position: absolute;
@@ -37,7 +38,7 @@
     padding: 30px 10px 30px 10px;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #f1f1f1;
+    border-bottom: 1px solid $text-menu-color;
 
     @include for-size(phone, min) {
       justify-content: center;

@@ -1,7 +1,7 @@
 @import "../../variable.scss";
 @import "../../breakPoint.scss";
 
-.comment {
+.comment-child {
   margin: 10px 0px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -27,6 +27,7 @@
   }
   &-content {
     flex: 1;
+    overflow: hidden;
     &-container {
       padding: 10px;
       border-radius: 8px;
@@ -211,10 +212,19 @@
       }
     }
   }
+  & p {
+    text-indent: 0px;
+  }
 }
 
 .comment-reply-form {
   width: 100%;
+
+  &-text {
+    height: 200px;
+    padding: 5px;
+  }
+
   &-input {
     border-radius: 5px;
     outline: none;
@@ -239,6 +249,20 @@
         border: 1px solid #999999;
         background-color: #cccccc;
         color: #666666;
+      }
+
+      &-spin {
+        margin: 0px 10px 0px 15px;
+        & span {
+          width: auto !important;
+          height: auto !important;
+          font-size: 10px !important;
+        }
+        & i {
+          background-color: white !important;
+          width: 7px !important;
+          height: 7px !important;
+        }
       }
     }
     &-cancel {

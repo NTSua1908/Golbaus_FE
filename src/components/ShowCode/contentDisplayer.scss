@@ -2,6 +2,8 @@
 /* Custom styles for paragraphs */
 .custom-paragraph {
   line-height: 2.5;
+  text-indent: 20px;
+  text-align: justify;
 }
 
 /* Custom styles for images */
@@ -62,12 +64,13 @@
 .custom-list-u {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin-left: 1em;
 }
 
 .custom-list-u .custom-list-item {
   padding-left: 1.5em;
   position: relative;
+  line-height: 2.3;
 }
 
 .custom-list-u .custom-list-item::before {
@@ -88,11 +91,11 @@
 .custom-list-o .custom-list-item {
   padding-left: 0.5em;
   position: relative;
+  line-height: 2.3;
 }
 
 .custom-list-item {
-  margin-bottom: 0.5em;
-  line-height: 1.5;
+  text-align: justify;
 }
 
 .custom-list-u .custom-list-u,
@@ -130,6 +133,7 @@
   position: relative;
   &-container {
     overflow: auto;
+    line-height: 2 !important;
   }
 }
 

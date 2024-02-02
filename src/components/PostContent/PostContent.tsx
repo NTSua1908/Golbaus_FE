@@ -290,7 +290,13 @@ function PostContent({
               <TiArrowSortedDown />
             </div>
             <div className='postContent-body-left-avatar'>
-              <img src={avatar} alt='User Avatar' />
+              <img
+                src={avatar}
+                alt='User Avatar'
+                onClick={() => {
+                  navigate("/user/" + userId);
+                }}
+              />
             </div>
             <div className='postContent-body-left-media'>
               <div
@@ -345,20 +351,21 @@ function PostContent({
                       >
                         @{username}
                       </p>
-
-                      <div
-                        className='post-user-info-details-name-btnfollow'
-                        onClick={handleFollowUser}
-                      >
-                        Follow{" "}
-                        {followLoading ? (
-                          <Spin className='post-user-info-details-name-btnfollow-spin' />
-                        ) : !follow ? (
-                          <GoPlus />
-                        ) : (
-                          <FaCheck />
-                        )}
-                      </div>
+                      {!isMyPost && (
+                        <div
+                          className='post-user-info-details-name-btnfollow'
+                          onClick={handleFollowUser}
+                        >
+                          Follow{" "}
+                          {followLoading ? (
+                            <Spin className='post-user-info-details-name-btnfollow-spin' />
+                          ) : !follow ? (
+                            <GoPlus />
+                          ) : (
+                            <FaCheck />
+                          )}
+                        </div>
+                      )}
                     </div>
                     <div className='post-user-info-details-more'>
                       <div className='post-user-info-details-more-post'>

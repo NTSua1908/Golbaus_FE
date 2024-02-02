@@ -32,6 +32,9 @@ import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 import RequiredLogin from "../RequiredLogin/RequiredLogin";
 import "./commentTree.scss";
 import { setPostCommentPage } from "../../actions/postAction";
+import BasicEditor from "../BasicEditor/BasicEditor";
+import ContentDisplayer from "../ShowCode/ContentDisplayer";
+import { FetchingErrorHandler } from "../../Helper/FetchingErrorHandler";
 
 const amoutPerPage = 5;
 
@@ -92,7 +95,9 @@ const Comment = React.memo(
             setCurrentPage(currentPage + 1);
             setReplies([...replies, ...res.data.data]);
           })
-          .catch()
+          .catch((error: AxiosError) => {
+            FetchingErrorHandler(error, openNotificationFailure);
+          })
           .finally(() => {
             setLoadingReply(false);
           });
@@ -146,7 +151,9 @@ const Comment = React.memo(
             setCurrentPage(currentPage + 1);
             setReplies([...replies, ...res.data.data]);
           })
-          .catch()
+          .catch((error: AxiosError) => {
+            FetchingErrorHandler(error, openNotificationFailure);
+          })
           .finally(() => {
             setLoadingReply(false);
           });
@@ -185,9 +192,7 @@ const Comment = React.memo(
           openNotificationSuccess("Updated successfully");
         })
         .catch((error: AxiosError) => {
-          const errors = (error.response?.data as any).errors;
-          const errorMessage = errors.join("\n") as string;
-          openNotificationFailure(errorMessage);
+          FetchingErrorHandler(error, openNotificationFailure);
         });
     };
 
@@ -214,7 +219,11 @@ const Comment = React.memo(
         setVote(VoteType.Up);
       }
 
-      UpVotePostComment(comment.id).then().catch();
+      UpVotePostComment(comment.id)
+        .then()
+        .catch((error: AxiosError) => {
+          FetchingErrorHandler(error, openNotificationFailure);
+        });
     };
 
     const handleDownvote = () => {
@@ -235,7 +244,11 @@ const Comment = React.memo(
         setVote(VoteType.Down);
       }
 
-      DownVotePostComment(comment.id).then().catch();
+      DownVotePostComment(comment.id)
+        .then()
+        .catch((error: AxiosError) => {
+          FetchingErrorHandler(error, openNotificationFailure);
+        });
     };
 
     const AddItsReply = (comment: CommentDetailModel) => {
@@ -273,16 +286,16 @@ const Comment = React.memo(
     };
 
     return (
-      <div className='comment'>
+      <div className='comment-child'>
         {contextHolder}
-        <div className='comment-header'>
+        <div className='comment-child-header'>
           <img
             src={comment.avatar}
             alt='User Avatar'
-            className='comment-header-avatar'
+            className='comment-child-header-avatar'
           />
         </div>
-        <div className='comment-content'>
+        <div className='comment-child-content'>
           {isEdit ? (
             <ReplyForm
               content={editContent}
@@ -296,33 +309,33 @@ const Comment = React.memo(
               showRequireLogin={showRequireLogin}
             />
           ) : (
-            <div className='comment-content-container'>
-              <div className='comment-content-left'>
-                <div className='comment-content-details'>
-                  <span className='comment-content-details-fullname'>
+            <div className='comment-child-content-container'>
+              <div className='comment-child-content-left'>
+                <div className='comment-child-content-details'>
+                  <span className='comment-child-content-details-fullname'>
                     {comment.fullName}
                   </span>
-                  <span className='comment-content-details-username'>
+                  <span className='comment-child-content-details-username'>
                     @{comment.userName}
                   </span>
-                  <span className='comment-content-details-date'>
+                  <span className='comment-child-content-details-date'>
                     {formatDateToString(comment.createdDate)}
                   </span>
                 </div>
                 <div
-                  className='comment-content-option'
+                  className='comment-child-content-option'
                   ref={optionRef}
                   onClick={handleShowOption}
                 >
                   <SlOptionsVertical />
                   <div
-                    className={`comment-content-option-menu ${
+                    className={`comment-child-content-option-menu ${
                       isShowOption && "show"
                     }`}
                   >
                     <ul>
                       {!comment.isMyComment && (
-                        <li className='comment-content-option-menu-item'>
+                        <li className='comment-child-content-option-menu-item'>
                           <CiFlag1 />
                           <span>Report</span>
                         </li>
@@ -331,7 +344,7 @@ const Comment = React.memo(
                       {comment.isMyComment && (
                         <>
                           <li
-                            className='comment-content-option-menu-item'
+                            className='comment-child-content-option-menu-item'
                             onClick={() => {
                               setEdit(true);
                             }}
@@ -339,7 +352,7 @@ const Comment = React.memo(
                             <CiEdit /> <span>Edit</span>
                           </li>
                           <li
-                            className='comment-content-option-menu-item'
+                            className='comment-child-content-option-menu-item'
                             onClick={() => {
                               console.log(comment);
                               setOnConfirm(() => () => {
@@ -358,16 +371,22 @@ const Comment = React.memo(
                 </div>
               </div>
 
-              <div className='comment-content-message'>
-                <Link to={`/user/profile/${"fill-later"}`}>
+              <div className='comment-child-content-message'>
+                {/* <Link to={`/user/profile/${"fill-later"}`}>
                   @{comment.replyFor}
                 </Link>{" "}
-                {content}
+                {content} */}
+                <ContentDisplayer
+                  content={
+                    `[@${comment.replyFor}](${`/user/${comment.userId}`}) ` +
+                    (content.startsWith(`\``) ? "\n" + content : content)
+                  }
+                />
               </div>
-              <div className='comment-content-function'>
-                <div className='comment-content-function-votes'>
+              <div className='comment-child-content-function'>
+                <div className='comment-child-content-function-votes'>
                   <div
-                    className={`comment-content-function-votes-up ${
+                    className={`comment-child-content-function-votes-up ${
                       vote == VoteType.Up && "selected"
                     }`}
                     onClick={handleUpvote}
@@ -376,7 +395,7 @@ const Comment = React.memo(
                     <span>{upvote}</span>
                   </div>
                   <div
-                    className={`comment-content-function-votes-down ${
+                    className={`comment-child-content-function-votes-down ${
                       vote == VoteType.Down && "selected"
                     }`}
                     onClick={handleDownvote}
@@ -386,7 +405,7 @@ const Comment = React.memo(
                   </div>
                 </div>
                 <div
-                  className='comment-content-function-reply'
+                  className='comment-child-content-function-reply'
                   onClick={handleReplyClick}
                 >
                   Reply
@@ -396,8 +415,8 @@ const Comment = React.memo(
           )}
 
           {isReply && (
-            <div className='comment-content-form'>
-              <div className='comment-content-form-icon'>
+            <div className='comment-child-content-form'>
+              <div className='comment-child-content-form-icon'>
                 <ImReply />
               </div>
               <ReplyForm
@@ -415,24 +434,24 @@ const Comment = React.memo(
 
           {totalCommentCount > 0 && (
             <div
-              className='comment-content-showComment'
+              className='comment-child-content-showComment'
               onClick={handleShowReplyClick}
             >
               <div
-                className={`comment-content-showComment-button ${
+                className={`comment-child-content-showComment-button ${
                   showComment && "show"
                 }`}
               >
                 <TiArrowRight />
               </div>
-              <div className='comment-content-showComment-label'>
+              <div className='comment-child-content-showComment-label'>
                 Show replies
               </div>
             </div>
           )}
 
           <div
-            className={`comment-content-replies ${
+            className={`comment-child-content-replies ${
               showComment && replies && "show"
             }`}
           >
@@ -453,7 +472,7 @@ const Comment = React.memo(
                 />
               ))}
             {isLoadingReply && (
-              <div className='comment-content-loading'>
+              <div className='comment-child-content-loading'>
                 <Spin />
               </div>
             )}
@@ -461,7 +480,7 @@ const Comment = React.memo(
               currentPage <=
                 Math.ceil(totalCommentCount / amoutPerPage) - 1 && (
                 <div
-                  className='comment-content-replies-more'
+                  className='comment-child-content-replies-more'
                   onClick={handleLoadMoreReplies}
                 >
                   Show more comments...
@@ -499,18 +518,23 @@ export const ReplyForm: React.FC<ReplyFormProps> = ({
   };
 
   const [api, contextHolder] = notification.useNotification();
+  const [loading, setLoading] = useState(false);
 
-  const handleSavePost = async () => {
+  const handleSavePost = () => {
     if (isAuthenticated) {
-      await onSave()
-        .then(() => {
-          openNotificationSuccess("Post successful");
-        })
-        .catch((error: AxiosError) => {
-          const errors = (error.response?.data as any).errors;
-          const errorMessage = errors.join("\n") as string;
-          openNotificationFailure(errorMessage);
-        });
+      if (!loading) {
+        setLoading(true);
+        onSave()
+          .then(() => {
+            openNotificationSuccess("Post successful");
+          })
+          .catch((error: AxiosError) => {
+            FetchingErrorHandler(error, openNotificationFailure);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }
     } else {
       showRequireLogin();
     }
@@ -536,13 +560,9 @@ export const ReplyForm: React.FC<ReplyFormProps> = ({
   return (
     <div className='comment-reply-form'>
       {contextHolder}
-      <textarea
-        autoFocus={autoFocus}
-        className='comment-reply-form-input'
-        value={content}
-        onChange={handleChange}
-        placeholder='Write your comment...'
-      />
+      <div className='comment-reply-form-text'>
+        <BasicEditor setValue={setContent} value={content} />
+      </div>
       <div className='comment-reply-form-function'>
         <button
           className='comment-reply-form-function-save'
@@ -550,6 +570,9 @@ export const ReplyForm: React.FC<ReplyFormProps> = ({
           disabled={content.length === 0}
         >
           Save changes
+          {loading && (
+            <Spin className='comment-reply-form-function-save-spin' />
+          )}
         </button>
         <button
           className='comment-reply-form-function-cancel'
@@ -599,7 +622,9 @@ const CommentsTree = ({
         console.log(res.data);
         setComments([res.data, ...comments]);
       })
-      .catch();
+      .catch((error: AxiosError) => {
+        FetchingErrorHandler(error, openNotificationFailure);
+      });
     setReply("");
   };
 
@@ -610,9 +635,7 @@ const CommentsTree = ({
         openNotificationSuccess("Deleted successfully");
       })
       .catch((error: AxiosError) => {
-        const errors = (error.response?.data as any).errors;
-        const errorMessage = errors.join("\n") as string;
-        openNotificationFailure(errorMessage);
+        FetchingErrorHandler(error, openNotificationFailure);
       });
   };
 

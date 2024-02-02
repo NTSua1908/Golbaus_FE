@@ -217,6 +217,9 @@
       }
     }
   }
+  & p {
+    text-indent: 0px;
+  }
 }
 
 .answer-reply-form {
@@ -251,6 +254,20 @@
         border: 1px solid #999999;
         background-color: #cccccc;
         color: #666666;
+      }
+
+      &-spin {
+        margin: 0px 10px 0px 15px;
+        & span {
+          width: auto !important;
+          height: auto !important;
+          font-size: 10px !important;
+        }
+        & i {
+          background-color: white !important;
+          width: 7px !important;
+          height: 7px !important;
+        }
       }
     }
     &-cancel {

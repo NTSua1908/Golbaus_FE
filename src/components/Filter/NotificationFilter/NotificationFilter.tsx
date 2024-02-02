@@ -2,7 +2,7 @@ import dayjs, { Dayjs } from "dayjs";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import OrderBy from "../../../enums/OrderBy";
 import OrderType from "../../../enums/OrderType";
-import { Input, Select } from "antd";
+import { Checkbox, CheckboxProps, Input, Select } from "antd";
 import { NotificationFilter as FilterProps } from "../../../model/notificationModel";
 import AddTag from "../../Tags/AddTag";
 import { DatePicker } from "antd";
@@ -25,27 +25,17 @@ function NotificationFilter({
   onFilter,
   onClose,
 }: NotificationFilterProps) {
-  const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFilter((prevState) => {
-      return { ...prevState, title: e.currentTarget.value };
-    });
-  };
-
-  const [tags, setTags] = useState<string[]>([]);
-
-  useEffect(() => {
-    setFilter((prevState) => {
-      return { ...prevState, tags };
-    });
-  }, [tags]);
-
   const handleDateChange = (
     values: RangeValue<Dayjs>,
     dateStrings: [string, string]
   ) => {
     const [startDate, endDate] = values as [Dayjs, Dayjs];
     setFilter((prevState) => {
-      return { ...prevState, dateFrom: startDate, dateTo: endDate };
+      return {
+        ...prevState,
+        notificationDateFrom: startDate,
+        notificationDateTo: endDate,
+      };
     });
   };
 
@@ -57,7 +47,7 @@ function NotificationFilter({
             (x) => NotificationType[x as keyof typeof NotificationType]
           );
     setFilter((prevState) => {
-      return { ...prevState, notificationType };
+      return { ...prevState, types: notificationType ?? [] };
     });
     console.log(notificationType);
   };
@@ -75,6 +65,12 @@ function NotificationFilter({
     onFilter();
   };
 
+  const onChangeUnread: CheckboxProps["onChange"] = (e) => {
+    setFilter((prevState) => {
+      return { ...prevState, unRead: e.target.checked };
+    });
+  };
+
   return (
     <div className='filterNotification'>
       <h2 className='filterNotification-title'>Filter</h2>
@@ -85,7 +81,7 @@ function NotificationFilter({
           </label>
           <RangePicker
             allowEmpty={[true, true]}
-            value={[filter.dateFrom, filter.dateTo]}
+            value={[filter.notificationDateFrom, filter.notificationDateTo]}
             onChange={handleDateChange}
           />
         </div>
@@ -95,9 +91,9 @@ function NotificationFilter({
             // className='filterNotification-input'
             mode='multiple'
             defaultValue={
-              filter.notificationType === null
+              filter.types.length === 0
                 ? []
-                : filter.notificationType.map((x) => NotificationType[x])
+                : filter.types.map((x) => NotificationType[x])
             }
             size='large'
             style={{ width: "100%" }}
@@ -116,17 +112,17 @@ function NotificationFilter({
           <label className='filterNotification-label'>Order type</label>
           <Select
             className='filterNotification-input'
-            defaultValue={
-              filter.orderType === null ? "None" : OrderType[filter.orderType]
-            }
+            defaultValue={OrderType[1]}
             style={{ width: 120 }}
             onChange={handleOrderTypeChange}
             options={[
-              { value: null, label: "Default" },
               { value: OrderType[0], label: OrderType[0] },
               { value: OrderType[1], label: OrderType[1] },
             ]}
           />
+        </div>
+        <div className='filterNotification-item'>
+          <Checkbox onChange={onChangeUnread}>Unread</Checkbox>
         </div>
         <div className='filterNotification-item function'>
           <div className='filterNotification-button cancel' onClick={onClose}>

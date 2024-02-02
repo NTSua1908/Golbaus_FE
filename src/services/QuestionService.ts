@@ -109,3 +109,27 @@ export function GetAllByQuestionUser(
 export function ToggleAddBookmark(id: string) {
   return api.put(BASE_URL_QUESTION + "ToggleAddBookmark/" + id);
 }
+
+export function GetAllQuestionBookmarkByToken(
+  searchText: string | null,
+  tags: string[],
+  orderBy: OrderBy | null,
+  orderType: OrderType | null,
+  publishDateFrom: Date | null,
+  publishDateTo: Date | null,
+  page: number,
+  amount: number
+) {
+  return api.get(BASE_URL_QUESTION + "GetAllBookmarkByToken", {
+    params: {
+      searchText,
+      tags: tags.join(","),
+      orderBy,
+      orderType,
+      publishDateFrom,
+      publishDateTo,
+      page,
+      amount,
+    },
+  });
+}

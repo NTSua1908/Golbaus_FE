@@ -84,6 +84,15 @@
         display: flex;
         justify-content: center;
       }
+      &-nocontent {
+        height: 100%;
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+        font-weight: 600;
+      }
     }
 
     &-filterRight {

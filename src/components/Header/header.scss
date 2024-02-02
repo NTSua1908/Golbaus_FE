@@ -12,7 +12,7 @@
   z-index: 1000;
 
   @include for-size(phone-sm, min) {
-    padding: 0 20px;
+    padding: 0px;
   }
   &-container {
     max-width: 1600px;
@@ -72,6 +72,33 @@
       list-style: none;
       // flex: 5;
 
+      &-write {
+        position: relative;
+        cursor: pointer;
+        &-menu {
+          position: absolute;
+          border: 1px solid $text-menu-color;
+          background-color: $background-color;
+          border-radius: 10px;
+          top: 28px;
+          left: -30px;
+          display: none;
+
+          &.show {
+            display: flex;
+          }
+
+          &-item {
+            padding: 10px;
+          }
+          &-divider {
+            height: 43px;
+            width: 1px;
+            background-color: $text-menu-color;
+          }
+        }
+      }
+
       & > li {
         margin-right: 30px;
         & a {
@@ -107,11 +134,12 @@
           left: -10px;
           font-size: 15px;
           text-align: center;
+          cursor: pointer;
         }
         &-menu {
           position: absolute;
           top: 47px;
-          left: -239px;
+          left: -233px;
           border-radius: 15px;
           border: 1px solid $text-menu-color;
           opacity: 0;
@@ -158,6 +186,7 @@
               display: flex;
               align-items: center;
               justify-content: center;
+              background-color: white;
               &-icon {
                 margin-right: 10px;
                 font-size: 25px;
@@ -214,7 +243,7 @@
 
               & .user-link {
                 font-weight: bold;
-                color: #333;
+                color: #007bff;
               }
 
               & .post-link {

@@ -38,4 +38,5 @@ export interface UserUpdateByTokenModel {
   bio: string | null;
   password: string;
   confirmPassword: string;
+  oldPassword: string;
 }
