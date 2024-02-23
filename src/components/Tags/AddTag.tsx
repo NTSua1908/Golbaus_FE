@@ -1,8 +1,10 @@
-import { AutoComplete, Space, Tag, Tooltip, theme } from "antd";
+import { AutoComplete, Space, Spin, Tag, Tooltip, theme } from "antd";
 import type { BaseSelectRef } from "rc-select";
 import React, { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { GoPlus } from "react-icons/go";
 import "./addTag.scss";
+import { GetAllTags } from "../../services/TagService";
+import { AxiosError } from "axios";
 
 interface AddTagProps {
   tags: string[];
@@ -25,6 +27,7 @@ const AddTag: React.FC<AddTagProps> = ({ tags, setTags }) => {
   const inputRef = useRef<BaseSelectRef>(null);
   const editInputRef = useRef<BaseSelectRef>(null);
   const [anotherOptions, setAnotherOptions] = useState<{ value: string }[]>([]);
+  const [isSearching, setSearching] = useState(false);
 
   useEffect(() => {
     if (inputVisible) {
@@ -36,16 +39,21 @@ const AddTag: React.FC<AddTagProps> = ({ tags, setTags }) => {
     editInputRef.current?.focus();
   }, [editInputValue]);
 
-  const getPanelValue = (searchText: string) => {
-    console.log(searchText);
-    return !searchText
-      ? []
-      : [mockVal(searchText), mockVal(searchText, 2), mockVal(searchText, 3)];
+  const getPanelValue = async (searchText: string) => {
+    await GetAllTags(searchText, 0, 10)
+      .then((res) => {
+        setAnotherOptions(res.data.data);
+      })
+      .catch((error: AxiosError) => {
+        setAnotherOptions([]);
+      })
+      .finally(() => {
+        setSearching(false);
+      });
   };
 
   const handleClose = (removedTag: string) => {
     const newTags = tags.filter((tag) => tag !== removedTag);
-    console.log(newTags);
     setTags(newTags);
   };
 
@@ -67,6 +75,7 @@ const AddTag: React.FC<AddTagProps> = ({ tags, setTags }) => {
     setTags(newTags);
     setEditInputIndex(-1);
     setEditInputValue("");
+    setAnotherOptions([]);
   };
 
   const handleEditEnter = (event: KeyboardEvent) => {
@@ -101,31 +110,36 @@ const AddTag: React.FC<AddTagProps> = ({ tags, setTags }) => {
     setInputValue(data);
   };
 
-  const handleSearch = (text: string) => {
+  const handleSearch = async (text: string) => {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      setAnotherOptions(getPanelValue(text));
+    setAnotherOptions([]);
+    timeoutId = setTimeout(async () => {
+      setSearching(true);
+      console.log("Searching...");
+      getPanelValue(text);
     }, 500);
   };
 
   return (
-    <Space size={[0, 8]} wrap className="addTag">
+    <Space size={[0, 8]} wrap className='addTag'>
       {tags.map((tag, index) => {
         if (editInputIndex === index) {
           return (
-            <AutoComplete
-              key={tag}
-              size="small"
-              value={editInputValue}
-              style={tagInputStyle}
-              onChange={onEditChange}
-              onBlur={handleEditInputConfirm}
-              onKeyDown={handleEditEnter}
-              options={anotherOptions}
-              onSearch={handleSearch}
-              placeholder="Edit tag"
-              ref={editInputRef}
-            />
+            <div>
+              <AutoComplete
+                key={tag}
+                size='small'
+                value={editInputValue}
+                style={tagInputStyle}
+                onChange={onEditChange}
+                onBlur={handleEditInputConfirm}
+                onKeyDown={handleEditEnter}
+                options={anotherOptions}
+                onSearch={handleSearch}
+                placeholder='Edit tag'
+                ref={editInputRef}
+              />
+            </div>
           );
         }
         const isLongTag = tag.length > 20;
@@ -158,7 +172,7 @@ const AddTag: React.FC<AddTagProps> = ({ tags, setTags }) => {
       {inputVisible ? (
         <AutoComplete
           ref={inputRef}
-          size="small"
+          size='small'
           value={inputValue}
           style={tagInputStyle}
           onChange={onInputChange}
@@ -166,13 +180,14 @@ const AddTag: React.FC<AddTagProps> = ({ tags, setTags }) => {
           onKeyDown={handleInputEnter}
           options={anotherOptions}
           onSearch={handleSearch}
-          placeholder="New tag"
+          placeholder='New tag'
         />
       ) : (
         <Tag style={tagPlusStyle} icon={<GoPlus />} onClick={showInput}>
           New Tag
         </Tag>
       )}
+      <div className='addTag-loading'>{isSearching && <Spin />}</div>
     </Space>
   );
 };

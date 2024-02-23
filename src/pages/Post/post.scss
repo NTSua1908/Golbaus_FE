@@ -23,6 +23,7 @@
     width: 80%;
     margin: 0 auto;
     max-width: 1500px;
+    padding-bottom: 50px;
 
     @include for-size(desktop, min) {
       width: 95%;

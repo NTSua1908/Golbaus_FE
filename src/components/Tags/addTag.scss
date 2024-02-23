@@ -1,11 +1,29 @@
+@import "../../variable.scss";
+
 .addTag {
   padding: 5px;
   & .ant-select {
     height: 32px !important;
   }
   & .ant-select-selection-search-input {
-    padding: 10px !important;
+    // padding: 10px !important;
     height: 32px !important;
     font-size: 14px;
+    // text-indent: 5px !important;
+  }
+
+  &-loading {
+    width: 25px;
+    margin-left: 15px;
+    & span {
+      width: auto !important;
+      height: auto !important;
+      font-size: 10px !important;
+    }
+    & i {
+      background-color: $background-color !important;
+      width: 7px !important;
+      height: 7px !important;
+    }
   }
 }

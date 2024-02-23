@@ -2,8 +2,8 @@ import axios, { AxiosInstance, AxiosResponse, AxiosError } from "axios";
 
 // Create an Axios instance with a base URL
 const api: AxiosInstance = axios.create({
-  // baseURL: "https://thiensua.bsite.net/api/",
-  baseURL: "https://localhost:7032/api/",
+  baseURL: "https://thiensua.bsite.net/api/",
+  // baseURL: "https://localhost:7032/api/",
   timeout: 30000,
   withCredentials: true,
 });

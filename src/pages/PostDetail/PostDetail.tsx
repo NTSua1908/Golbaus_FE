@@ -134,7 +134,7 @@ function PostDetail() {
 
       if (!isRelatedPostLoading && post) {
         setRelatedPostLoading(true);
-        GetRelatedPost(post.userId, post.tags, 0, 10)
+        GetRelatedPost(post.id, post.tags, 0, 10)
           .then((res) => {
             setRelatedPosts(res.data.data);
           })
