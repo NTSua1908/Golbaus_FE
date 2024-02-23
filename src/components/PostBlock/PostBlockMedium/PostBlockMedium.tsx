@@ -7,24 +7,24 @@ import { Link } from "react-router-dom";
 
 function PostBlockMedium({ post }: PostBlockProps) {
   return (
-    <Link to={`/post/${post.id}}`} className="post-block-medium">
-      <div className="post-block-medium-thumbnail">
+    <Link to={`/post/${post.id}`} className='post-block-medium'>
+      <div className='post-block-medium-thumbnail'>
         <img
           src={post.thumbnail}
           alt={post.title}
-          className="post-block-medium-thumbnail-img"
+          className='post-block-medium-thumbnail-img'
         />
       </div>
-      <div className="post-block-medium-content">
-        <h3 className="post-block-medium-content-title">{post.title}</h3>
-        <p className="post-block-medium-content-excerpt">{post.excerpt}</p>
-        <p className="post-block-medium-content-info">
+      <div className='post-block-medium-content'>
+        <h3 className='post-block-medium-content-title'>{post.title}</h3>
+        <p className='post-block-medium-content-excerpt'>{post.excerpt}</p>
+        <p className='post-block-medium-content-info'>
           <i>By</i>{" "}
-          <span className="post-block-medium-content-info-auth">
+          <span className='post-block-medium-content-info-auth'>
             {post.author}
           </span>{" "}
           <br />
-          <span className="post-block-medium-content-info-date">
+          <span className='post-block-medium-content-info-date'>
             {formatDateToString(post.date)}
           </span>
         </p>

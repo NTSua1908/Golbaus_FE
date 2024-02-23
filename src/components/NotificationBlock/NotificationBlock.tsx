@@ -8,6 +8,7 @@ import { FaRegEye } from "react-icons/fa";
 import "./notificationBlock.scss";
 import { notificationLinkResolver } from "../../Helper/NotificationHelper";
 import { MarkRead } from "../../services/NotificationService";
+import DefaultAvatar from "../../images/default_avatar.png";
 
 interface NotificationBlockProps {
   notification: NotificationModel;
@@ -45,6 +46,7 @@ function NotificationBlock({
 
   const goToIssue = () => {
     navigate(notificationLinkResolver(notification.issueId, notification.type));
+    handleMarkRead(notification.id);
   };
 
   return (
@@ -58,7 +60,7 @@ function NotificationBlock({
           className='notificationBlock-item-avatar'
         >
           <img
-            src={notification.avatar}
+            src={notification.avatar ?? DefaultAvatar}
             alt={`${notification.avatar}'s avatar`}
           />
         </Link>

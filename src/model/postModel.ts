@@ -5,12 +5,12 @@ import OrderBy from "../enums/OrderBy";
 import OrderType from "../enums/OrderType";
 
 export interface PostBlock {
-  thumbnail: string;
+  id: string;
   title: string;
   excerpt: string;
+  thumbnail: string;
   author: string;
   date: Date;
-  id: string;
 }
 
 export interface PostList {
@@ -23,7 +23,7 @@ export interface PostList {
   authorName: string;
   authorAvatar: string;
   commentCount: number;
-  date: Date;
+  publishDate: Date;
   id: string;
 }
 

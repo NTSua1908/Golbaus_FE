@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { CiBookmark, CiEdit, CiFlag1 } from "react-icons/ci";
 import {
   FaBookmark,
@@ -32,6 +32,7 @@ import { Spin, notification } from "antd";
 import PublishType from "../../enums/PublishType";
 import { formatDateToString, formatDayAgo } from "../../Helper/DateHelper";
 import { ToggleFollow } from "../../services/AccountService";
+import DefaultAvatar from "../../images/default_avatar.png";
 
 interface PostContentProps {
   id: string;
@@ -291,7 +292,7 @@ function PostContent({
             </div>
             <div className='postContent-body-left-avatar'>
               <img
-                src={avatar}
+                src={avatar ?? DefaultAvatar}
                 alt='User Avatar'
                 onClick={() => {
                   navigate("/user/" + userId);
@@ -330,7 +331,7 @@ function PostContent({
                 <div className='post-user-info'>
                   <img
                     className='post-user-info-avatar'
-                    src={avatar}
+                    src={avatar ?? DefaultAvatar}
                     alt='User Avatar'
                   />
                   <div className='post-user-info-details'>
@@ -512,4 +513,4 @@ function PostContent({
   );
 }
 
-export default PostContent;
+export default memo(PostContent);

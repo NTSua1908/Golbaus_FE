@@ -5,6 +5,7 @@ import { QuestionListModel } from "../../model/questionModel";
 import { formatDayAgo } from "../../Helper/DateHelper";
 import DisplayTags from "../DisplayTag/DisplayTags";
 import { FaRegEye, FaRocketchat } from "react-icons/fa";
+import DefaultAvatar from "../../images/default_avatar.png";
 
 interface QuestionBlockProps {
   question: QuestionListModel;
@@ -24,7 +25,7 @@ function QuestionBlock({ question, newTab }: QuestionBlockProps) {
           <Link to={"users/"} className='question-block-info-left-link'>
             <img
               className='question-block-info-left-avatar'
-              src={question.avatar}
+              src={question.avatar ?? DefaultAvatar}
               alt={question.userName}
             />
             <span className='question-block-info-left-fullname'>

@@ -12,17 +12,17 @@ interface TrendingPostProps {
 
 function TrendingPost({ post, index }: TrendingPostProps) {
   return (
-    <Link to={`/post/${post.id}}`} className="post-block-trending">
-      <div className="post-block-trending-left">{index}</div>
-      <div className="post-block-trending-right">
-        <h3 className="post-block-trending-right-title">{post.title}</h3>
-        <p className="post-block-trending-right-info">
+    <Link to={`/post/${post.id}`} className='post-block-trending'>
+      <div className='post-block-trending-left'>{index}</div>
+      <div className='post-block-trending-right'>
+        <h3 className='post-block-trending-right-title'>{post.title}</h3>
+        <p className='post-block-trending-right-info'>
           <i>By</i>{" "}
-          <span className="post-block-trending-right-info-auth">
+          <span className='post-block-trending-right-info-auth'>
             {post.author}
           </span>{" "}
           <br />
-          <span className="post-block-trending-right-info-date">
+          <span className='post-block-trending-right-info-date'>
             {formatDateToString(post.date)}
           </span>
         </p>

@@ -35,6 +35,7 @@ import { setPostCommentPage } from "../../actions/postAction";
 import BasicEditor from "../BasicEditor/BasicEditor";
 import ContentDisplayer from "../ShowCode/ContentDisplayer";
 import { FetchingErrorHandler } from "../../Helper/FetchingErrorHandler";
+import DefaultAvatar from "../../images/default_avatar.png";
 
 const amoutPerPage = 5;
 
@@ -281,7 +282,7 @@ const Answer = React.memo(
         {contextHolder}
         <div className='answer-header'>
           <img
-            src={comment.avatar}
+            src={comment.avatar ?? DefaultAvatar}
             alt='User Avatar'
             className='answer-header-avatar'
           />
@@ -706,10 +707,11 @@ const AnswerTree = ({
           <div className='answers-tree-list-pagination'>
             <Pagination
               simple
-              defaultCurrent={page}
+              defaultCurrent={1}
               pageSize={amount}
               total={totalCount}
               onChange={onChangePage}
+              current={page}
             />
           </div>
         </div>

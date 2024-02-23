@@ -46,6 +46,8 @@
     width: 80%;
     margin: 0 auto;
     max-width: 1500px;
+    padding-bottom: 50px;
+
     @include for-size(desktop, min) {
       width: 95%;
     }
@@ -113,7 +115,7 @@
     }
 
     &-special-post {
-      padding: 20px 0px;
+      padding: 40px 0px 20px 0px;
     }
   }
 }

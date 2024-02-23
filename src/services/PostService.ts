@@ -43,10 +43,10 @@ export function GetAllByToken(
   page: number,
   amount: number
 ) {
-  return api.get(BASE_URL_POST + "GetAllByToken", {
+  const queryString = tags.map((value) => `tags=${value}`).join("&");
+  return api.get(BASE_URL_POST + "GetAllByToken?" + queryString, {
     params: {
       searchText,
-      tags: tags.join(","),
       orderBy,
       orderType,
       publishDateFrom,
@@ -67,10 +67,10 @@ export function GetAllPost(
   page: number,
   amount: number
 ) {
-  return api.get(BASE_URL_POST + "GetAll", {
+  const queryString = tags.map((value) => `tags=${value}`).join("&");
+  return api.get(BASE_URL_POST + "GetAll?" + queryString, {
     params: {
       searchText,
-      tags: tags.join(","),
       orderBy,
       orderType,
       publishDateFrom,
@@ -92,10 +92,10 @@ export function GetAllPostByUser(
   page: number,
   amount: number
 ) {
-  return api.get(BASE_URL_POST + "GetAllByUser/" + userId, {
+  const queryString = tags.map((value) => `tags=${value}`).join("&");
+  return api.get(BASE_URL_POST + "GetAllByUser/" + userId + "?" + queryString, {
     params: {
       searchText,
-      tags: tags.join(","),
       orderBy,
       orderType,
       publishDateFrom,
@@ -120,14 +120,71 @@ export function GetAllPostBookmarkByToken(
   page: number,
   amount: number
 ) {
-  return api.get(BASE_URL_POST + "GetAllBookmarkByToken", {
+  const queryString = tags.map((value) => `tags=${value}`).join("&");
+  return api.get(BASE_URL_POST + "GetAllBookmarkByToken?" + queryString, {
     params: {
       searchText,
-      tags: tags.join(","),
       orderBy,
       orderType,
       publishDateFrom,
       publishDateTo,
+      page,
+      amount,
+    },
+  });
+}
+
+export function GetOtherPostByUser(
+  userId: string,
+  postId: string,
+  page: number,
+  amount: number
+) {
+  return api.get(BASE_URL_POST + `GetOtherPostByUser/${userId}/${postId}`, {
+    params: {
+      page,
+      amount,
+    },
+  });
+}
+
+export function GetRelatedPost(
+  postId: string,
+  tags: string[],
+  page: number,
+  amount: number
+) {
+  const queryString = tags
+    .map((value) => `tags=${encodeURIComponent(value)}`)
+    .join("&");
+  return api.get(BASE_URL_POST + `GetRelatedPost/${postId}?${queryString}`, {
+    params: {
+      page,
+      amount,
+    },
+  });
+}
+
+export function GetNewestPost() {
+  return api.get(BASE_URL_POST + "GetNewestPost");
+}
+
+export function GetPostTrending(page: number, amount: number) {
+  return api.get(BASE_URL_POST + "GetPostTrending", {
+    params: {
+      page,
+      amount,
+    },
+  });
+}
+
+export function GetFeaturedPostByToken() {
+  return api.get(BASE_URL_POST + "GetFeaturedPostByToken");
+}
+
+export function GetFollowUserPost(page: number, amount: number) {
+  return api.get(BASE_URL_POST + "GetFollowUserPost", {
+    params: {
       page,
       amount,
     },

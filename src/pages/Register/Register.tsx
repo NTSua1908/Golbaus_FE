@@ -143,22 +143,24 @@ const Register: React.FC = () => {
   const [isLoading, setLoading] = useState(false);
 
   const handleRegister = (values: any) => {
-    setLoading(true);
-    RegisterAccount(values)
-      .then((res) => {
-        openNotificationSuccess();
-        setTimeout(() => {
-          navigate("/CheckEmail/", { state: { email: values.email } });
-        }, 2000);
-      })
-      .catch((error: AxiosError) => {
-        const errors = (error.response?.data as any).errors;
-        const errorMessage = errors.join("\n") as string;
-        openNotificationFailure(errorMessage);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    if (!isLoading) {
+      setLoading(true);
+      RegisterAccount(values)
+        .then((res) => {
+          openNotificationSuccess();
+          setTimeout(() => {
+            navigate("/CheckEmail/", { state: { email: values.email } });
+          }, 2000);
+        })
+        .catch((error: AxiosError) => {
+          const errors = (error.response?.data as any).errors;
+          const errorMessage = errors.join("\n") as string;
+          openNotificationFailure(errorMessage);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   };
 
   const handleGoogleLogin = () => {

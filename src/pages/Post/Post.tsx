@@ -1,17 +1,23 @@
-import React from "react";
-import Banner from "../../images/home_banner.png";
-import Header from "../../components/Header/Header";
+import { useEffect, useLayoutEffect, useState } from "react";
 import Footer from "../../components/Footer/Footer";
-import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
-import "./post.scss";
-import { PostBlock, PostList } from "../../model/postModel";
-import TrendingPost from "../../components/PostBlock/TrendingPost/TrendingPost";
-import PostBlockLarge from "../../components/PostBlock/PostBlockLarge/PostBlockLarge";
-import ViewMoreButton from "../../components/ViewMoreButton/ViewMoreButton";
-import { ParsePostTrendingToPostBlock } from "../../Helper/ObjectParser";
+import Header from "../../components/Header/Header";
 import FeaturedPost from "../../components/PostBlock/FeaturedPost/FeaturedPost";
-import SwipperContent from "../../components/SwiperContent/SwiperContent";
 import PostBlockList from "../../components/PostBlock/PostBlockList/PostBlockList";
+import TrendingPost from "../../components/PostBlock/TrendingPost/TrendingPost";
+import ScrollToTop from "../../components/ScrollToTop/ScrollToTop";
+import SwipperContent from "../../components/SwiperContent/SwiperContent";
+import ViewMoreButton from "../../components/ViewMoreButton/ViewMoreButton";
+import Banner from "../../images/home_banner.png";
+import { PostBlock, PostList } from "../../model/postModel";
+import "./post.scss";
+import {
+  GetFeaturedPostByToken,
+  GetFollowUserPost,
+  GetNewestPost,
+  GetPostTrending,
+} from "../../services/PostService";
+import { AxiosError } from "axios";
+import { Spin } from "antd";
 
 const contents: PostList[] = [
   {
@@ -26,7 +32,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolor ad fugit accusantium, temporibus saepe, beatae laboriosam, quam id tempore doloribus nemo! Architecto vero earum repudiandae dignissimos labore, dolorum possimus quaerat.",
   },
@@ -41,7 +47,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
@@ -56,7 +62,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
@@ -71,7 +77,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
@@ -86,7 +92,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
@@ -101,7 +107,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
@@ -116,7 +122,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
@@ -131,7 +137,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
@@ -147,7 +153,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games, How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
@@ -176,15 +182,84 @@ const posts: PostBlock[] = [
 ];
 
 function Post() {
+  const [newestPosts, setNewestPosts] = useState<PostList[]>([]);
+  const [newestPostsLoading, setNewestPostsLoading] = useState(false);
+
+  const [featuredPosts, setFeaturedPosts] = useState<PostBlock[][]>([]);
+  const [featuredPostsLoading, setFeaturedPostsLoading] = useState(false);
+  const [featuredPostCurrentPage, setFeaturedPostCurrentPage] = useState(1);
+
+  const [trendingPosts, setTrendingPosts] = useState<PostBlock[]>([]);
+  const [trendingPostsLoading, setTrendingPostLoading] = useState(false);
+
+  const [followPosts, setFollowPosts] = useState<PostList[]>([]);
+  const [followPostsLoading, setFollowPostLoading] = useState(false);
+  const [followPostsTotalPage, setFollowPostsTotalPage] = useState(0);
+  const [followPostsCurrentPage, setFollowPostsCurrentPage] = useState(0);
+
+  useEffect(() => {
+    setNewestPostsLoading(true);
+    GetNewestPost()
+      .then((res) => {
+        setNewestPosts(res.data);
+      })
+      .catch((error: AxiosError) => {})
+      .finally(() => {
+        setNewestPostsLoading(false);
+      });
+
+    setTrendingPostLoading(true);
+    GetPostTrending(0, 9)
+      .then((res) => {
+        setTrendingPosts(res.data.data);
+      })
+      .catch((error: AxiosError) => {})
+      .finally(() => {
+        setTrendingPostLoading(false);
+      });
+
+    setFeaturedPostsLoading(true);
+    GetFeaturedPostByToken()
+      .then((res) => {
+        setFeaturedPosts(res.data);
+      })
+      .catch((error: AxiosError) => {})
+      .finally(() => {
+        setFeaturedPostsLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (!followPostsLoading) {
+      setFollowPostLoading(true);
+      GetFollowUserPost(followPostsCurrentPage, 10)
+        .then((res) => {
+          setFollowPosts([...followPosts, ...res.data.data]);
+          setFollowPostsTotalPage(res.data.totalPage);
+        })
+        .catch((error: AxiosError) => {})
+        .finally(() => {
+          setFollowPostLoading(false);
+        });
+    }
+  }, [followPostsCurrentPage]);
+
   return (
     <div className='post'>
       <Header />
       <img className='post-banner' src={Banner} alt='' />
       <div className='post-container'>
         <h1 className='post-title'>NEW POSTS</h1>
-        <div className='post-trending-swipper'>
-          <SwipperContent contents={contents} />
-        </div>
+        {newestPostsLoading && (
+          <div className='postDetail-comment-loading'>
+            <Spin />
+          </div>
+        )}
+        {!newestPostsLoading && (
+          <div className='home-trending-swipper'>
+            <SwipperContent contents={newestPosts} />
+          </div>
+        )}
         <div className='post-content'>
           <div className='post-content-featured'>
             <h3 className='post-content-title'>Featured Posts</h3>
@@ -192,18 +267,25 @@ function Post() {
               <div className='post-content-line-left'></div>
               <div className='post-content-line-right'></div>
             </div>
-            <FeaturedPost
-              postMedium={post}
-              postSmall1={post}
-              postSmall2={post}
-              postSmall3={post}
-            />
-            <FeaturedPost
-              postMedium={post}
-              postSmall1={post}
-              postSmall2={post}
-              postSmall3={post}
-            />
+            {featuredPostsLoading && (
+              <div
+                className='postDetail-comment-loading'
+                style={{ paddingTop: "50px" }}
+              >
+                <Spin />
+              </div>
+            )}
+            {!featuredPostsLoading &&
+              featuredPosts
+                .slice(0, 2 * featuredPostCurrentPage)
+                .map((post, index) => (
+                  <FeaturedPost
+                    postMedium={post[0]}
+                    postSmall1={post[1]}
+                    postSmall2={post[2]}
+                    postSmall3={post[3]}
+                  />
+                ))}
           </div>
           <div className='post-content-trending'>
             <h3 className='post-content-title'>Trending</h3>
@@ -211,27 +293,59 @@ function Post() {
               <div className='post-content-line-left'></div>
               <div className='post-content-line-right'></div>
             </div>
-            <div className='post-content-trending-container'>
-              {contents.map((post, index) => (
-                <TrendingPost
-                  index={index + 1}
-                  post={ParsePostTrendingToPostBlock(post)}
-                />
-              ))}
-            </div>
+            {trendingPostsLoading && (
+              <div
+                className='postDetail-comment-loading'
+                style={{ paddingTop: "50px" }}
+              >
+                <Spin />
+              </div>
+            )}
+            {!trendingPostsLoading && (
+              <div className='home-content-trending-container'>
+                {trendingPosts.map((post, index) => (
+                  <TrendingPost key={index} index={index + 1} post={post} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        <ViewMoreButton onClick={() => {}} />
+        {featuredPostCurrentPage * 2 < featuredPosts.length && (
+          <ViewMoreButton
+            onClick={() => {
+              setFeaturedPostCurrentPage(featuredPostCurrentPage + 1);
+            }}
+          />
+        )}
 
-        <h2 className='post-content-title'>Followed Users' Activity</h2>
-        <div className='post-content-followed'>
-          {contents.map((post, index) => (
-            <PostBlockList key={index} post={post} />
-          ))}
-        </div>
+        {followPosts.length > 0 && (
+          <>
+            <h2 className='post-content-title'>Followed Users' Activity</h2>
+            <div className='post-content-followed'>
+              {followPosts.map((post, index) => (
+                <PostBlockList key={index} post={post} />
+              ))}
+            </div>
+          </>
+        )}
+        {followPostsLoading && (
+          <div
+            className='postDetail-comment-loading'
+            style={{ paddingTop: "50px" }}
+          >
+            <Spin />
+          </div>
+        )}
 
-        <ViewMoreButton onClick={() => {}} />
+        {!followPostsLoading &&
+          followPostsCurrentPage < followPostsTotalPage - 1 && (
+            <ViewMoreButton
+              onClick={() => {
+                setFollowPostsCurrentPage(followPostsCurrentPage + 1);
+              }}
+            />
+          )}
 
         <ScrollToTop />
       </div>

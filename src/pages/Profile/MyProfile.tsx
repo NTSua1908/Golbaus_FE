@@ -667,7 +667,7 @@ const PersonalPost = () => {
       <div className='myProfile-right-header'>My Posts</div>
       <div className='myProfile-right-content'>
         <div className='myProfile-right-content-filterLeft'>
-          <h2 className='myProfile-right-content-title'>Questions</h2>
+          <h2 className='myProfile-right-content-title'>Posts</h2>
           {loading && <Spin fullscreen />}
           {posts.length !== 0 && (
             <>
@@ -678,7 +678,7 @@ const PersonalPost = () => {
               >
                 {posts.length > 0 &&
                   posts.map((post, index) => (
-                    <PostBlockList key={index} post={post} newTab />
+                    <PostBlockList key={index} post={post} />
                   ))}
               </div>
               <div className='myProfile-right-content-filterLeft-pagination'>
@@ -822,7 +822,7 @@ const PersonalQuestion = () => {
             <>
               <div className='myProfile-right-content-filterLeft-container'>
                 {questions.map((question, index) => (
-                  <QuestionBlock key={index} question={question} newTab />
+                  <QuestionBlock key={index} question={question} />
                 ))}
               </div>
               <div className='myProfile-right-content-filterLeft-pagination'>
@@ -1030,7 +1030,7 @@ const PersonalBookmarked = () => {
               <>
                 <div className='myProfile-right-content-filterLeft-container'>
                   {posts.map((post, index) => (
-                    <PostBlockList key={index} post={post} newTab />
+                    <PostBlockList key={index} post={post} />
                   ))}
                 </div>
                 <div className='myProfile-right-content-filterLeft-pagination'>
@@ -1060,7 +1060,7 @@ const PersonalBookmarked = () => {
               <>
                 <div className='myProfile-right-content-filterLeft-container'>
                   {question.map((question, index) => (
-                    <QuestionBlock key={index} question={question} newTab />
+                    <QuestionBlock key={index} question={question} />
                   ))}
                 </div>
                 <div className='myProfile-right-content-filterLeft-pagination'>
@@ -1423,146 +1423,6 @@ const questionData: QuestionListModel[] = [
     viewCount: 123,
     answerCount: 12,
     tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
-  },
-];
-
-const postData: PostList[] = [
-  {
-    id: "18dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
-    thumbnail:
-      "https://tintuc-divineshop.cdn.vccloud.vn/wp-content/uploads/2020/08/782784.jpg",
-    title: "Stardew Valley 1",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
-  },
-  {
-    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
-    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
-    title: "New mod for Stardew Valley 2",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
-  },
-  {
-    id: "08dc0c4a-13aa-4cc7-856e-09f0ac174146",
-    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
-    title: "New mod for Stardew Valley 3",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
-  },
-  {
-    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
-    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
-    title: "New mod for Stardev Valley",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
-  },
-  {
-    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
-    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
-    title: "New mod for Stardev Valley",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
-  },
-  {
-    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
-    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
-    title: "New mod for Stardev Valley",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
-  },
-  {
-    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
-    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
-    title: "New mod for Stardev Valley",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
-  },
-  {
-    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
-    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
-    title: "New mod for Stardev Valley",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
-  },
-  {
-    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
-    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
-    title:
-      "New mod for Stardev Valley, New mod for Stardev Valley, New mod for Stardev Valley",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games, How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
 ];
 

@@ -27,38 +27,32 @@
 /* Custom styles for headings */
 .custom-heading1 {
   font-size: 2em;
-  margin-bottom: 0.5em;
-  line-height: 35px;
+  line-height: 70px;
 }
 
 .custom-heading2 {
   font-size: 1.5em;
-  margin-bottom: 0.5em;
-  line-height: 35px;
+  line-height: 70px;
 }
 
 .custom-heading3 {
   font-size: 1.17em;
-  margin-bottom: 0.5em;
-  line-height: 35px;
+  line-height: 70px;
 }
 
 .custom-heading4 {
   font-size: 1em;
-  margin-bottom: 0.5em;
-  line-height: 35px;
+  line-height: 70px;
 }
 
 .custom-heading5 {
   font-size: 0.83em;
-  margin-bottom: 0.5em;
-  line-height: 35px;
+  line-height: 70px;
 }
 
 .custom-heading6 {
   font-size: 0.67em;
-  margin-bottom: 0.5em;
-  line-height: 35px;
+  line-height: 70px;
 }
 
 .custom-list-u {
@@ -144,6 +138,7 @@
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   overflow: hidden;
+  line-height: 2;
   // max-width: 80%;
 
   // @include for-size(tablet, min) {
@@ -156,6 +151,7 @@
     padding: 12px;
     text-align: left;
     border: 1px solid #3498db;
+
     @include for-size(tablet, min) {
       // white-space: nowrap;
     }
@@ -176,10 +172,9 @@
 }
 
 // /* Custom styles for code tag */
-// .blog-code {
-//   font-family: 'Courier New', Courier, monospace;
-//   font-size: 0.9em;
-//   background-color: #f8f8f8;
-//   padding: 0.2em 0.4em;
-//   border-radius: 4px;
-// }
+.blog-code {
+  font-size: 0.9em;
+  background-color: #cfcfcf;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+}

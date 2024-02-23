@@ -1,8 +1,7 @@
+import { Spin } from "antd";
+import { AxiosError } from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  ParsePostTrendingToPostBlock,
-  ParsePostTrendingToSwiperCardContent,
-} from "../../Helper/ObjectParser";
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
 import FeaturedPost from "../../components/PostBlock/FeaturedPost/FeaturedPost";
@@ -15,6 +14,12 @@ import ViewMoreButton from "../../components/ViewMoreButton/ViewMoreButton";
 import Banner from "../../images/home_banner.png";
 import { PostBlock, PostList } from "../../model/postModel";
 import { QuestionListModel } from "../../model/questionModel";
+import {
+  GetFeaturedPostByToken,
+  GetNewestPost,
+  GetPostTrending,
+} from "../../services/PostService";
+import { GetNewestQuestion } from "../../services/QuestionService";
 import "./home.scss";
 
 const contents: PostList[] = [
@@ -30,7 +35,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
@@ -45,7 +50,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
@@ -60,7 +65,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
@@ -75,7 +80,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
@@ -90,7 +95,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
@@ -105,7 +110,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
@@ -120,7 +125,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
@@ -135,7 +140,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
@@ -151,7 +156,7 @@ const contents: PostList[] = [
     authorAvatar:
       "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
     commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
+    publishDate: new Date(2023, 12, 23, 15, 22),
     excerpt:
       "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games, How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
   },
@@ -312,6 +317,18 @@ const questions: QuestionListModel[] = [
 ];
 
 function Home() {
+  const [newestPosts, setNewestPosts] = useState<PostList[]>([]);
+  const [newestPostsLoading, setNewestPostsLoading] = useState(false);
+
+  const [featuredPosts, setFeaturedPosts] = useState<PostBlock[][]>([]);
+  const [featuredPostsLoading, setFeaturedPostsLoading] = useState(false);
+
+  const [trendingPosts, setTrendingPosts] = useState<PostBlock[]>([]);
+  const [trendingPostsLoading, setTrendingPostLoading] = useState(false);
+
+  const [newQuestions, setNewQuestions] = useState<QuestionListModel[]>([]);
+  const [newQuestionsLoading, setNewQuestionsLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const gotoPosts = () => {
@@ -321,6 +338,50 @@ function Home() {
   const gotoQA = () => {
     navigate("/Question");
   };
+
+  useEffect(() => {
+    setNewestPostsLoading(true);
+    GetNewestPost()
+      .then((res) => {
+        setNewestPosts(res.data);
+      })
+      .catch((error: AxiosError) => {})
+      .finally(() => {
+        setNewestPostsLoading(false);
+      });
+
+    setTrendingPostLoading(true);
+    GetPostTrending(0, 9)
+      .then((res) => {
+        setTrendingPosts(res.data.data);
+      })
+      .catch((error: AxiosError) => {})
+      .finally(() => {
+        setTrendingPostLoading(false);
+      });
+
+    setFeaturedPostsLoading(true);
+    GetFeaturedPostByToken()
+      .then((res) => {
+        setFeaturedPosts(res.data);
+      })
+      .catch((error: AxiosError) => {})
+      .finally(() => {
+        setFeaturedPostsLoading(false);
+      });
+
+    if (!newQuestionsLoading) {
+      setNewQuestionsLoading(true);
+      GetNewestQuestion(0, 10)
+        .then((res) => {
+          setNewQuestions(res.data.data);
+        })
+        .catch((error: AxiosError) => {})
+        .finally(() => {
+          setNewQuestionsLoading(false);
+        });
+    }
+  }, []);
 
   return (
     <div>
@@ -340,13 +401,17 @@ function Home() {
             spirit of mutual growth.
           </p>
           <h1 className='home-title'>NEW POSTS</h1>
-          <div className='home-trending-swipper'>
-            <SwipperContent
-              contents={contents.map((x) =>
-                ParsePostTrendingToSwiperCardContent(x)
-              )}
-            />
-          </div>
+
+          {newestPostsLoading && (
+            <div className='postDetail-comment-loading'>
+              <Spin />
+            </div>
+          )}
+          {!newestPostsLoading && (
+            <div className='home-trending-swipper'>
+              <SwipperContent contents={newestPosts} />
+            </div>
+          )}
           <div className='home-content'>
             <div className='home-content-featured'>
               <h3 className='home-content-title'>Featured Posts</h3>
@@ -354,18 +419,25 @@ function Home() {
                 <div className='home-content-line-left'></div>
                 <div className='home-content-line-right'></div>
               </div>
-              <FeaturedPost
-                postMedium={post}
-                postSmall1={post}
-                postSmall2={post}
-                postSmall3={post}
-              />
-              <FeaturedPost
-                postMedium={post}
-                postSmall1={post}
-                postSmall2={post}
-                postSmall3={post}
-              />
+              {featuredPostsLoading && (
+                <div
+                  className='postDetail-comment-loading'
+                  style={{ paddingTop: "50px" }}
+                >
+                  <Spin />
+                </div>
+              )}
+              {!featuredPostsLoading &&
+                featuredPosts
+                  .slice(0, 2)
+                  .map((post, index) => (
+                    <FeaturedPost
+                      postMedium={post[0]}
+                      postSmall1={post[1]}
+                      postSmall2={post[2]}
+                      postSmall3={post[3]}
+                    />
+                  ))}
             </div>
             <div className='home-content-trending'>
               <h3 className='home-content-title'>Trending</h3>
@@ -373,31 +445,51 @@ function Home() {
                 <div className='home-content-line-left'></div>
                 <div className='home-content-line-right'></div>
               </div>
-              <div className='home-content-trending-container'>
-                {contents.map((post, index) => (
-                  <TrendingPost
-                    key={index}
-                    index={index + 1}
-                    post={ParsePostTrendingToPostBlock(post)}
-                  />
-                ))}
-              </div>
+              {trendingPostsLoading && (
+                <div
+                  className='postDetail-comment-loading'
+                  style={{ paddingTop: "50px" }}
+                >
+                  <Spin />
+                </div>
+              )}
+              {!trendingPostsLoading && (
+                <div className='home-content-trending-container'>
+                  {trendingPosts.map((post, index) => (
+                    <TrendingPost key={index} index={index + 1} post={post} />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
-
-          <div className='home-content-special-post'>
-            <PostBlockLarge post={post} />
-          </div>
+          {trendingPosts.length > 0 && (
+            <div className='home-content-special-post'>
+              <PostBlockLarge post={trendingPosts[0]!} />
+            </div>
+          )}
 
           <ViewMoreButton onClick={gotoPosts} />
 
           <h1 className='home-title'>NEW QUESTIONS</h1>
-          <div className='home-content-question'>
-            {questions.map((question, index) => (
-              <QuestionBlock key={index} question={question} />
-            ))}
-          </div>
-          <ViewMoreButton onClick={gotoQA} />
+          {newQuestionsLoading && (
+            <div
+              className='postDetail-comment-loading'
+              style={{ paddingTop: "50px" }}
+            >
+              <Spin />
+            </div>
+          )}
+
+          {!newQuestionsLoading && (
+            <>
+              <div className='home-content-question'>
+                {newQuestions.map((question, index) => (
+                  <QuestionBlock key={index} question={question} />
+                ))}
+              </div>
+              <ViewMoreButton onClick={gotoQA} />
+            </>
+          )}
         </div>
         <ScrollToTop />
       </div>

@@ -35,6 +35,7 @@ import { setPostCommentPage } from "../../actions/postAction";
 import BasicEditor from "../BasicEditor/BasicEditor";
 import ContentDisplayer from "../ShowCode/ContentDisplayer";
 import { FetchingErrorHandler } from "../../Helper/FetchingErrorHandler";
+import DefaultAvatar from "../../images/default_avatar.png";
 
 const amoutPerPage = 5;
 
@@ -290,7 +291,7 @@ const Comment = React.memo(
         {contextHolder}
         <div className='comment-child-header'>
           <img
-            src={comment.avatar}
+            src={comment.avatar ?? DefaultAvatar}
             alt='User Avatar'
             className='comment-child-header-avatar'
           />

@@ -32,11 +32,11 @@ function UserProfile() {
   const [loading, setLoading] = useState(false);
   const [notFound, setNotFound] = useState(false);
 
-  const [questions, setQuestion] = useState(questionData);
+  const [questions, setQuestion] = useState<QuestionListModel[]>([]);
   const [currentQuestionPage, setCurrentQuestionPage] = useState(1);
   const [questionTotalPage, setQuestionTotalPage] = useState(0);
 
-  const [posts, setPosts] = useState(postData);
+  const [posts, setPosts] = useState<PostList[]>([]);
   const [currentPostPage, setCurrentPostPage] = useState(1);
   const [postTotalPage, setPostTotalPage] = useState(0);
 
@@ -302,7 +302,7 @@ function UserProfile() {
                       <>
                         <div className='myProfile-right-content-filterLeft-container'>
                           {posts.map((post, index) => (
-                            <PostBlockList key={index} post={post} newTab />
+                            <PostBlockList key={index} post={post} />
                           ))}
                         </div>
                         <div className='myProfile-right-content-filterLeft-pagination'>
@@ -360,11 +360,7 @@ function UserProfile() {
                       <>
                         <div className='myProfile-right-content-filterLeft-container'>
                           {questions.map((question, index) => (
-                            <QuestionBlock
-                              key={index}
-                              question={question}
-                              newTab
-                            />
+                            <QuestionBlock key={index} question={question} />
                           ))}
                         </div>
                         <div className='myProfile-right-content-filterLeft-pagination'>
@@ -489,276 +485,3 @@ export default UserProfile;
 //   followCount: 235,
 //   postCount: 10,
 // };
-
-const questionData: QuestionListModel[] = [
-  {
-    id: "123",
-    title:
-      "Use of malloc function instead of fgets for a file and an array[100000]",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    createdDate: new Date(2023, 11, 22, 15, 43, 22),
-    updatedDate: null,
-    userName: "Gus",
-    followCount: 23,
-    viewCount: 123,
-    answerCount: 12,
-    tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
-  },
-  {
-    id: "123",
-    title:
-      "Use of malloc function instead of fgets for a file and an array[100000]",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    createdDate: new Date(2023, 11, 22, 15, 43, 22),
-    updatedDate: null,
-    userName: "Gus",
-    followCount: 23,
-    viewCount: 123,
-    answerCount: 12,
-    tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
-  },
-  {
-    id: "123",
-    title:
-      "Use of malloc function instead of fgets for a file and an array[100000]",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    createdDate: new Date(2023, 11, 22, 15, 43, 22),
-    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
-    userName: "Gus",
-    followCount: 23,
-    viewCount: 123,
-    answerCount: 12,
-    tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
-  },
-  {
-    id: "123",
-    title:
-      "Use of malloc function instead of fgets for a file and an array[100000]",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    createdDate: new Date(2023, 11, 22, 15, 43, 22),
-    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
-    userName: "Gus",
-    followCount: 23,
-    viewCount: 123,
-    answerCount: 12,
-    tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
-  },
-  {
-    id: "123",
-    title:
-      "Use of malloc function instead of fgets for a file and an array[100000]",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    createdDate: new Date(2023, 11, 22, 15, 43, 22),
-    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
-    userName: "Gus",
-    followCount: 23,
-    viewCount: 123,
-    answerCount: 12,
-    tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
-  },
-  {
-    id: "123",
-    title:
-      "Use of malloc function instead of fgets for a file and an array[100000]",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    createdDate: new Date(2023, 11, 22, 15, 43, 22),
-    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
-    userName: "Gus",
-    followCount: 23,
-    viewCount: 123,
-    answerCount: 12,
-    tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
-  },
-  {
-    id: "123",
-    title:
-      "Use of malloc function instead of fgets for a file and an array[100000]",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    createdDate: new Date(2023, 11, 22, 15, 43, 22),
-    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
-    userName: "Gus",
-    followCount: 23,
-    viewCount: 123,
-    answerCount: 12,
-    tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
-  },
-  {
-    id: "123",
-    title:
-      "Use of malloc function instead of fgets for a file and an array[100000]",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    createdDate: new Date(2023, 11, 22, 15, 43, 22),
-    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
-    userName: "Gus",
-    followCount: 23,
-    viewCount: 123,
-    answerCount: 12,
-    tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
-  },
-  {
-    id: "123",
-    title:
-      "Use of malloc function instead of fgets for a file and an array[100000]",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    createdDate: new Date(2023, 11, 22, 15, 43, 22),
-    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
-    userName: "Gus",
-    followCount: 23,
-    viewCount: 123,
-    answerCount: 12,
-    tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
-  },
-  {
-    id: "123",
-    title:
-      "Use of malloc function instead of fgets for a file and an array[100000]",
-    avatar: "https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png",
-    createdDate: new Date(2023, 11, 22, 15, 43, 22),
-    updatedDate: new Date(2023, 11, 22, 15, 43, 22),
-    userName: "Gus",
-    followCount: 23,
-    viewCount: 123,
-    answerCount: 12,
-    tags: ["c", "malloc", "dynamic-memory-allocation", "fgets"],
-  },
-];
-
-const postData: PostList[] = [
-  {
-    id: "18dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
-    thumbnail:
-      "https://tintuc-divineshop.cdn.vccloud.vn/wp-content/uploads/2020/08/782784.jpg",
-    title: "Stardew Valley 1",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
-  },
-  {
-    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
-    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
-    title: "New mod for Stardew Valley 2",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
-  },
-  {
-    id: "08dc0c4a-13aa-4cc7-856e-09f0ac174146",
-    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
-    title: "New mod for Stardew Valley 3",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
-  },
-  {
-    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
-    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
-    title: "New mod for Stardev Valley",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
-  },
-  {
-    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
-    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
-    title: "New mod for Stardev Valley",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
-  },
-  {
-    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
-    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
-    title: "New mod for Stardev Valley",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
-  },
-  {
-    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
-    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
-    title: "New mod for Stardev Valley",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
-  },
-  {
-    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
-    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
-    title: "New mod for Stardev Valley",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
-  },
-  {
-    id: "08dc084f-6462-4b2d-8b41-5b8cfcd61ca8",
-    thumbnail: "https://pbs.twimg.com/media/E1veJHUWEAMrLrm.jpg:large",
-    title:
-      "New mod for Stardev Valley, New mod for Stardev Valley, New mod for Stardev Valley",
-    upVote: 10,
-    downVote: 1,
-    viewCount: 432,
-    authorName: "Lewis",
-    authorAvatar:
-      "https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png",
-    commentCount: 3,
-    date: new Date(2023, 12, 23, 15, 22),
-    excerpt:
-      "How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games, How Stardew Valley Sets The Blueprint for Indie and Farming Simulator Games",
-  },
-];

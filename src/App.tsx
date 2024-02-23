@@ -23,7 +23,10 @@ import QuestionDetail from "./pages/QuestionDetail/QuestionDetail";
 import Question from "./pages/Question/Question";
 import CreateQuestion from "./pages/CreateQuestion/CreateQuestion";
 import EditQuestion from "./pages/EditQuestion/EditQuestion";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
+const clientId =
+  "672779961311-gndtddba3c43p77oqhhkp4d99qpjhnck.apps.googleusercontent.com";
 const App = () => {
   const dispatch = useDispatch();
 
@@ -40,57 +43,59 @@ const App = () => {
   // console.log('APP');
 
   return (
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: "#20004d",
-        },
-      }}
-    >
-      <div className='App'>
-        <div className='content-wrap'>
-          <Router>
-            <Routes>
-              <Route path='/post' element={<Post />} />
-              <Route path='/post/:postId' element={<PostDetail />} />
-              <Route path='/Question' element={<Question />} />
-              <Route
-                path='/question/:questionId'
-                element={<QuestionDetail />}
-              />
-              <Route path='/' element={<Home />} />
-              <Route path='/create-post' element={<CreatePost />} />
-              <Route path='/edit-post/:postId' element={<EditPost />} />
-              <Route path='/create-question' element={<CreateQuestion />} />
-              <Route
-                path='/edit-question/:questionId'
-                element={<EditQuestion />}
-              />
-              <Route path='/profile' element={<MyProfile />} />
-              <Route path='/user/:userId' element={<UserProfile />} />
-              <Route path='*' element={<NotFound />} />
-              <Route path='/login' element={<Login />} />
-              <Route
-                path='/ResetPassword/:token/:email'
-                element={<ResetPassword />}
-              />
-              <Route path='/forgot-password' element={<ForgotPassword />} />
-              <Route path='/register' element={<Register />} />
-              <Route path='/checkEmail' element={<RegisterSuccess />} />
-              <Route
-                path='/checkEmail/:emailResend'
-                element={<RegisterSuccess />}
-              />
-              <Route
-                path='/ConfirmEmail/:token/:email'
-                element={<ConfirmEmail />}
-              />
-              <Route path='/search' element={<Search />} />
-            </Routes>
-          </Router>
+    <GoogleOAuthProvider clientId={clientId}>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#20004d",
+          },
+        }}
+      >
+        <div className='App'>
+          <div className='content-wrap'>
+            <Router>
+              <Routes>
+                <Route path='/post' element={<Post />} />
+                <Route path='/post/:postId' element={<PostDetail />} />
+                <Route path='/Question' element={<Question />} />
+                <Route
+                  path='/question/:questionId'
+                  element={<QuestionDetail />}
+                />
+                <Route path='/' element={<Home />} />
+                <Route path='/create-post' element={<CreatePost />} />
+                <Route path='/edit-post/:postId' element={<EditPost />} />
+                <Route path='/create-question' element={<CreateQuestion />} />
+                <Route
+                  path='/edit-question/:questionId'
+                  element={<EditQuestion />}
+                />
+                <Route path='/profile' element={<MyProfile />} />
+                <Route path='/user/:userId' element={<UserProfile />} />
+                <Route path='*' element={<NotFound />} />
+                <Route path='/login' element={<Login />} />
+                <Route
+                  path='/ResetPassword/:token/:email'
+                  element={<ResetPassword />}
+                />
+                <Route path='/forgot-password' element={<ForgotPassword />} />
+                <Route path='/register' element={<Register />} />
+                <Route path='/checkEmail' element={<RegisterSuccess />} />
+                <Route
+                  path='/checkEmail/:emailResend'
+                  element={<RegisterSuccess />}
+                />
+                <Route
+                  path='/ConfirmEmail/:token/:email'
+                  element={<ConfirmEmail />}
+                />
+                <Route path='/search' element={<Search />} />
+              </Routes>
+            </Router>
+          </div>
         </div>
-      </div>
-    </ConfigProvider>
+      </ConfigProvider>
+    </GoogleOAuthProvider>
   );
 };
 

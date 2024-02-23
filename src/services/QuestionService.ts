@@ -133,3 +133,50 @@ export function GetAllQuestionBookmarkByToken(
     },
   });
 }
+
+export function GetRelatedQuestion(
+  questionId: string,
+  tags: string[],
+  page: number,
+  amount: number
+) {
+  const queryString = tags
+    .map((value) => `tags=${encodeURIComponent(value)}`)
+    .join("&");
+  return api.get(
+    BASE_URL_QUESTION + `GetRelatedQuestion/${questionId}?${queryString}`,
+    {
+      params: {
+        page,
+        amount,
+      },
+    }
+  );
+}
+
+export function GetNewestQuestion(page: number, amount: number) {
+  return api.get(BASE_URL_QUESTION + "GetNewestQuestion", {
+    params: {
+      page,
+      amount,
+    },
+  });
+}
+
+export function GetFeaturedQuestionByToken(page: number, amount: number) {
+  return api.get(BASE_URL_QUESTION + "GetFeaturedQuestionByToken", {
+    params: {
+      page,
+      amount,
+    },
+  });
+}
+
+export function GetFollowUserQuestion(page: number, amount: number) {
+  return api.get(BASE_URL_QUESTION + "GetFollowUserQuestion", {
+    params: {
+      page,
+      amount,
+    },
+  });
+}

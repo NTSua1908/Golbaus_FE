@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import "./swipperContent.scss";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -7,31 +7,20 @@ import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { FaRegEye, FaRocketchat } from "react-icons/fa";
 import { Autoplay, Pagination } from "swiper/modules";
 import { Link } from "react-router-dom";
-
-export interface SwiperCardContent {
-  id: string;
-  thumbnail: string;
-  title: string;
-  excerpt: string;
-  upVote: number;
-  downVote: number;
-  viewCount: number;
-  authorName: string;
-  authorAvatar: string;
-  commentCount: number;
-  date: Date;
-}
+import { PostList } from "../../model/postModel";
+import DefaultAvatar from "../../images/default_avatar.png";
 
 interface SwiperCardProps {
-  content: SwiperCardContent;
+  content: PostList;
   animation?: boolean;
 }
 
 export interface SwiperContentProps {
-  contents: SwiperCardContent[];
+  contents: PostList[];
 }
 
 export function SwipperCard({ content, animation }: SwiperCardProps) {
+  // console.log(content);
   return (
     <Link
       to={"/post/" + content.id}
@@ -78,7 +67,7 @@ export function SwipperCard({ content, animation }: SwiperCardProps) {
             <i> By {content.authorName}</i>
           </span>
           <img
-            src={content.authorAvatar}
+            src={content.authorAvatar ?? DefaultAvatar}
             alt=''
             className='swiper-card-content-author-img'
           />
@@ -87,7 +76,7 @@ export function SwipperCard({ content, animation }: SwiperCardProps) {
               {content.authorName}
             </div>
             <div className='swiper-card-content-author-info-date'>
-              {formatDateToString(content.date)}
+              {formatDateToString(content.publishDate)}
             </div>
           </div>
         </div>
@@ -164,4 +153,4 @@ function SwiperContent({ contents }: SwiperContentProps) {
   );
 }
 
-export default SwiperContent;
+export default memo(SwiperContent);

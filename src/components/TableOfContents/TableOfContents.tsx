@@ -30,19 +30,19 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ heading }) => {
   };
 
   return (
-    <div className="table-of-contents">
+    <div className='table-of-contents'>
       <ul>
         {heading.map((heading, index) => (
           <li
             key={index}
             className={`table-of-contents-level-${heading.level}`}
           >
-            <span
-              className="table-of-contents-title"
+            <p
+              className='table-of-contents-title'
               onClick={() => handleItemClick(heading.id)}
             >
               {heading.title}
-            </span>
+            </p>
             {heading.childrens && heading.childrens.length != 0 && (
               <TableOfContents heading={heading.childrens} />
             )}

@@ -43,7 +43,7 @@ function PostBlockList({ post, newTab }: PostBlockListProps) {
             </span>{" "}
             <br />
             <span className='post-block-list-right-info-detail-date'>
-              {formatDateToString(post.date)}
+              {formatDateToString(post.publishDate)}
             </span>
           </p>
           <div className='post-block-list-right-info-stats'>

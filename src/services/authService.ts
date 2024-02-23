@@ -1,5 +1,7 @@
+import Token from "markdown-it/lib/token";
 import { LoginModel, ResetPasswordModel } from "../model/authModel";
 import api from "./api";
+import axios from "axios";
 
 const BASE_URL_AUTH = "auth/";
 
@@ -25,4 +27,17 @@ export function SendEmailResetPassword(email: string) {
 
 export function ResetPassword(model: ResetPasswordModel) {
   return api.put(BASE_URL_AUTH + "ResetPassword", model);
+}
+
+export function getGoogleAccountInfo(token: string) {
+  console.log("Token: ", token);
+  return axios.get(
+    "https://people.googleapis.com/v1/people/me?personFields=names,emailAddresses,photos",
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+        // "Content-Type": "application/json",
+      },
+    }
+  );
 }

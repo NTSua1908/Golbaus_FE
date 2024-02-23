@@ -29,6 +29,7 @@ import InputSearch from "../InputSearch/InputSearch";
 import {
   GetAllNotificationByToken,
   MarkAllRead,
+  MarkRead,
 } from "../../services/NotificationService";
 import { AxiosError } from "axios";
 import { NotificationModel } from "../../model/notificationModel";
@@ -129,18 +130,20 @@ function Header() {
   }, []);
 
   const getNotification = async () => {
-    await GetAllNotificationByToken(false, null, null, null, [], 0, 10)
-      .then((res) => {
-        setNotifications(res.data.data);
-        setNotificationCount(
-          (res.data.data as NotificationModel[]).reduce(
-            (unreadCount, notification) =>
-              (unreadCount += notification.isRead ? 0 : 1),
-            0
-          )
-        );
-      })
-      .catch((error: AxiosError) => {});
+    if (isAuthenticated) {
+      await GetAllNotificationByToken(false, null, null, null, [], 0, 10)
+        .then((res) => {
+          setNotifications(res.data.data);
+          setNotificationCount(
+            (res.data.data as NotificationModel[]).reduce(
+              (unreadCount, notification) =>
+                (unreadCount += notification.isRead ? 0 : 1),
+              0
+            )
+          );
+        })
+        .catch((error: AxiosError) => {});
+    }
   };
 
   useEffect(() => {
@@ -169,6 +172,12 @@ function Header() {
         setNotificationCount(0);
       })
       .catch((error: AxiosError) => {});
+  };
+
+  const handleMarkRead = (id: string) => {
+    MarkRead(id)
+      .then(() => {})
+      .catch(() => {});
   };
 
   useEffect(() => {
@@ -289,6 +298,9 @@ function Header() {
                             )}
                             className='notification-container'
                             key={index}
+                            onClick={() => {
+                              MarkRead(notification.id);
+                            }}
                           >
                             <div
                               key={index}
@@ -301,7 +313,7 @@ function Header() {
                                 className='user-avatar'
                               >
                                 <img
-                                  src={notification.avatar}
+                                  src={notification.avatar ?? DefaultAvatar}
                                   alt={`${notification.userName}'s avatar`}
                                 />
                               </Link>

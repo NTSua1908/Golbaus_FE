@@ -30,6 +30,7 @@ import DisplayTags from "../DisplayTag/DisplayTags";
 import ContentDisplayer from "../ShowCode/ContentDisplayer";
 import "./questionContent.scss";
 import { ToggleFollow } from "../../services/AccountService";
+import DefaultAvatar from "../../images/default_avatar.png";
 
 interface QuestionContentProps {
   id: string;
@@ -247,7 +248,7 @@ function QuestionContent({
             </div>
             <div className='questionContent-body-left-avatar'>
               <img
-                src={question.avatar}
+                src={question.avatar ?? DefaultAvatar}
                 alt='User Avatar'
                 onClick={() => {
                   navigate("/user/" + question.userId);
@@ -281,7 +282,7 @@ function QuestionContent({
                 <div className='question-user-info'>
                   <img
                     className='question-user-info-avatar'
-                    src={question.avatar}
+                    src={question.avatar ?? DefaultAvatar}
                     alt='User Avatar'
                   />
                   <div className='question-user-info-details'>

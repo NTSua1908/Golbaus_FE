@@ -103,7 +103,8 @@ const BasicEditor = forwardRef<EditorRef, EditorProps>(
     return (
       <div className='BasicEditor' data-color-mode='light'>
         <MDEditor
-          height={"100%"}
+          height={200}
+          minHeight={150}
           value={value}
           onChange={handleEditorChange}
           commands={

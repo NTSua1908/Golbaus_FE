@@ -9,7 +9,10 @@ import { FaFacebook, FaGoogle } from "react-icons/fa";
 import FormItem from "antd/es/form/FormItem";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/configureStore";
-import { Login as HandleLogin } from "../../services/AuthService";
+import {
+  Login as HandleLogin,
+  getGoogleAccountInfo,
+} from "../../services/AuthService";
 import {
   loginFailure,
   loginStart,
@@ -20,6 +23,9 @@ import { notification } from "antd";
 import { useNavigate } from "react-router-dom";
 import { removePost } from "../../actions/postAction";
 import { FetchingErrorHandler } from "../../Helper/FetchingErrorHandler";
+import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
+import { AxiosError } from "axios";
 
 interface LoginFormProps {
   onLogin: (values: any) => void;
@@ -97,7 +103,7 @@ const Login: React.FC = () => {
   const state = useLocation().state ?? { returnPath: null };
 
   useEffect(() => {
-    console.log("login", state.returnPath, state.id);
+    // console.log("login", state.returnPath, state.id);
     if (isAuthenticated) {
       if (state && state.returnPath) {
         navigate(state.returnPath);
@@ -131,9 +137,18 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    message.info("Google login clicked");
-  };
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      console.log(tokenResponse.access_token);
+      getGoogleAccountInfo(tokenResponse.access_token)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error: AxiosError) => {
+          FetchingErrorHandler(error, openNotificationFailure);
+        });
+    },
+  });
 
   const handleFacebookLogin = () => {
     message.info("Facebook login clicked");
@@ -175,11 +190,19 @@ const Login: React.FC = () => {
         <div className='login-other-function'>
           <button
             className='login-other-function-google'
-            onClick={handleGoogleLogin}
+            onClick={() => handleGoogleLogin()}
           >
             <FaGoogle style={{ color: "#e94820" }} />
             <span>Google</span>
           </button>
+          {/* <GoogleLogin
+            onSuccess={() => {
+              console.log("Success");
+            }}
+            onError={() => {
+              console.log("Failed");
+            }}
+          /> */}
           <div className='login-other-function-devider'></div>
           <button
             className='login-other-function-facebook'

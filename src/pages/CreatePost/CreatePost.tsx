@@ -1,4 +1,4 @@
-import { Button, Input, Popover, message, notification } from "antd";
+import { Button, Input, Popover, Spin, message, notification } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { AxiosError } from "axios";
 import { Dayjs } from "dayjs";
@@ -29,6 +29,7 @@ import { Logo } from "../../Logo";
 import { useNavigate } from "react-router-dom";
 import { PostCreateModel } from "../../model/postModel";
 import Module from "../../enums/Module";
+import { FetchingErrorHandler } from "../../Helper/FetchingErrorHandler";
 
 const CreatePost: React.FC = () => {
   const [publishType, setPublishType] = useState<PublishType>(
@@ -43,6 +44,7 @@ const CreatePost: React.FC = () => {
   const [thumbnail, setThumbnail] = useState<ImageUploaded[]>([]);
 
   const [isUploading, setIsUploading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [api, contextHolder] = notification.useNotification();
 
@@ -66,12 +68,8 @@ const CreatePost: React.FC = () => {
   };
 
   const onPublish = async () => {
-    if (editorRef.current) {
-      console.log(
-        publishType == PublishType.Schedule &&
-          publishDay != null &&
-          publishDay.toDate()
-      );
+    if (editorRef.current && !loading) {
+      setLoading(true);
       await editorRef.current
         .onSavePost()
         .then(async (res) => {
@@ -95,13 +93,11 @@ const CreatePost: React.FC = () => {
               }, 2000);
             })
             .catch((error: AxiosError) => {
-              const errors = (error.response?.data as any).errors;
-              const errorMessage = errors.join("\n") as string;
-              openNotificationFailure(errorMessage);
+              FetchingErrorHandler(error, openNotificationFailure);
             });
         })
         .catch();
-
+      setLoading(false);
       console.log("Created");
     }
   };
@@ -175,6 +171,7 @@ const CreatePost: React.FC = () => {
   return (
     <div className='create-post'>
       {contextHolder}
+      {loading && <Spin fullscreen />}
       <div className='create-post-logo'>
         <Logo />
       </div>

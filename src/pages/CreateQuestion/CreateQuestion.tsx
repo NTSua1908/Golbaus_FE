@@ -10,6 +10,7 @@ import "./createQuestion.scss";
 import { QuestionCreateUpdateModel } from "../../model/questionModel";
 import { Create } from "../../services/QuestionService";
 import { AxiosError } from "axios";
+import { FetchingErrorHandler } from "../../Helper/FetchingErrorHandler";
 
 const CreateQuestion: React.FC = () => {
   const [title, setTitle] = useState("");
@@ -54,13 +55,7 @@ const CreateQuestion: React.FC = () => {
           }, 2000);
         })
         .catch((error: AxiosError) => {
-          const errors = (error.response?.data as any).errors;
-          if (errors) {
-            const errorMessage = errors.join("\n") as string;
-            openNotificationFailure(errorMessage);
-          } else {
-            openNotificationFailure("Something went wrong");
-          }
+          FetchingErrorHandler(error, openNotificationFailure);
         })
         .finally(() => {
           setLoading(false);
