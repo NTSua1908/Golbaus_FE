@@ -62,8 +62,17 @@ To run this project locally, follow these steps:
      npm start
      ```
 4. Open your browser and navigate to `http://localhost:3000` to view the website.
-   
+
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 ## Contact
 If you have any questions or suggestions, feel free to contact us at [suaapag@gmail.com](mailto:suaapag@gmail.com).
+
+## Diagrams
+
+### ER Diagram
+![ERD_Golbaus drawio](https://github.com/NTSua1908/Golbaus_FE/assets/72732661/0647a4f7-facb-4ed9-bffc-3a2cf977d263)
+
+### User Case Diagram
+![Golbaus_Usercase drawio](https://github.com/NTSua1908/Golbaus_FE/assets/72732661/5271509c-022c-4726-9b75-6884bd1f9fb2)
+
