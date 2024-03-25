@@ -15,6 +15,7 @@
     "antd": "5.11.5",
     "axios": "^1.6.2",
     "dayjs": "^1.11.10",
+    "dotenv": "^16.4.5",
     "firebase": "^10.7.0",
     "font-awesome": "^4.7.0",
     "highlight.js": "^11.9.0",

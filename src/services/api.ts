@@ -1,9 +1,10 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from "axios";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 // Create an Axios instance with a base URL
 const api: AxiosInstance = axios.create({
-  baseURL: "https://thiensua.bsite.net/api/",
-  // baseURL: "https://localhost:7032/api/",
+  baseURL: apiUrl,
   timeout: 30000,
   withCredentials: true,
 });
