@@ -5,7 +5,7 @@ import {
 } from "./../model/accountModel";
 import api from "./api";
 
-const BASE_URL_ACCOUNT = "account/";
+const BASE_URL_ACCOUNT = "api/account/";
 
 export function GetByToken() {
   return api.get(BASE_URL_ACCOUNT + "getByToken");

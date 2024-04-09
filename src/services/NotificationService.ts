@@ -4,7 +4,7 @@ import OrderType from "../enums/OrderType";
 import { QuestionCreateUpdateModel } from "../model/questionModel";
 import api from "./api";
 
-const BASE_URL_NOTIFICATION = "notification/";
+const BASE_URL_NOTIFICATION = "api/notification/";
 
 interface NotifcationRequestPayload {
   unRead: boolean;

@@ -4,7 +4,7 @@ import {
 } from "./../model/commentModel";
 import api from "./api";
 
-const BASE_URL_COMMENT = "comment/";
+const BASE_URL_COMMENT = "api/comment/";
 
 //Post
 export function AddPostComment(model: CommentCreateModel) {

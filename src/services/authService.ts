@@ -3,7 +3,7 @@ import { LoginModel, ResetPasswordModel } from "../model/authModel";
 import api from "./api";
 import axios from "axios";
 
-const BASE_URL_AUTH = "auth/";
+const BASE_URL_AUTH = "api/auth/";
 
 export function Login(params: LoginModel) {
   return api.post(BASE_URL_AUTH + "login", params);

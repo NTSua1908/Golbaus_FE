@@ -3,7 +3,7 @@ import OrderType from "../enums/OrderType";
 import { QuestionCreateUpdateModel } from "../model/questionModel";
 import api from "./api";
 
-const BASE_URL_QUESTION = "question/";
+const BASE_URL_QUESTION = "api/question/";
 
 export function Create(createModel: QuestionCreateUpdateModel) {
   return api.post(BASE_URL_QUESTION + "create", createModel);
